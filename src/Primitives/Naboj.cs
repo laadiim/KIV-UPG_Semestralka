@@ -1,34 +1,40 @@
+using UPG_SP_2024.Interfaces;
+
 namespace UPG_SP_2024;
 
-public class Naboj
+public class Naboj : INaboj
 {
     private int charge;
     private int radius;
     private PointF center;
+    private int id;
     
-    public Naboj(int charge, int radius, PointF center)
+    public Naboj(int charge, int radius, PointF center, int id)
     {
         this.charge = charge;
         this.radius = radius;
         this.center = center;
-    }
-    
-    public int Charge
-    {
-        get => charge;
-        set => charge = value;
+        this.id = id;
     }
 
-    public int Radius
+    public int GetCharge()
     {
-        get => radius;
-        set => radius = value;
+        throw new NotImplementedException();
     }
 
-    public PointF Center
+    public void SetCharge(int charge)
     {
-        get => center;
-        set => center = value;
+        throw new NotImplementedException();
+    }
+
+    public Tuple<int, int> GetPosition()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetPosition(int x, int y)
+    {
+        throw new NotImplementedException();
     }
 
     public void Draw(Graphics g)
@@ -47,5 +53,9 @@ public class Naboj
         brush = new SolidBrush(Color.Black);
         g.DrawString(label, font, brush, center.X - width / 2, center.Y - height / 2);
     }
-    
+
+    public int GetID()
+    {
+        throw new NotImplementedException();
+    }
 }

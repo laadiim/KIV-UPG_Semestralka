@@ -25,8 +25,8 @@ namespace UPG_SP_2024
             Graphics g = e.Graphics;
 
             //TODO: Add custom paint code here
-            Naboj n = new Naboj(5, 20, new PointF(100, 100));
-            Naboj n2 = new Naboj(16, 40, new PointF(200, 150));
+            INaboj n = new Naboj(5, 20, new PointF(100, 100));
+            INaboj n2 = new Naboj(16, 40, new PointF(200, 150));
 
             n.Draw(g);
             n2.Draw(g);
