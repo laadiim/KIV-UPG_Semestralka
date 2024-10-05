@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using UPG_SP_2024.Interfaces;
+
 
 namespace UPG_SP_2024
 {
@@ -16,7 +18,6 @@ namespace UPG_SP_2024
             this.ClientSize = new System.Drawing.Size(800, 600);
         }
 
-
         /// <summary>TODO: Custom visualization code comes into this method</summary>
         /// <remarks>Raises the <see cref="E:System.Windows.Forms.Control.Paint">Paint</see> event.</remarks>
         /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs">PaintEventArgs</see> that contains the event data.</param>
@@ -25,11 +26,12 @@ namespace UPG_SP_2024
             Graphics g = e.Graphics;
 
             //TODO: Add custom paint code here
-            INaboj n = new Naboj(5, 20, new PointF(100, 100));
-            INaboj n2 = new Naboj(16, 40, new PointF(200, 150));
+            INaboj n1 = new Naboj(5, 20, new PointF(100, 100), 1);
+            INaboj n2 = new Naboj(16, 40, new PointF(200, 150), 2);
 
-            n.Draw(g);
+            n1.Draw(g);
             n2.Draw(g);
+
             // Calling the base class OnPaint
             base.OnPaint(e);
         }

@@ -27,25 +27,25 @@ public class Naboj : INaboj
         throw new NotImplementedException();
     }
 
-    public Tuple<int, int> GetPosition()
+    public PointF GetPosition()
     {
         throw new NotImplementedException();
     }
 
-    public void SetPosition(int x, int y)
+    public void SetPosition(PointF point)
     {
         throw new NotImplementedException();
     }
 
     public void Draw(Graphics g)
     {
-        Brush brush = new SolidBrush(Color.Gray);
+        Brush brush = new SolidBrush(Color.Gold);
         g.FillEllipse(brush, center.X - radius, center.Y - radius, radius * 2, radius * 2);
         
         Pen pen = new Pen(Color.Black);
         g.DrawEllipse(pen, center.X - radius, center.Y - radius, radius * 2, radius * 2);
 
-        string label = $"{charge} C";
+        string label = $"{this.charge} C";
         Font font = new Font("Arial", 12, FontStyle.Bold);
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;

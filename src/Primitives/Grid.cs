@@ -4,12 +4,12 @@ namespace UPG_SP_2024;
 
 public class Grid : IGrid
 {
-    public int GetDensity()
+    public int GetNumberOfGridLines()
     {
         throw new NotImplementedException();
     }
 
-    public void SetDensity(int row, int column)
+    public void SetNumberOfGridLines(int row, int column)
     {
         throw new NotImplementedException();
     }
