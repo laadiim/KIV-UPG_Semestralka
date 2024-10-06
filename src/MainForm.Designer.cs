@@ -29,9 +29,9 @@ namespace UPG_SP_2024
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent(int scenario_num)
         {
-            drawingPanel = new DrawingPanel();
+            drawingPanel = new DrawingPanel(scenario_num);
             SuspendLayout();
             // 
             // drawingPanel
