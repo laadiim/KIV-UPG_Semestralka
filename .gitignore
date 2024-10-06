@@ -30,3 +30,4 @@ _ReSharper*/
 #Nuget packages folder
 packages/
 *.class
+src/.idea/.idea.ElectricFieldVis/.idea/workspace.xml
