@@ -37,6 +37,16 @@ public interface INaboj
     /// </summary>
     /// <returns>ID</returns>
     int GetID();
+
+    /// <summary>
+    /// vrati polomer naboje pro vykresleni
+    /// </summary>
+    /// <returns>polomer</returns>
+    int GetRadius();
     
-    
+    /// <summary>
+    /// nastavi novy polomer
+    /// </summary>
+    /// <param name="radius">novy polomer</param>
+    void SetRadius(int radius);
 }
