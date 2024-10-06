@@ -1,6 +1,6 @@
 using UPG_SP_2024.Interfaces;
 
-namespace UPG_SP_2024;
+namespace UPG_SP_2024.Primitives;
 
 public class Grid : IGrid
 {
