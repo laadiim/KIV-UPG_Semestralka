@@ -19,12 +19,12 @@ public class Naboj : INaboj
 
     public int GetCharge()
     {
-        throw new NotImplementedException();
+        return this.charge;
     }
 
     public void SetCharge(int charge)
     {
-        throw new NotImplementedException();
+        this.charge = charge;
     }
 
     public PointF GetPosition()
@@ -34,7 +34,21 @@ public class Naboj : INaboj
 
     public void SetPosition(PointF point)
     {
-        throw new NotImplementedException();
+        this.center = point;
+    }
+    public int GetRadius()
+    {
+        return this.radius;
+    }
+
+    public void SetRadius(int radius)
+    {
+        this.radius = radius;
+    }
+
+    public int GetID()
+    {
+        return this.id;
     }
 
     public void Draw(Graphics g)
@@ -53,9 +67,5 @@ public class Naboj : INaboj
         brush = new SolidBrush(Color.Black);
         g.DrawString(label, font, brush, center.X - width / 2, center.Y - height / 2);
     }
-
-    public int GetID()
-    {
-        return this.id;
-    }
+    
 }

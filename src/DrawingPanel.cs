@@ -25,7 +25,7 @@ namespace UPG_SP_2024
             switch(scenario_num)
             {
                 case 0:
-                    INaboj naboj = new Naboj(1,5, new PointF(0, 0), 0);
+                    INaboj naboj = new Naboj(1, 50, new PointF(0, 0), 0);
                     scenario.AddCharge(naboj);
                     break;
                 case 1:
@@ -63,11 +63,8 @@ namespace UPG_SP_2024
 
 
             //TODO: Add custom paint code here
-            INaboj n1 = new Naboj(5, 20, new PointF(100, 100), 1);
-            INaboj n2 = new Naboj(16, 40, new PointF(200, 150), 2);
-
-            n1.Draw(g);
-            n2.Draw(g);
+            
+            scenario.Draw(g);
 
             // Calling the base class OnPaint
             base.OnPaint(e);
