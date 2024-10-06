@@ -4,6 +4,8 @@ namespace UPG_SP_2024;
 
 public class Scenario : IScenario
 {
+    INaboj[] charges = new INaboj[1];
+
     public INaboj[] GetCharges()
     {
         throw new NotImplementedException();
@@ -25,7 +27,12 @@ public class Scenario : IScenario
     }
 
     public void Draw(Graphics g)
-    {
-        throw new NotImplementedException();
+    {  
+
+        float x_min;
+        float x_max;
+        float y_min;
+        float y_max;
+        ;
     }
 }
