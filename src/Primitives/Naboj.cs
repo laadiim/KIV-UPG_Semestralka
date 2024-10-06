@@ -29,7 +29,7 @@ public class Naboj : INaboj
 
     public PointF GetPosition()
     {
-        throw new NotImplementedException();
+        return this.center;
     }
 
     public void SetPosition(PointF point)
@@ -56,6 +56,6 @@ public class Naboj : INaboj
 
     public int GetID()
     {
-        throw new NotImplementedException();
+        return this.id;
     }
 }
