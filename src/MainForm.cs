@@ -5,9 +5,9 @@ namespace UPG_SP_2024
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        public MainForm(int scenario_num)
         {
-            InitializeComponent();
+            InitializeComponent(scenario_num);
         }
     }
 }

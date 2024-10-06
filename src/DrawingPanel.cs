@@ -13,10 +13,44 @@ namespace UPG_SP_2024
     /// </summary>
     public class DrawingPanel : Panel
     {
-        /// <summary>Initializes a new instance of the <see cref="DrawingPanel" /> class.</summary>
-        public DrawingPanel()
+        Scenario scenario;
+        /// <summary>
+        /// konstruktor DrawingPanel
+        /// </summary>
+        /// <param name="scenario_num">ocislovani scenaria od 0 do 3</param>
+        public DrawingPanel(int scenario_num)
         {
             this.ClientSize = new System.Drawing.Size(800, 600);
+            scenario = new Scenario();
+            switch(scenario_num)
+            {
+                case 0:
+                    INaboj naboj = new Naboj(1,5, new PointF(0, 0), 0);
+                    scenario.AddCharge(naboj);
+                    break;
+                case 1:
+                    INaboj naboj1 = new Naboj(1, 5, new PointF(-1, 0), 0);
+                    INaboj naboj2 = new Naboj(1, 5, new PointF(1, 0), 1);
+                    scenario.AddCharge(naboj1);
+                    scenario.AddCharge(naboj2);
+                    break;
+                case 2:
+                    INaboj naboj3 = new Naboj(-1, 5, new PointF(-1, 0), 0);
+                    INaboj naboj4 = new Naboj(2, 5, new PointF(1, 0), 1);
+                    scenario.AddCharge(naboj3);
+                    scenario.AddCharge(naboj4);
+                    break;
+                case 3:
+                    INaboj naboj5 = new Naboj(1, 5, new PointF(-1, -1), 0);
+                    INaboj naboj6 = new Naboj(2, 5, new PointF(1, -1), 1);
+                    INaboj naboj7 = new Naboj(-3, 5, new PointF(1, 1), 0);
+                    INaboj naboj8 = new Naboj(-4, 5, new PointF(-1, 1), 1);
+                    scenario.AddCharge(naboj5);
+                    scenario.AddCharge(naboj6);
+                    scenario.AddCharge(naboj7);
+                    scenario.AddCharge(naboj8);
+                    break;
+            }
         }
 
         /// <summary>TODO: Custom visualization code comes into this method</summary>
@@ -25,6 +59,8 @@ namespace UPG_SP_2024
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+
+
 
             //TODO: Add custom paint code here
             INaboj n1 = new Naboj(5, 20, new PointF(100, 100), 1);
