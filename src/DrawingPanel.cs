@@ -64,7 +64,7 @@ namespace UPG_SP_2024
 
             //TODO: Add custom paint code here
             
-            scenario.Draw(g);
+            scenario.Draw(g, this);
 
             // Calling the base class OnPaint
             base.OnPaint(e);

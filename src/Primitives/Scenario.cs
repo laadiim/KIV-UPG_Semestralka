@@ -106,22 +106,27 @@ public class Scenario : IScenario
         {
             scale = scaleY;
             float difX = width - scale * (xMax - xMin);
-            xMax += difX / 2;
-            xMin -= difX / 2;
+            xMax = xMax * scale + difX / 2;
+            xMin = xMin * scale - difX / 2;
+            yMax = yMax * scale;
+            yMin = yMin * scale;
+
         }
         else
         {
             scale = scaleX;
             float difY = height - scale * (yMax - yMin);
-            yMax += difY / 2;
-            yMin -= difY / 2;
+            yMax = yMax * scale + difY / 2;
+            yMin = yMin * scale - difY / 2;
+            xMax = xMax * scale;
+            xMin = xMin * scale;
         }
         
         PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
 
         for (int i = 0; i < charges.Length; i++)
         {
-            if (charges[i] != null) charges[i].Draw(g);
+            if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
     }
 }

@@ -36,5 +36,5 @@ public interface IScenario
     /// vykresli scenar
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    void Draw(Graphics g);
+    void Draw(Graphics g, Panel panel);
 }

@@ -51,7 +51,7 @@ public class Naboj : INaboj
         return this.id;
     }
 
-    public void Draw(Graphics g)
+    public void Draw(Graphics g, PointF panelCenter, float scale)
     {
         Brush brush = new SolidBrush(Color.Gold);
         g.FillEllipse(brush, center.X - radius, center.Y - radius, radius * 2, radius * 2);
