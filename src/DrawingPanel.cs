@@ -17,12 +17,12 @@ namespace UPG_SP_2024
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
-        /// <param name="scenario_num">ocislovani scenaria od 0 do 3</param>
-        public DrawingPanel(int scenario_num)
+        /// <param name="scenarioNum">ocislovani scenaria od 0 do 3</param>
+        public DrawingPanel(int scenarioNum)
         {
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
-            switch(scenario_num)
+            switch(scenarioNum)
             {
                 case 0:
                     INaboj naboj = new Naboj(1, 50, new PointF(0, 0), 0);

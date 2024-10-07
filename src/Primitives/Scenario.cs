@@ -86,10 +86,12 @@ public class Scenario : IScenario
     {
         Tuple<float[], float[]> positions = GetPositions();
 
-        float x_min = positions.Item1.Min();
-        float x_max = positions.Item1.Max();
-        float y_min = positions.Item2.Min();
-        float y_max = positions.Item2.Max();
+        float xMin = positions.Item1.Min();
+        float xMax = positions.Item1.Max();
+        float yMin = positions.Item2.Min();
+        float yMax = positions.Item2.Max();
+        
+        int height = g.Size.Height;
 
         for (int i = 0; i < charges.Length; i++)
         {
