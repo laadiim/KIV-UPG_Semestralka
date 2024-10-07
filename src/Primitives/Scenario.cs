@@ -82,7 +82,7 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    public void Draw(Graphics g)
+    public void Draw(Graphics g, Panel panel)
     {
         Tuple<float[], float[]> positions = GetPositions();
 
@@ -91,7 +91,33 @@ public class Scenario : IScenario
         float yMin = positions.Item2.Min();
         float yMax = positions.Item2.Max();
         
-        int height = g.Size.Height;
+        xMin -= panel.Width / 10f;
+        xMax += panel.Width / 10f;
+        yMin -= panel.Height / 10f;
+        yMax += panel.Height / 10f;
+        
+        int height = panel.Size.Height;
+        int width = panel.Size.Width;
+        
+        float scaleX = width / (xMax - xMin);
+        float scaleY = height / (yMax - yMin);
+        float scale;
+        if (scaleX > scaleY)
+        {
+            scale = scaleY;
+            float difX = width - scale * (xMax - xMin);
+            xMax += difX / 2;
+            xMin -= difX / 2;
+        }
+        else
+        {
+            scale = scaleX;
+            float difY = height - scale * (yMax - yMin);
+            yMax += difY / 2;
+            yMin -= difY / 2;
+        }
+        
+        PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
 
         for (int i = 0; i < charges.Length; i++)
         {
