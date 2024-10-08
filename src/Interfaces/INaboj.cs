@@ -30,7 +30,7 @@ public interface INaboj
     /// vykresli naboj
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    void Draw(Graphics g);
+    void Draw(Graphics g, PointF panelCenter, float scale);
     
     /// <summary>
     /// vrati ID naboje
