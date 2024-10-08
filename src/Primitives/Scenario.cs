@@ -127,6 +127,9 @@ public class Scenario : IScenario
         
         PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
 
+        IGrid grid = new Grid();
+        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax));
+
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
