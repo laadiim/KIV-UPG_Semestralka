@@ -25,12 +25,14 @@ public interface INaboj
     /// </summary>
     /// <param name="point">novy stred</param>
     void SetPosition(PointF point);
-    
+
     /// <summary>
     /// vykresli naboj
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    void Draw(Graphics g);
+    /// <param name="panelCenter">stred panelu</param>
+    /// <param name="scale">zvetseni</param>
+    void Draw(Graphics g, PointF panelCenter, float scale);
     
     /// <summary>
     /// vrati ID naboje

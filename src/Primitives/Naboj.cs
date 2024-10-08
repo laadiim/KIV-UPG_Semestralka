@@ -54,10 +54,10 @@ public class Naboj : INaboj
     public void Draw(Graphics g, PointF panelCenter, float scale)
     {
         Brush brush = new SolidBrush(Color.Gold);
-        g.FillEllipse(brush, center.X - radius, center.Y - radius, radius * 2, radius * 2);
+        g.FillEllipse(brush, panelCenter.X + center.X - radius, panelCenter.Y + center.Y - radius, radius * 2, radius * 2);
         
         Pen pen = new Pen(Color.Black);
-        g.DrawEllipse(pen, center.X - radius, center.Y - radius, radius * 2, radius * 2);
+        g.DrawEllipse(pen, panelCenter.X + center.X - radius, panelCenter.Y + center.Y - radius, radius * 2, radius * 2);
 
         string label = $"{this.charge} C";
         Font font = new Font("Arial", 12, FontStyle.Bold);
