@@ -61,7 +61,7 @@ public class Naboj : INaboj
         g.DrawEllipse(pen, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
 
         string label = $"{this.charge} C";
-        Font font = new Font("Arial", 12, FontStyle.Bold);
+        Font font = new Font("Arial", 0.2f * scale, FontStyle.Bold);
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
         
