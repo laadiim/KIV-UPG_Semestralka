@@ -91,10 +91,13 @@ public class Scenario : IScenario
         float yMin = positions.Item2.Min();
         float yMax = positions.Item2.Max();
         
-        xMin -= panel.Width / 10f;
-        xMax += panel.Width / 10f;
-        yMin -= panel.Height / 10f;
-        yMax += panel.Height / 10f;
+        float viewportWidth = xMax - xMin;
+        float viewportHeight = yMax - yMin;
+        
+        xMin -= viewportWidth / 10f;
+        xMax += viewportWidth / 10f;
+        yMin -= viewportHeight / 10f;
+        yMax += viewportHeight / 10f;
         
         int height = panel.Size.Height;
         int width = panel.Size.Width;

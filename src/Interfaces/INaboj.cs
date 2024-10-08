@@ -44,11 +44,11 @@ public interface INaboj
     /// vrati polomer naboje pro vykresleni
     /// </summary>
     /// <returns>polomer</returns>
-    int GetRadius();
+    float GetRadius();
     
     /// <summary>
     /// nastavi novy polomer
     /// </summary>
     /// <param name="radius">novy polomer</param>
-    void SetRadius(int radius);
+    void SetRadius(float radius);
 }
