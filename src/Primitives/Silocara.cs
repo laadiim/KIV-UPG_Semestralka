@@ -8,14 +8,14 @@ namespace UPG_SP_2024.Primitives;
 public class Silocara
 {
     private LinkedList<PointF> points = new LinkedList<PointF>();
-    private int amount;
     private PointF start;
     private const double e = 8.854E-12;
-    private const double k = 1 / (4 * Math.PI * e);
+    private const float k = 1 / (float)(4 * Math.PI * e);
+    private float epsilon;
     
-    public Silocara(int amount, PointF startPoint)
+    public Silocara(float epsilon, PointF startPoint)
     {
-        this.amount = amount;
+        this.epsilon = epsilon;
         this.start = startPoint;
         this.points.AddLast(startPoint);
         
@@ -24,22 +24,33 @@ public class Silocara
     private void Eval(INaboj[] charges)
     {
         
-        Vector3 electricField = Vector3.Zero; // Initialize the electric field to zero
+        Vector2 electricField = Vector2.Zero; // Initialize the electric field to zero
+        Vector2 x = new Vector2(start.X, start.Y);
+        Vector2 newPoint = Vector2.Zero;
 
-        for (int i = 0; i < charges.Length; i++)
+        do
         {
-            Vector3 r = x - chargePositions[i]; // Vector from charge to observation point
-            double rMagnitude = r.Length();     // Magnitude of vector r
-
-            if (rMagnitude == 0)
+            for (int i = 0; i < charges.Length; i++)
             {
-                continue; // Avoid division by zero (if the charge is exactly at the point)
+                PointF point = charges[i].GetPosition();
+                Vector2 r = x - new Vector2(point.X, point.Y); // Vector from charge to observation point
+                double rMagnitude = r.Length(); // Magnitude of vector r
+
+                if (rMagnitude == 0)
+                {
+                    continue; // Avoid division by zero (if the charge is exactly at the point)
+                }
+
+                // Contribution of charge i to the electric field
+                Vector2 contribution = (float)(charges[i].GetCharge() / Math.Pow(rMagnitude, 3)) * r;
+                electricField = contribution;
             }
 
-            // Contribution of charge i to the electric field
-            Vector3 contribution = (float)(charges[i] / Math.Pow(rMagnitude, 3)) * r;
-            electricField += contribution;
+            Vector2 force = k * electricField;
+            newPoint = x + force;
+            this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
         }
+        while ((newPoint - x).Length() > epsilon);
     }
 
     private double Sum(PointF point, INaboj[] charges)
