@@ -64,12 +64,12 @@ public class Naboj : INaboj
         g.DrawEllipse(pen, 0, 0, radius * 2, radius * 2);
 
         string label = $"{this.charge} C";
-        Font font = new Font("Arial", 0.2f * scale, FontStyle.Bold);
+        Font font = new Font("Arial", 10 / scale, FontStyle.Bold);
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
         
         brush = new SolidBrush(Color.Black);
-        //g.DrawString(label, font, brush, center.X * scale - width / 2 + panelCenter.X, center.Y * scale - height / 2 + panelCenter.Y);
+        g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
         g.TranslateTransform(radius - center.X, radius - center.Y);
     }
     
