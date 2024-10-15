@@ -107,17 +107,16 @@ public class Scenario : IScenario
         {
             scale = scaleY;
             float difX = width - scale * (xMax - xMin);
-            Console.WriteLine("dif: {0}", difX);
-            xMax = xMax + difX / 2;
-            xMin = xMin - difX / 2;
+            xMax = xMax + difX / (2 * scale);
+            xMin = xMin - difX / (2 * scale);
 
         }
         else
         {
             scale = scaleX;
-            float difY = height - (yMax - yMin);
-            yMax = yMax + difY / 2;
-            yMin = yMin - difY / 2;
+            float difY = height - scale * (yMax - yMin);
+            yMax = yMax + difY / (2 * scale);
+            yMin = yMin - difY / (2 * scale);
         }
         
         g.ScaleTransform(scale, scale);

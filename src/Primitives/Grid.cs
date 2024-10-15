@@ -40,8 +40,8 @@ public class Grid : IGrid
         Console.WriteLine(points2[1].ToString());
         Console.WriteLine(points2[2].ToString());
         
-        g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter, leftCenter);
-        g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter, bottomCenter);
+        g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter - new SizeF(tip, 0), leftCenter);
+        g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter + new SizeF(0, tip), bottomCenter);
         
         g.FillPolygon(new SolidBrush(Color.Black), points1);
         g.FillPolygon(new SolidBrush(Color.Black), points2);
