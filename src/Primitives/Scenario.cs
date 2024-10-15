@@ -121,20 +121,20 @@ public class Scenario : IScenario
         
         g.ScaleTransform(scale, scale);
         
-        PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
+        PointF center = new PointF((xMax + xMin) / 2, (yMax + yMin) / 2);
         Console.WriteLine(scale);
         Console.WriteLine(center.ToString());
         Console.WriteLine(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
         
         //g.DrawLine(new Pen(Color.Black, 1), new PointF(1, 0), new PointF(-1, 0));
-        //g.FillEllipse(new SolidBrush(Color.Black), 1, 1, 1, 1);
+        g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
 
-        IGrid grid = new Grid();
+        /*IGrid grid = new Grid();
         grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin));
 
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
-        }
+        }*/
     }
 }
