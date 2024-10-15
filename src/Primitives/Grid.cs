@@ -31,7 +31,15 @@ public class Grid : IGrid
         points1[1] = new PointF(topCenter.X + tip, topCenter.Y + tip);
         points1[2] = new PointF(topCenter.X - tip, topCenter.Y + tip);
         
+        PointF[] points2 = new PointF[3];
+        points2[0] = rightCenter;
+        points2[1] = new PointF(rightCenter.X - tip, rightCenter.Y + tip);
+        points2[2] = new PointF(rightCenter.X - tip, rightCenter.Y - tip);
+        
         g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter, leftCenter);
         g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter, bottomCenter);
+        
+        g.FillPolygon(new SolidBrush(Color.Black), points1);
+        g.FillPolygon(new SolidBrush(Color.Black), points2);
     }
 }
