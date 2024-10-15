@@ -9,9 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change afterPath="$PROJECT_DIR$/Primitives/Silocara.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Primitives/Grid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Grid.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Silocara.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Silocara.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,6 +145,7 @@
       <workItem from="1729013404638" duration="304000" />
       <workItem from="1729013942812" duration="630000" />
       <workItem from="1729014641880" duration="454000" />
+      <workItem from="1729015523300" duration="320000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />

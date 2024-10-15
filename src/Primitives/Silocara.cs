@@ -18,7 +18,7 @@ public class Silocara
         this.points.AddLast(start);
     }
     
-    private void Eval(INaboj[] charges)
+    public void Eval(INaboj[] charges, int chargesCount)
     {
         if (charges == null || charges.Length == 0)
         {
@@ -26,6 +26,17 @@ public class Silocara
             return; // Exit the method if no charges
         }
         
+        INaboj[] c = new INaboj[chargesCount];
+        int j = 0;
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] != null)
+            {
+                c[j] = charges[i];
+                j++;
+            }
+        }
+
         Vector2 electricField = Vector2.Zero; // Initialize the electric field to zero
         Vector2 x = new Vector2(start.X, start.Y); // Start point
         Vector2 newPoint = Vector2.Zero;
@@ -36,9 +47,9 @@ public class Silocara
         do
         {
             electricField = Vector2.Zero; // Reset the field for each iteration
-            for (int i = 0; i < charges.Length; i++)
+            for (int i = 0; i < c.Length; i++)
             {
-                PointF point = charges[i].GetPosition();
+                PointF point = c[i].GetPosition();
                 Vector2 r = x - new Vector2(point.X, point.Y); // Vector from charge to observation point
                 double rMagnitude = r.Length(); // Magnitude of vector r
     
@@ -48,7 +59,7 @@ public class Silocara
                 }
     
                 // Contribution of charge i to the electric field
-                Vector2 contribution = (float)(charges[i].GetCharge() / Math.Pow(rMagnitude, 3)) * r;
+                Vector2 contribution = (float)(c[i].GetCharge() / Math.Pow(rMagnitude, 3)) * r;
                 electricField += contribution;
             }
     
@@ -67,4 +78,16 @@ public class Silocara
         } while (force.Length() > epsilon && points.Count < 100); // Limit the number of points
     }
     
+    
+    public void Draw(Graphics g, PointF center, float scale)
+    {
+        PointF[] pointsArray = new PointF[this.points.Count];
+        this.points.CopyTo(pointsArray, 0);
+
+        // Only draw if there are at least 2 points to form a line
+        if (pointsArray.Length > 1)
+        {
+            g.DrawLines(new Pen(Brushes.Black, 1 / scale), pointsArray);
+        }
+    }
 }

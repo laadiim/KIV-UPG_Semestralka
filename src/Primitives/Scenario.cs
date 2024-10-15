@@ -136,5 +136,9 @@ public class Scenario : IScenario
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
+        
+        Silocara s = new Silocara(new PointF(1.5f, 1.5f), 1/scale);
+        s.Eval(this.charges, chargesCount);
+        s.Draw(g, center, scale);
     }
 }
