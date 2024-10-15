@@ -67,7 +67,7 @@ public class Silocara
             x = newPoint;
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
         }
-        while (force.Length() > epsilon && points.Count < 100);
+        while (force.Length() > epsilon && points.Count < 10);
     }
 
     public void Draw(Graphics g, PointF center, float scale)
@@ -80,10 +80,8 @@ public class Silocara
             Console.WriteLine(points[i].ToString());
             points[i].X = (points[i].X + center.X);
             points[i].Y = (points[i].Y + center.Y);
-            Console.WriteLine(points[i].ToString());
         }
         
-        for (int i = 0; i < points.Length; i++) Console.WriteLine(points[i].ToString());
 
         g.DrawLines(new Pen(Brushes.Black, 1), points);
     }
