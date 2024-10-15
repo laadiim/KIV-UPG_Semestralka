@@ -1,3 +1,6 @@
+using Accessibility;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms.VisualStyles;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -128,7 +131,12 @@ public class Scenario : IScenario
         PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
 
         IGrid grid = new Grid();
-        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin));
+
+        Pen pen = new Pen(Color.FromArgb(150, Color.PowderBlue), 3f);
+        Brush brush = new SolidBrush(Color.FromArgb(150, Color.PowderBlue));
+
+
+        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush);
 
         for (int i = 0; i < charges.Length; i++)
         {
