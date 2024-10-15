@@ -94,10 +94,10 @@ public class Scenario : IScenario
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
         
-        xMin -= viewportWidth / 10f;
-        xMax += viewportWidth / 10f;
-        yMin -= viewportHeight / 10f;
-        yMax += viewportHeight / 10f;
+        xMin -= viewportWidth / 5f;
+        xMax += viewportWidth / 5f;
+        yMin -= viewportHeight / 5f;
+        yMax += viewportHeight / 5f;
         
         int height = panel.Size.Height;
         int width = panel.Size.Width;
@@ -132,18 +132,20 @@ public class Scenario : IScenario
 
         PointF start = new PointF(charges[0].GetPosition().X * scale + center.X,
             charges[0].GetPosition().Y * scale + center.Y);
-        Console.WriteLine(charges[0].GetPosition().ToString());
-        for (int i = 0; i < 50; i++)
-        {
-            Silocara s = new Silocara(10f, new PointF(0 , 3 * i), this.charges, chargesCount);
-            s.Draw(g, center, scale); 
-            
-        }
 
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
-        s.Draw(g, center, scale);
+
+        Console.WriteLine(center.ToString());
+        for (int i = 0; i < 1; i++)
+        {
+            PointF x = new PointF(1, 1);
+            Console.WriteLine(x.ToString());
+            Silocara s = new Silocara(10f, x, this.charges, chargesCount);
+            s.Draw(g, center, scale); 
+            
+        }
     }
 }

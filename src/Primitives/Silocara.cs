@@ -27,8 +27,6 @@ public class Silocara
             tmp[j] = charges[i];
             j++;
         }
-
-        Console.WriteLine(tmp.Length);
         this.Eval(tmp);
     }
 
@@ -45,7 +43,7 @@ public class Silocara
         Vector2 newPoint = Vector2.Zero;
         Vector2 force = Vector2.Zero;
 
-        const float stepSize = 0.1f; // Use a small, constant step size
+        const float stepSize = 0.01f; // Use a small, constant step size
 
         do
         {
@@ -66,7 +64,7 @@ public class Silocara
                 electricField += contribution;
             }
 
-            force = k * electricField;
+            force = k * stepSize * electricField;
 
             // Normalize the force and scale the step size based on field strength
             if (force.Length() == 0)
@@ -74,11 +72,11 @@ public class Silocara
                 break; // Stop if the force becomes zero
             }
 
-            newPoint = x + stepSize * force / force.Length(); // Take a small step in the force direction
+            newPoint = x + force / force.Length(); // Take a small step in the force direction
             x = newPoint;
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
 
-        } while (force.Length() > epsilon && points.Count < 100); // Limit the number of points
+        } while (force.Length() > epsilon && points.Count < 50); // Limit the number of points
     }
 
 
@@ -96,6 +94,8 @@ public class Silocara
             // Then apply the translation for centering
             pointsArray[i].X += center.X;
             pointsArray[i].Y += center.Y;
+
+            Console.WriteLine(pointsArray[i].ToString());
         }
 
         // Only draw if there are at least 2 points to form a line
