@@ -14,17 +14,30 @@ public class Silocara
     private float epsilon;
    
     
-    public Silocara(float epsilon, PointF startPoint, INaboj[] charges)
+    public Silocara(float epsilon, PointF startPoint, INaboj[] charges, int chargesCount)
     {
         this.epsilon = epsilon;
         this.start = startPoint;
         this.points.AddLast(startPoint);
-        this.Eval(charges);
+        INaboj[] tmp = new INaboj[chargesCount];
+        int j = 0;
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] == null) continue;
+            tmp[j] = charges[i];
+            j++;
+        }
+
+        Console.WriteLine(tmp.Length);
+        this.Eval(tmp);
     }
 
     private void Eval(INaboj[] charges)
     {
-        
+         if (charges == null || charges.Length == 0)
+         {
+             Console.WriteLine("No charges");
+         }   
         Vector2 electricField = Vector2.Zero; // Initialize the electric field to zero
         Vector2 x = new Vector2(start.X, start.Y);
         Vector2 newPoint = Vector2.Zero;
@@ -52,6 +65,7 @@ public class Silocara
             force = k * electricField;
             newPoint = x + force;
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
+            Console.WriteLine(force.Length());
         }
         while (force.Length() > epsilon);
     }
