@@ -130,7 +130,7 @@ public class Scenario : IScenario
         //g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
 
         IGrid grid = new Grid();
-        grid.Draw(g, new PointF(xMin,yMin), new PointF(xMax, yMax));
+        grid.Draw(g, new PointF(xMin,yMin), new PointF(xMax, yMax), scale);
 
         for (int i = 0; i < charges.Length; i++)
         {

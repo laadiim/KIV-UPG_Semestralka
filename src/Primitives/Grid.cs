@@ -15,7 +15,7 @@ public class Grid : IGrid
         throw new NotImplementedException();
     }
 
-    public void Draw(Graphics g, PointF topLeft, PointF bottomRight)
+    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float scale)
     {
         Console.WriteLine(topLeft);
         Console.WriteLine(bottomRight);
@@ -24,7 +24,7 @@ public class Grid : IGrid
         PointF leftCenter = new PointF(topLeft.X, (topLeft.Y + bottomRight.Y) / 2);
         PointF rightCenter = new PointF(bottomRight.X, (topLeft.Y + bottomRight.Y) / 2);
         
-        g.DrawLine(new Pen(Brushes.Black, 1), rightCenter, leftCenter);
-        g.DrawLine(new Pen(Brushes.Black, 1), topCenter, bottomCenter);
+        g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter, leftCenter);
+        g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter, bottomCenter);
     }
 }

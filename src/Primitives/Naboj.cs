@@ -56,11 +56,11 @@ public class Naboj : INaboj
         Console.WriteLine(scale);
         Brush brush = new SolidBrush(Color.Gold);
         
-        g.TranslateTransform(center.X - radius / 2, center.Y - radius / 2);
+        g.TranslateTransform(center.X - radius, center.Y - radius);
         
-        g.FillEllipse(brush, 0, 0, radius, radius);
+        g.FillEllipse(brush, 0, 0, radius * 2, radius * 2);
         
-        Pen pen = new Pen(Color.Black);
+        Pen pen = new Pen(Color.Black, 1/scale);
         g.DrawEllipse(pen, 0, 0, radius * 2, radius * 2);
 
         string label = $"{this.charge} C";
@@ -70,7 +70,7 @@ public class Naboj : INaboj
         
         brush = new SolidBrush(Color.Black);
         //g.DrawString(label, font, brush, center.X * scale - width / 2 + panelCenter.X, center.Y * scale - height / 2 + panelCenter.Y);
-        g.TranslateTransform(radius / 2 - center.X, radius / 2 - center.Y);
+        g.TranslateTransform(radius - center.X, radius - center.Y);
     }
     
 }
