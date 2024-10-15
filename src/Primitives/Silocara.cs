@@ -45,7 +45,6 @@ public class Silocara
 
         do
         {
-            Console.WriteLine(points.Count);
             electricField = Vector2.Zero;
             for (int i = 0; i < charges.Length; i++)
             {
@@ -67,20 +66,24 @@ public class Silocara
             newPoint = x + 10 * force / force.Length();
             x = newPoint;
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
-            Console.WriteLine(newPoint.ToString());
         }
-        while (force.Length() > epsilon && points.Count < 10);
+        while (force.Length() > epsilon && points.Count < 100);
     }
 
     public void Draw(Graphics g, PointF center, float scale)
     {
+        Console.WriteLine(scale);
         PointF[] points = new PointF[this.points.Count];
+        this.points.CopyTo(points, 0);
         for (int i = 0; i < points.Length; i++)
         {
-            points[i].X = scale * (points[i].X + center.X);
-            points[i].Y = scale * (points[i].Y + center.Y);
+            Console.WriteLine(points[i].ToString());
+            points[i].X = (points[i].X + center.X);
+            points[i].Y = (points[i].Y + center.Y);
             Console.WriteLine(points[i].ToString());
         }
+        
+        for (int i = 0; i < points.Length; i++) Console.WriteLine(points[i].ToString());
 
         g.DrawLines(new Pen(Brushes.Black, 1), points);
     }

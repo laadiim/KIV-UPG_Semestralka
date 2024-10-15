@@ -9,7 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Silocara.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Silocara.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -141,6 +141,7 @@
       <workItem from="1728978066405" duration="1202000" />
       <workItem from="1728979374089" duration="726000" />
       <workItem from="1728980694756" duration="300000" />
+      <workItem from="1728981313751" duration="546000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
