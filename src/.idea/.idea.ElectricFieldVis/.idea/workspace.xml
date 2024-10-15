@@ -9,8 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Grid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Grid.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Naboj.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,6 +145,7 @@
       <workItem from="1729012390551" duration="311000" />
       <workItem from="1729013119800" duration="255000" />
       <workItem from="1729013404638" duration="304000" />
+      <workItem from="1729013942812" duration="630000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />

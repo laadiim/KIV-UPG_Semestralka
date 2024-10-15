@@ -106,7 +106,8 @@ public class Scenario : IScenario
         if (scaleX > scaleY)
         {
             scale = scaleY;
-            float difX = width - (xMax - xMin);
+            float difX = width - scale * (xMax - xMin);
+            Console.WriteLine("dif: {0}", difX);
             xMax = xMax + difX / 2;
             xMin = xMin - difX / 2;
 

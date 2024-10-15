@@ -30,11 +30,15 @@ public class Grid : IGrid
         points1[0] = topCenter;
         points1[1] = new PointF(topCenter.X + tip, topCenter.Y + tip);
         points1[2] = new PointF(topCenter.X - tip, topCenter.Y + tip);
-        
+        Console.WriteLine(points1[1].ToString());
+        Console.WriteLine(points1[2].ToString());
         PointF[] points2 = new PointF[3];
         points2[0] = rightCenter;
         points2[1] = new PointF(rightCenter.X - tip, rightCenter.Y + tip);
         points2[2] = new PointF(rightCenter.X - tip, rightCenter.Y - tip);
+
+        Console.WriteLine(points2[1].ToString());
+        Console.WriteLine(points2[2].ToString());
         
         g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter, leftCenter);
         g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter, bottomCenter);

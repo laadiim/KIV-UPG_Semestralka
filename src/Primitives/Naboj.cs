@@ -53,7 +53,6 @@ public class Naboj : INaboj
 
     public void Draw(Graphics g, PointF panelCenter, float scale)
     {
-        Console.WriteLine(scale);
         Brush brush = new SolidBrush(Color.Gold);
         
         g.TranslateTransform(center.X - radius, center.Y - radius);
