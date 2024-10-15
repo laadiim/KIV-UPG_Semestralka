@@ -82,7 +82,7 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    public void Draw(Graphics g, Panel panel)
+    public void Draw(Graphics g, float width, float height)
     {
         Tuple<float[], float[]> positions = GetPositions();
 
@@ -99,8 +99,6 @@ public class Scenario : IScenario
         yMin -= viewportHeight / 10f;
         yMax += viewportHeight / 10f;
         
-        int height = panel.Size.Height;
-        int width = panel.Size.Width;
         
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);

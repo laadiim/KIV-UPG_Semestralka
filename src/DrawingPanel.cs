@@ -63,8 +63,11 @@ namespace UPG_SP_2024
 
 
             //TODO: Add custom paint code here
+            float panelHeight = this.Height;
+            float panelWidth = this.Width;
+            g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            scenario.Draw(g, this);
+            scenario.Draw(g, panelWidth, panelHeight);
 
             // Calling the base class OnPaint
             base.OnPaint(e);
