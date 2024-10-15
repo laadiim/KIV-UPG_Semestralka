@@ -29,8 +29,8 @@ namespace UPG_SP_2024
                     scenario.AddCharge(naboj);
                     break;
                 case 1:
-                    INaboj naboj1 = new Naboj(1, 1, new PointF(-1, 0), 0);
-                    INaboj naboj2 = new Naboj(1, 1, new PointF(1, 0), 1);
+                    INaboj naboj1 = new Naboj(1, 0.5f, new PointF(-1, 0), 0);
+                    INaboj naboj2 = new Naboj(1, 0.5f, new PointF(1, 0), 1);
                     scenario.AddCharge(naboj1);
                     scenario.AddCharge(naboj2);
                     break;

@@ -5,11 +5,11 @@ namespace UPG_SP_2024.Primitives;
 public class Naboj : INaboj
 {
     private int charge;
-    private int radius;
+    private float radius;
     private PointF center;
     private int id;
     
-    public Naboj(int charge, int radius, PointF center, int id)
+    public Naboj(int charge, float radius, PointF center, int id)
     {
         this.charge = charge;
         this.radius = radius;
@@ -36,12 +36,12 @@ public class Naboj : INaboj
     {
         this.center = point;
     }
-    public int GetRadius()
+    public float GetRadius()
     {
         return this.radius;
     }
 
-    public void SetRadius(int radius)
+    public void SetRadius(float radius)
     {
         this.radius = radius;
     }
@@ -61,7 +61,7 @@ public class Naboj : INaboj
         g.FillEllipse(brush, 0, 0, radius, radius);
         
         Pen pen = new Pen(Color.Black);
-        //g.DrawEllipse(pen, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
+        g.DrawEllipse(pen, 0, 0, radius * 2, radius * 2);
 
         string label = $"{this.charge} C";
         Font font = new Font("Arial", 0.2f * scale, FontStyle.Bold);
