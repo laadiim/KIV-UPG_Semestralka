@@ -9,8 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interfaces/INaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaces/INaboj.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Naboj.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
     </list>
@@ -140,6 +139,7 @@
       <workItem from="1728384842690" duration="367000" />
       <workItem from="1729009742223" duration="302000" />
       <workItem from="1729010218587" duration="623000" />
+      <workItem from="1729011340115" duration="338000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />

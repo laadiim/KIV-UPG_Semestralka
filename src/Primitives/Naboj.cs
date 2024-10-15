@@ -55,7 +55,10 @@ public class Naboj : INaboj
     {
         Console.WriteLine(scale);
         Brush brush = new SolidBrush(Color.Gold);
-        g.FillEllipse(brush, panelCenter.X + center.X - radius, panelCenter.Y + center.Y - radius, radius * 2, radius * 2);
+        
+        g.TranslateTransform(center.X - radius / 2, center.Y - radius / 2);
+        
+        g.FillEllipse(brush, 0, 0, radius, radius);
         
         Pen pen = new Pen(Color.Black);
         //g.DrawEllipse(pen, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
@@ -67,6 +70,7 @@ public class Naboj : INaboj
         
         brush = new SolidBrush(Color.Black);
         //g.DrawString(label, font, brush, center.X * scale - width / 2 + panelCenter.X, center.Y * scale - height / 2 + panelCenter.Y);
+        g.TranslateTransform(radius / 2 - center.X, radius / 2 - center.Y);
     }
     
 }

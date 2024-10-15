@@ -127,14 +127,14 @@ public class Scenario : IScenario
         Console.WriteLine(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
         
         //g.DrawLine(new Pen(Color.Black, 1), new PointF(1, 0), new PointF(-1, 0));
-        g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
+        //g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
 
-        /*IGrid grid = new Grid();
-        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin));
+        IGrid grid = new Grid();
+        grid.Draw(g, new PointF(xMin,yMin), new PointF(xMax, yMax));
 
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
-        }*/
+        }
     }
 }
