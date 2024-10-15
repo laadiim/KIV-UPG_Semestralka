@@ -106,38 +106,35 @@ public class Scenario : IScenario
         if (scaleX > scaleY)
         {
             scale = scaleY;
-            float difX = width - scale * (xMax - xMin);
-            xMax = xMax * scale + difX / 2;
-            xMin = xMin * scale - difX / 2;
-            yMax = yMax * scale;
-            yMin = yMin * scale;
+            float difX = width - (xMax - xMin);
+            xMax = xMax + difX / 2;
+            xMin = xMin - difX / 2;
 
         }
         else
         {
             scale = scaleX;
-            float difY = height - scale * (yMax - yMin);
-            yMax = yMax * scale + difY / 2;
-            yMin = yMin * scale - difY / 2;
-            xMax = xMax * scale;
-            xMin = xMin * scale;
+            float difY = height - (yMax - yMin);
+            yMax = yMax + difY / 2;
+            yMin = yMin - difY / 2;
         }
         
         g.ScaleTransform(scale, scale);
         
         PointF center = new PointF((xMax - xMin) / 2, (yMax - yMin) / 2);
-
+        Console.WriteLine(scale);
         Console.WriteLine(center.ToString());
         Console.WriteLine(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
         
-        g.FillEllipse(new SolidBrush(Color.Black), center.X - 50, center.Y - 50, 100f, 100f);
-/*
+        //g.DrawLine(new Pen(Color.Black, 1), new PointF(1, 0), new PointF(-1, 0));
+        //g.FillEllipse(new SolidBrush(Color.Black), 1, 1, 1, 1);
+
         IGrid grid = new Grid();
         grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin));
 
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
-        }*/
+        }
     }
 }

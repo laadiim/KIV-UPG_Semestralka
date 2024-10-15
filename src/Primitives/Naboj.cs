@@ -5,14 +5,14 @@ namespace UPG_SP_2024.Primitives;
 public class Naboj : INaboj
 {
     private int charge;
-    private float radius;
+    private int radius;
     private PointF center;
     private int id;
     
     public Naboj(int charge, int radius, PointF center, int id)
     {
         this.charge = charge;
-        this.radius = 0.5f;
+        this.radius = radius;
         this.center = center;
         this.id = id;
     }
@@ -36,12 +36,12 @@ public class Naboj : INaboj
     {
         this.center = point;
     }
-    public float GetRadius()
+    public int GetRadius()
     {
         return this.radius;
     }
 
-    public void SetRadius(float radius)
+    public void SetRadius(int radius)
     {
         this.radius = radius;
     }
@@ -55,10 +55,10 @@ public class Naboj : INaboj
     {
         Console.WriteLine(scale);
         Brush brush = new SolidBrush(Color.Gold);
-        g.FillEllipse(brush, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
+        g.FillEllipse(brush, panelCenter.X + center.X - radius, panelCenter.Y + center.Y - radius, radius * 2, radius * 2);
         
         Pen pen = new Pen(Color.Black);
-        g.DrawEllipse(pen, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
+        //g.DrawEllipse(pen, panelCenter.X + center.X * scale - radius * scale, panelCenter.Y + center.Y * scale - radius * scale, radius * scale * 2, radius * scale * 2);
 
         string label = $"{this.charge} C";
         Font font = new Font("Arial", 0.2f * scale, FontStyle.Bold);
@@ -66,7 +66,7 @@ public class Naboj : INaboj
         float height = g.MeasureString(label, font).Height;
         
         brush = new SolidBrush(Color.Black);
-        g.DrawString(label, font, brush, center.X * scale - width / 2 + panelCenter.X, center.Y * scale - height / 2 + panelCenter.Y);
+        //g.DrawString(label, font, brush, center.X * scale - width / 2 + panelCenter.X, center.Y * scale - height / 2 + panelCenter.Y);
     }
     
 }
