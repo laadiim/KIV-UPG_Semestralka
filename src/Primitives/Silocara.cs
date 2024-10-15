@@ -62,12 +62,10 @@ public class Silocara
                 electricField += contribution;
             }
 
-            force = k * electricField / 1000000;
-            newPoint = x + force;
-            Console.Write(force.X);
-            Console.WriteLine(force.Y);
+            force = k * electricField;
+            newPoint = x + force / force.Length();
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
-            Console.WriteLine(force.Length());
+            Console.WriteLine(newPoint.ToString());
         }
         while (force.Length() > epsilon);
     }
