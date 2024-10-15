@@ -132,11 +132,11 @@ public class Scenario : IScenario
 
         IGrid grid = new Grid();
 
-        Pen pen = new Pen(Color.FromArgb(150, Color.PowderBlue), 3f);
-        Brush brush = new SolidBrush(Color.FromArgb(150, Color.PowderBlue));
+        Pen pen = new Pen(Color.FromArgb(150, Color.Blue), 2f);
+        Brush brush = new SolidBrush(Color.FromArgb(150, Color.Blue));
+        float tipLength = 1f;
 
-
-        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush);
+        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush, tipLength * scale / 8);
 
         for (int i = 0; i < charges.Length; i++)
         {

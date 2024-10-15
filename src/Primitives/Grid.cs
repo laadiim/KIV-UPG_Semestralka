@@ -15,12 +15,18 @@ public class Grid : IGrid
         throw new NotImplementedException();
     }
 
-    private void DrawArrow(Graphics g, Brush brush, PointF topLeft, PointF bottomRight)
+    private void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
     {
-        throw new NotImplementedException();
+        var points1 = new PointF[3];
+        points1[0] = new PointF(rightCenter.X , rightCenter.Y);
+        points1[1] = new PointF(rightCenter.X - tipLength, rightCenter.Y + tipLength / 2);
+        points1[2] = new PointF(rightCenter.X - tipLength, rightCenter.Y - tipLength / 2);
+
+        g.FillPolygon(brush, points1);
+
     }
 
-    private void DrawGrid(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight)
+    private void DrawGrid(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight, float tipLength)
     {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
         PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
@@ -29,11 +35,11 @@ public class Grid : IGrid
 
         g.DrawLine(pen, rightCenter, leftCenter);
         g.DrawLine(pen, topCenter, bottomCenter);
-        DrawArrow(g, brush, topLeft, bottomRight);
+        DrawArrows(g, brush, rightCenter, topCenter, tipLength);
     }
 
-    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, Pen pen, Brush brush)
+    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, Pen pen, Brush brush, float tipLength)
     {
-        DrawGrid(g, pen, brush, topLeft, bottomRight);
+        DrawGrid(g, pen, brush, topLeft, bottomRight, tipLength);
     }
 }
