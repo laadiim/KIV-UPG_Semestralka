@@ -132,8 +132,11 @@ public class Scenario : IScenario
 
         IGrid grid = new Grid();
 
-        Pen pen = new Pen(Color.FromArgb(150, Color.Blue), 2f);
-        Brush brush = new SolidBrush(Color.FromArgb(150, Color.Blue));
+        Color color = Color.FromArgb(150, Color.LightCoral);
+
+        Pen pen = new Pen(color, 2 / scale);
+        Brush brush = new SolidBrush(color);
+
         float tipLength = 1f;
 
         grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush, tipLength * scale / 8);
