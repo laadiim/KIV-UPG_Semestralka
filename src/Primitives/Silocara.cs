@@ -12,13 +12,14 @@ public class Silocara
     private const double e = 8.854E-12;
     private const float k = 1 / (float)(4 * Math.PI * e);
     private float epsilon;
+   
     
-    public Silocara(float epsilon, PointF startPoint)
+    public Silocara(float epsilon, PointF startPoint, INaboj[] charges)
     {
         this.epsilon = epsilon;
         this.start = startPoint;
         this.points.AddLast(startPoint);
-        
+        this.Eval(charges);
     }
 
     private void Eval(INaboj[] charges)
@@ -27,9 +28,11 @@ public class Silocara
         Vector2 electricField = Vector2.Zero; // Initialize the electric field to zero
         Vector2 x = new Vector2(start.X, start.Y);
         Vector2 newPoint = Vector2.Zero;
+        Vector2 force = Vector2.Zero;
 
         do
         {
+            electricField = Vector2.Zero;
             for (int i = 0; i < charges.Length; i++)
             {
                 PointF point = charges[i].GetPosition();
@@ -43,24 +46,24 @@ public class Silocara
 
                 // Contribution of charge i to the electric field
                 Vector2 contribution = (float)(charges[i].GetCharge() / Math.Pow(rMagnitude, 3)) * r;
-                electricField = contribution;
+                electricField += contribution;
             }
 
-            Vector2 force = k * electricField;
+            force = k * electricField;
             newPoint = x + force;
             this.points.AddLast(new PointF(newPoint.X, newPoint.Y));
         }
-        while ((newPoint - x).Length() > epsilon);
+        while (force.Length() > epsilon);
     }
 
-    private double Sum(PointF point, INaboj[] charges)
+    public void Draw(Graphics g, PointF center, float scale)
     {
-        Vector<double> sum = new Vector<double>();
-        for (int i = 0; i < charges.Length; i++)
+        PointF[] points = new PointF[this.points.Count];
+        for (int i = 0; i < points.Length; i++)
         {
-            Vector<double> p = new Vector<double>();
-            p[1] = point.X;
-            sum += charges[i].GetCharge() * Vector.Subtract(new)
+            points[i].X = scale * (points[i].X + center.X);
+            points[i].Y = scale * (points[i].Y + center.Y);
         }
+        g.DrawLines(new Pen(Brushes.Black, 1), points);
     }
 }

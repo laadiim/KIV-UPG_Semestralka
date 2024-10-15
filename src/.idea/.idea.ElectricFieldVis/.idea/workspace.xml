@@ -9,6 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Silocara.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Silocara.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +67,7 @@
   <component name="RunManager" selected=".NET Project.UPG_SP_2024">
     <configuration name="UPG_SP_2024" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/UPG_SP_2024.exe" />
-      <option name="PROGRAM_PARAMETERS" value="1" />
+      <option name="PROGRAM_PARAMETERS" value="3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bin/Debug/net8.0-windows" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -137,6 +139,7 @@
       <workItem from="1728384842690" duration="367000" />
       <workItem from="1728900658190" duration="3134000" />
       <workItem from="1728905307625" duration="693000" />
+      <workItem from="1728978066405" duration="1202000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />

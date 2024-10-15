@@ -130,6 +130,9 @@ public class Scenario : IScenario
         IGrid grid = new Grid();
         grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin));
 
+        Silocara s = new Silocara(0.1f, charges[0].GetPosition(), charges);
+        s.Draw(g, new PointF((xMax - xMin) / 2, (yMax - yMin) / 2), scale); 
+
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
