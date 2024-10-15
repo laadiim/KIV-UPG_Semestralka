@@ -57,6 +57,8 @@ public class Naboj : INaboj
         
         g.TranslateTransform(center.X - radius, center.Y - radius);
         
+        //TODO: grafika naboju
+
         g.FillEllipse(brush, 0, 0, radius * 2, radius * 2);
         
         Pen pen = new Pen(Color.Black, 1/scale);

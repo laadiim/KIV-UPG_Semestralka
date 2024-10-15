@@ -132,6 +132,8 @@ public class Scenario : IScenario
         //g.DrawLine(new Pen(Color.Black, 1), new PointF(1, 0), new PointF(-1, 0));
         //g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
 
+        //TODO: grafika pozadi
+
         IGrid grid = new Grid();
 
         Color color = Color.FromArgb(150, Color.LightCoral);
@@ -139,17 +141,17 @@ public class Scenario : IScenario
         Pen pen = new Pen(color, 2 / scale);
         Brush brush = new SolidBrush(color);
 
-        float tipLength = 1f;
+        float tipLength = 10f;
 
-        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush, tipLength * scale / 8);
+        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), pen, brush, tipLength / scale);
 
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
         
-        Silocara s = new Silocara(new PointF(1.5f, 1.5f), 1/scale);
+        /*Silocara s = new Silocara(new PointF(1.5f, 1.5f), 1/scale);
         s.Eval(this.charges, chargesCount);
-        s.Draw(g, center, scale);
+        s.Draw(g, center, scale);*/
     }
 }

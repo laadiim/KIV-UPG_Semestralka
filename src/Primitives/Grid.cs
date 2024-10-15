@@ -18,7 +18,7 @@ public class Grid : IGrid
     private void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
     {
         var points = new PointF[3];
-        points[0] = new PointF(rightCenter.X , rightCenter.Y);
+        points[0] = new PointF(rightCenter.X, rightCenter.Y);
         points[1] = new PointF(rightCenter.X - tipLength, rightCenter.Y + tipLength / 2);
         points[2] = new PointF(rightCenter.X - tipLength, rightCenter.Y - tipLength / 2);
 
