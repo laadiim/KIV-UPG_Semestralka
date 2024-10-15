@@ -1,3 +1,6 @@
+using Accessibility;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms.VisualStyles;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -130,7 +133,15 @@ public class Scenario : IScenario
         //g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
 
         IGrid grid = new Grid();
-        grid.Draw(g, new PointF(xMin,yMin), new PointF(xMax, yMax), scale);
+
+        Color color = Color.FromArgb(150, Color.LightCoral);
+
+        Pen pen = new Pen(color, 2 / scale);
+        Brush brush = new SolidBrush(color);
+
+        float tipLength = 1f;
+
+        grid.Draw(g, new PointF(0,0), new PointF(xMax - xMin, yMax - yMin), pen, brush, tipLength * scale / 8);
 
         for (int i = 0; i < charges.Length; i++)
         {

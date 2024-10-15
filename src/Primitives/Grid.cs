@@ -15,35 +15,36 @@ public class Grid : IGrid
         throw new NotImplementedException();
     }
 
-    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float scale)
+    private void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
     {
-        float tip = 10 / scale;
-        
-        Console.WriteLine(topLeft);
-        Console.WriteLine(bottomRight);
+        var points = new PointF[3];
+        points[0] = new PointF(rightCenter.X , rightCenter.Y);
+        points[1] = new PointF(rightCenter.X - tipLength, rightCenter.Y + tipLength / 2);
+        points[2] = new PointF(rightCenter.X - tipLength, rightCenter.Y - tipLength / 2);
+
+        g.FillPolygon(brush, points);
+
+        points[0] = new PointF(topCenter.X, topCenter.Y);
+        points[1] = new PointF(topCenter.X - tipLength / 2, topCenter.Y + tipLength);
+        points[2] = new PointF(topCenter.X + tipLength / 2, topCenter.Y + tipLength);
+
+        g.FillPolygon(brush, points);
+    }
+
+    private void DrawGrid(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight, float tipLength)
+    {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
         PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
         PointF leftCenter = new PointF(topLeft.X, (topLeft.Y + bottomRight.Y) / 2);
         PointF rightCenter = new PointF(bottomRight.X, (topLeft.Y + bottomRight.Y) / 2);
 
-        PointF[] points1 = new PointF[3];
-        points1[0] = topCenter;
-        points1[1] = new PointF(topCenter.X + tip, topCenter.Y + tip);
-        points1[2] = new PointF(topCenter.X - tip, topCenter.Y + tip);
-        Console.WriteLine(points1[1].ToString());
-        Console.WriteLine(points1[2].ToString());
-        PointF[] points2 = new PointF[3];
-        points2[0] = rightCenter;
-        points2[1] = new PointF(rightCenter.X - tip, rightCenter.Y + tip);
-        points2[2] = new PointF(rightCenter.X - tip, rightCenter.Y - tip);
+        g.DrawLine(pen, rightCenter - new SizeF(tipLength, 0), leftCenter);
+        g.DrawLine(pen, topCenter + new SizeF(0, tipLength), bottomCenter);
+        DrawArrows(g, brush, rightCenter, topCenter, tipLength);
+    }
 
-        Console.WriteLine(points2[1].ToString());
-        Console.WriteLine(points2[2].ToString());
-        
-        g.DrawLine(new Pen(Brushes.Black, 2/scale), rightCenter - new SizeF(tip, 0), leftCenter);
-        g.DrawLine(new Pen(Brushes.Black, 2/scale), topCenter + new SizeF(0, tip), bottomCenter);
-        
-        g.FillPolygon(new SolidBrush(Color.Black), points1);
-        g.FillPolygon(new SolidBrush(Color.Black), points2);
+    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, Pen pen, Brush brush, float tipLength)
+    {
+        DrawGrid(g, pen, brush, topLeft, bottomRight, tipLength);
     }
 }
