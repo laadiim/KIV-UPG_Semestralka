@@ -13,8 +13,9 @@ public class Probe
         this.anglePerSecond = anglePerSecond;
     }
 
-    public void Draw(Graphics g, )
+    public void Draw(Graphics g, int startTime)
     {
-        
+        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        PointF start = new PointF(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
     }
 }

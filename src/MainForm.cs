@@ -12,7 +12,7 @@ namespace UPG_SP_2024
         public MainForm(int scenario_num)
         {
             this.ClientSize = new System.Drawing.Size(800, 600);
-            InitializeComponent(scenario_num);
+            InitializeComponent(scenario_num, startTime);
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TimerTick;
             timer.Interval = 50;

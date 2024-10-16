@@ -9,11 +9,16 @@ namespace UPG_SP_2024
         /// </summary>
         static void Main(string[] args)
         {
+            int n;
             if (args.Length != 1)
             {
-                throw new ArgumentException("chybi cislo scenaria");
+                n = 0;
             }
-            int scenario_num = int.Parse(args[0]);
+            else
+            {
+                n = int.Parse(args[0]);
+            }
+            int scenario_num = n;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(scenario_num));

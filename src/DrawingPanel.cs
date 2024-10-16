@@ -14,12 +14,14 @@ namespace UPG_SP_2024
     public class DrawingPanel : Panel
     {
         Scenario scenario;
+        private int startTime;
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
         /// <param name="scenarioNum">ocislovani scenaria od 0 do 3</param>
-        public DrawingPanel(int scenarioNum)
+        public DrawingPanel(int scenarioNum, int startTime)
         {
+            this.startTime = startTime;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
             switch(scenarioNum)
@@ -67,7 +69,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            scenario.Draw(g, panelWidth, panelHeight);
+            scenario.Draw(g, panelWidth, panelHeight, this.startTime);
 
             // Calling the base class OnPaint
             base.OnPaint(e);
