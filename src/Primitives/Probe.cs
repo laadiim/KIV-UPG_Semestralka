@@ -1,3 +1,6 @@
+using System.Numerics;
+using UPG_SP_2024.Interfaces;
+
 namespace UPG_SP_2024.Primitives;
 
 public class Probe
@@ -13,11 +16,26 @@ public class Probe
         this.anglePerSecond = anglePerSecond;
     }
 
-    public void Draw(Graphics g, int startTime)
+    public void Draw(Graphics g, int startTime, INaboj[] charges)
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
-        PointF start = new PointF(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
-        PointF end = new PointF(0, 0);
-        float k = 
+        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        Vector2 end = new Vector2(0, 0);
+        float k = 8.9875517923E9f;
+        Vector2 sum = Vector2.Zero;
+        for (int i = 0; i < charges.Length; i++) 
+        {
+            if (charges[i] == null) continue;
+            PointF p = charges[i].GetPosition();
+            Vector2 vect = start - new Vector2(p.X, p.Y);
+            sum += charges[i].GetCharge() * vect / (vect.Length() * vect.Length() * vect.Length());
+        }
+        sum *= k;
+        end = start + sum;
+        end *= 0.01f;
+        PointF[] points = new PointF[2];
+        points[0] = new PointF(end.X, end.Y);
+        points[1] = new PointF(start.X, start.Y);
+        g.DrawLine(new Pen(Color.Black, 0.1f), points[0], points[1]);
     }
 }

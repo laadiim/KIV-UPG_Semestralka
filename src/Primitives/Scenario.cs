@@ -151,6 +151,6 @@ public class Scenario : IScenario
         }
         
         Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime);
+        probe.Draw(g, startTime,this.charges);
     }
 }
