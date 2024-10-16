@@ -15,7 +15,7 @@ namespace UPG_SP_2024
             InitializeComponent(scenario_num, startTime);
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TimerTick;
-            timer.Interval = 50;
+            timer.Interval = 200;
             
             startTime = Environment.TickCount;
             timer.Start();

@@ -17,5 +17,7 @@ public class Probe
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         PointF start = new PointF(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        PointF end = new PointF(0, 0);
+        float k = 
     }
 }
