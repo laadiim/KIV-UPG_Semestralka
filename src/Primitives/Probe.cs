@@ -32,10 +32,11 @@ public class Probe
         }
         sum *= k;
         end = start + sum;
-        end *= 0.01f;
+        end *= 0.000001f;
         PointF[] points = new PointF[2];
         points[0] = new PointF(end.X, end.Y);
         points[1] = new PointF(start.X, start.Y);
+        Console.WriteLine("probe");
         Console.WriteLine(points[1].ToString());
         Console.WriteLine(points[0].ToString());
         g.DrawLine(new Pen(Color.Black, 0.1f), points[0], points[1]);
