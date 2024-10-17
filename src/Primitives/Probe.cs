@@ -36,6 +36,8 @@ public class Probe
         PointF[] points = new PointF[2];
         points[0] = new PointF(end.X, end.Y);
         points[1] = new PointF(start.X, start.Y);
+        Console.WriteLine(points[1].ToString());
+        Console.WriteLine(points[0].ToString());
         g.DrawLine(new Pen(Color.Black, 0.1f), points[0], points[1]);
     }
 }
