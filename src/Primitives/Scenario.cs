@@ -85,7 +85,7 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    public void Draw(Graphics g, float width, float height)
+    public void Draw(Graphics g, float width, float height, int startTime)
     {
         Tuple<float[], float[]> positions = GetPositions();
 
@@ -149,5 +149,8 @@ public class Scenario : IScenario
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
+        
+        Probe probe = new Probe(new PointF(0, 0));
+        probe.Draw(g, startTime,this.charges);
     }
 }
