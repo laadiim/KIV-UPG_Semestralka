@@ -30,12 +30,13 @@ public class Probe
             Vector2 vect = start - new Vector2(p.X, p.Y);
             sum += charges[i].GetCharge() * vect / (vect.Length() * vect.Length() * vect.Length());
         }
-        sum *= k/sum.Length();
-        sum *= 0.0000000001f;
-        end = start + sum;
+
+        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
+        sum *= 10E-12f; // prevod na TN/C
+        end = start + sum; // vektor konce sipky
         PointF[] points = new PointF[2];
-        points[0] = new PointF(end.X, end.Y);
-        points[1] = new PointF(start.X, start.Y);
+        points[0] = new PointF(start.X, start.Y); // bod zacatku sipky
+        points[1] = new PointF(end.X, end.Y); // bod konce sipky
         Console.WriteLine("probe");
         Console.WriteLine(points[1].ToString());
         Console.WriteLine(points[0].ToString());
