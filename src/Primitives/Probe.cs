@@ -1,4 +1,7 @@
+using System.Drawing;
+using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -16,7 +19,7 @@ public class Probe
         this.anglePerSecond = anglePerSecond;
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges)
+    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale)
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
@@ -37,9 +40,53 @@ public class Probe
         PointF[] points = new PointF[2];
         points[0] = new PointF(start.X, start.Y); // bod zacatku sipky
         points[1] = new PointF(end.X, end.Y); // bod konce sipky
+        
+        /* pro debug
         Console.WriteLine("probe");
         Console.WriteLine(points[1].ToString());
         Console.WriteLine(points[0].ToString());
-        g.DrawLine(new Pen(Color.Black, 0.1f), points[0], points[1]);
+        */
+
+        Color color = Color.FromArgb(120, Color.White);
+        Brush brush = new SolidBrush(Color.White);
+        float r = 0.3f / (float)Math.Sqrt(scale);
+
+        g.TranslateTransform(points[0].X, points[0].Y);
+        float len = sum.Length() * 100;
+        string label = $"{len.ToString("n2")}E-2 TN/C";
+        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
+        float width = g.MeasureString(label, font).Width;
+        float height = g.MeasureString(label, font).Height;
+        g.DrawString(label, font, brush, 3/2 * r, - 6 * r);
+
+        g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
+        DrawArrow(g, sum, scale, color);
+
+        g.TranslateTransform(- points[0].X, - points[0].Y);
+    }
+
+    private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color)
+    {
+        float x = sum.X / 2;
+        float y = sum.Y / 2;
+
+        float tipLen = 30f / scale;
+
+        float norma = 1 / (float)sum.Length();
+
+        // vektor u bude jednotkovy
+        float u_x = x * norma;
+        float u_y = y * norma;
+
+        g.DrawLine(new Pen(color, 5 / scale), 0, 0, x, y);
+
+        var points_arrow = new PointF[3];
+        points_arrow[0] = new PointF(x - u_y * tipLen / 2, y + u_x * tipLen / 2);
+        points_arrow[1] = new PointF(x + u_x * tipLen, y + u_y * tipLen);
+        points_arrow[2] = new PointF(x + u_y * tipLen / 2, y - u_x * tipLen / 2);
+
+        Brush brush = new SolidBrush(color);
+
+        g.FillPolygon(brush, points_arrow);
     }
 }

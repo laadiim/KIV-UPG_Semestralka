@@ -21,6 +21,7 @@ namespace UPG_SP_2024
         /// <param name="scenarioNum">ocislovani scenaria od 0 do 3</param>
         public DrawingPanel(int scenarioNum, int startTime)
         {
+            this.DoubleBuffered = true;
             this.startTime = startTime;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();

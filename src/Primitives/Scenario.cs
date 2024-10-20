@@ -97,10 +97,10 @@ public class Scenario : IScenario
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
         
-        xMin -= viewportWidth / 10f;
-        xMax += viewportWidth / 10f;
-        yMin -= viewportHeight / 10f;
-        yMax += viewportHeight / 10f;
+        xMin -= viewportWidth / 4f;
+        xMax += viewportWidth / 4f;
+        yMin -= viewportHeight / 4f;
+        yMax += viewportHeight / 4f;
         
         
         float scaleX = width / (xMax - xMin);
@@ -125,18 +125,32 @@ public class Scenario : IScenario
         g.ScaleTransform(scale, scale);
         
         PointF center = new PointF((xMax + xMin) / 2, (yMax + yMin) / 2);
+
+        /* pro debug
         Console.WriteLine(scale);
         Console.WriteLine(center.ToString());
         Console.WriteLine(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
-        
-        //g.DrawLine(new Pen(Color.Black, 1), new PointF(1, 0), new PointF(-1, 0));
-        //g.FillEllipse(new SolidBrush(Color.Black), center.X - 1, center.Y - 1, 2, 2);
+        */
 
-        //TODO: grafika pozadi
+        LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(xMin, yMin), new PointF(xMax, yMax),
+                                                                 Color.DarkBlue, Color.DarkCyan);
+
+        brush_scen.InterpolationColors = new ColorBlend()
+        {
+            Colors = new Color[] {
+                    Color.FromArgb(200, Color.DarkBlue),
+                    Color.FromArgb(200, Color.DarkCyan),
+                    Color.FromArgb(200, Color.DarkSeaGreen)
+                },
+            Positions = new float[] { 0f, 0.8f, 1f }
+        };
+
+        g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
+
 
         IGrid grid = new Grid();
 
-        Color color = Color.FromArgb(150, Color.LightCoral);
+        Color color = Color.FromArgb(70, Color.White);
 
         Pen pen = new Pen(color, 2 / scale);
         Brush brush = new SolidBrush(color);
@@ -151,6 +165,6 @@ public class Scenario : IScenario
         }
         
         Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime,this.charges);
+        probe.Draw(g, startTime, this.charges, scale);
     }
 }

@@ -61,15 +61,17 @@ public class Naboj : INaboj
 
         g.FillEllipse(brush, 0, 0, radius * 2, radius * 2);
         
-        Pen pen = new Pen(Color.Black, 1/scale);
+        /* ohraniceni pro naboj, zatim to nechceme
+        Pen pen = new Pen(Color.FromArgb(150, Color.White), 2 / scale);
         g.DrawEllipse(pen, 0, 0, radius * 2, radius * 2);
+        */
 
         string label = $"{this.charge} C";
-        Font font = new Font("Arial", 10 / scale, FontStyle.Bold);
+        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
         
-        brush = new SolidBrush(Color.Black);
+        brush = new SolidBrush(Color.White);
         g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
         g.TranslateTransform(radius - center.X, radius - center.Y);
     }
