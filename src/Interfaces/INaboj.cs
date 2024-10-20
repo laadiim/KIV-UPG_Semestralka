@@ -6,13 +6,13 @@ public interface INaboj
     /// vraci velikost a polaritu naboje
     /// </summary>
     /// <returns>naboj</returns>
-    int GetCharge();
+    float GetCharge();
     
     /// <summary>
     /// nastavi novou hodnotu naboje
     /// </summary>
     /// <param name="charge">novy naboj</param>
-    void SetCharge(int charge);
+    void SetCharge(float charge);
     
     /// <summary>
     /// vrati pozici stredu naboje

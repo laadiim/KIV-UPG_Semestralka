@@ -28,26 +28,26 @@ namespace UPG_SP_2024
             switch(scenarioNum)
             {
                 case 0:
-                    INaboj naboj = new Naboj(1, 50, new PointF(0, 0), 0);
+                    INaboj naboj = new Naboj(1, new PointF(0, 0), 0);
                     scenario.AddCharge(naboj);
                     break;
                 case 1:
-                    INaboj naboj1 = new Naboj(1, 0.5f, new PointF(-1, 0), 0);
-                    INaboj naboj2 = new Naboj(1, 0.5f, new PointF(1, 0), 1);
+                    INaboj naboj1 = new Naboj(1, new PointF(-1, 0), 0);
+                    INaboj naboj2 = new Naboj(1, new PointF(1, 0), 1);
                     scenario.AddCharge(naboj1);
                     scenario.AddCharge(naboj2);
                     break;
                 case 2:
-                    INaboj naboj3 = new Naboj(-1, 0.5f, new PointF(-1, 0), 0);
-                    INaboj naboj4 = new Naboj(2, 0.5f, new PointF(1, 0), 1);
+                    INaboj naboj3 = new Naboj(-1, new PointF(-1, 0), 0);
+                    INaboj naboj4 = new Naboj(2, new PointF(1, 0), 1);
                     scenario.AddCharge(naboj3);
                     scenario.AddCharge(naboj4);
                     break;
                 case 3:
-                    INaboj naboj5 = new Naboj(1, 0.5f, new PointF(-1, -1), 0);
-                    INaboj naboj6 = new Naboj(2, 0.5f, new PointF(1, -1), 1);
-                    INaboj naboj7 = new Naboj(-3, 0.5f, new PointF(1, 1), 0);
-                    INaboj naboj8 = new Naboj(-4, 0.5f, new PointF(-1, 1), 1);
+                    INaboj naboj5 = new Naboj(1, new PointF(-1, -1), 0);
+                    INaboj naboj6 = new Naboj(2, new PointF(1, -1), 1);
+                    INaboj naboj7 = new Naboj(-3, new PointF(1, 1), 0);
+                    INaboj naboj8 = new Naboj(-4, new PointF(-1, 1), 1);
                     scenario.AddCharge(naboj5);
                     scenario.AddCharge(naboj6);
                     scenario.AddCharge(naboj7);
