@@ -4,25 +4,25 @@ namespace UPG_SP_2024.Primitives;
 
 public class Naboj : INaboj
 {
-    private int charge;
+    private float charge;
     private float radius;
     private PointF center;
     private int id;
     
-    public Naboj(int charge, float radius, PointF center, int id)
+    public Naboj(int charge, PointF center, int id)
     {
         this.charge = charge;
-        this.radius = radius;
         this.center = center;
         this.id = id;
+        this.radius = 1f;
     }
 
-    public int GetCharge()
+    public float GetCharge()
     {
         return this.charge;
     }
 
-    public void SetCharge(int charge)
+    public void SetCharge(float charge)
     {
         this.charge = charge;
     }

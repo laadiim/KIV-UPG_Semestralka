@@ -74,11 +74,11 @@ public class Scenario : IScenario
         {
             if (charges[i] != null)
             {
-                positionsX[j] = charges[i].GetPosition().X - charges[i].GetRadius();
-                positionsY[j] = charges[i].GetPosition().Y - charges[i].GetRadius();
+                positionsX[j] = Math.Abs(charges[i].GetPosition().X - charges[i].GetRadius());
+                positionsY[j] = Math.Abs(charges[i].GetPosition().Y - charges[i].GetRadius());
                 j++;
-                positionsX[j] = charges[i].GetPosition().X + charges[i].GetRadius();
-                positionsY[j] = charges[i].GetPosition().Y + charges[i].GetRadius();
+                positionsX[j] = Math.Abs(charges[i].GetPosition().X + charges[i].GetRadius());
+                positionsY[j] = Math.Abs(charges[i].GetPosition().Y + charges[i].GetRadius());
                 j++;
             }
         }
@@ -87,20 +87,64 @@ public class Scenario : IScenario
 
     public void Draw(Graphics g, float width, float height, int startTime)
     {
+        float sum_ch = 0;
+        int count_ch = 0;
+
+        // First loop: Calculate the sum of charges
+        foreach (var charge in charges)
+        {
+            if (charge != null)
+            {
+                count_ch += 1;
+                sum_ch += Math.Abs(charge.GetCharge());
+            }
+        }
+
+        
+        if (sum_ch > 0) // Ensure sum is greater than 0 to avoid division by zero
+        {
+            // Second loop: Adjust radius based on the sum of charges
+            foreach (var charge in charges)
+            {
+                if (charge != null & count_ch >= 2)
+                {
+                    float currentCharge = (float)Math.Sqrt(Math.Abs(charge.GetCharge()));
+                    
+                    float newRadius = (float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch);
+                    charge.SetRadius(newRadius); 
+                }
+                else if(charge != null & count_ch == 1)
+                {
+                    charge.SetRadius(0.5f);
+                }
+            }
+        }
+
         Tuple<float[], float[]> positions = GetPositions();
 
-        float xMin = positions.Item1.Min();
+        float xMin = - positions.Item1.Max();
         float xMax = positions.Item1.Max();
-        float yMin = positions.Item2.Min();
+        float yMin = - positions.Item2.Max();
         float yMax = positions.Item2.Max();
         
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
-        
-        xMin -= viewportWidth / 4f;
-        xMax += viewportWidth / 4f;
-        yMin -= viewportHeight / 4f;
-        yMax += viewportHeight / 4f;
+
+        if (chargesCount == 1)
+        {
+            xMin -= viewportWidth * 2;
+            xMax += viewportWidth * 2;
+            yMin -= viewportHeight * 2;
+            yMax += viewportHeight * 2;
+
+        }
+        else
+        {
+            xMin -= viewportWidth / 4f;
+            xMax += viewportWidth / 4f;
+            yMin -= viewportHeight / 4f;
+            yMax += viewportHeight / 4f;
+        }
         
         
         float scaleX = width / (xMax - xMin);
@@ -124,7 +168,7 @@ public class Scenario : IScenario
         
         g.ScaleTransform(scale, scale);
         
-        PointF center = new PointF((xMax + xMin) / 2, (yMax + yMin) / 2);
+        PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
         /* pro debug
         Console.WriteLine(scale);
