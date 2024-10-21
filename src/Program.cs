@@ -19,6 +19,7 @@ namespace UPG_SP_2024
                 n = int.Parse(args[0]);
             }
             int scenario_num = n;
+            Console.WriteLine("Creating scenario #" + scenario_num + "...");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(scenario_num));
