@@ -17,6 +17,10 @@ namespace UPG_SP_2024
             else
             {
                 n = int.Parse(args[0]);
+                if (n < 0 || n > 3)
+                {
+                    n = 0;
+                }
             }
             int scenario_num = n;
             Console.WriteLine("Creating scenario #" + scenario_num + "...");
