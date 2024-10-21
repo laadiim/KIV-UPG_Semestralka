@@ -58,6 +58,7 @@ public class Naboj : INaboj
     {  
         g.TranslateTransform(center.X - radius, center.Y - radius);
 
+        // nastaveni barvy pro naboje
         using (var ellipsePath = new GraphicsPath())
         {
             ellipsePath.AddEllipse(0, 0, radius * 2, radius * 2);
@@ -105,6 +106,7 @@ public class Naboj : INaboj
         float height = g.MeasureString(label, font).Height;
         
         g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
+
         g.TranslateTransform(radius - center.X, radius - center.Y);
     }
     

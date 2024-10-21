@@ -65,7 +65,11 @@ public class Scenario : IScenario
         throw new Exception("naboj nebyl nalezen");
     }
 
-    public Tuple<float[], float[]> GetPositions()
+    /// <summary>
+    /// ulozi vsechny krajni pozice na mape
+    /// </summary>
+    /// <returns>dvojice seznamu s pozicemi x a y</returns>
+    private Tuple<float[], float[]> GetPositions()
     {
         int j = 0;
         float[] positionsX = new float[chargesCount * 2];

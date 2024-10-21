@@ -23,13 +23,15 @@ public class Probe : IProbe
     public void Draw(Graphics g, int startTime, INaboj[] charges, float scale)
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
         Vector2 end = new Vector2(0, 0);
-        float k = 8.9875517923E9f;
         Vector2 sum = Vector2.Zero;
+
         for (int i = 0; i < charges.Length; i++) 
         {
             if (charges[i] == null) continue;
+
             PointF p = charges[i].GetPosition();
             Vector2 vect = start - new Vector2(p.X, p.Y);
             float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
