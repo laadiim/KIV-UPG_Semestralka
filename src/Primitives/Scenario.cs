@@ -197,11 +197,8 @@ public class Scenario : IScenario
 
         // kresleni mrizky
         IGrid grid = new Grid();
-        Color color = Color.FromArgb(40, Color.White);
-        Pen pen = new Pen(color, 2 / scale);
-        Brush brush = new SolidBrush(color);
         float tipLength = 10f; // nastaveni velikosti sipky
-        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), pen, brush, tipLength / scale);
+        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
 
 
         // kresleni naboju

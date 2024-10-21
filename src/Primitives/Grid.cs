@@ -19,7 +19,7 @@ public class Grid : IGrid
     /// vykresli scenar
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    /// <param name="brush">stetec</param>
+    /// <param name="brush">predany stetec</param>
     /// <param name="rightCenter">prostredek prave strany scenare</param>
     /// <param name="topCenter">prostredek horni strany scenare</param>
     /// <param name="tipLength">delka sipky</param>
@@ -41,12 +41,12 @@ public class Grid : IGrid
     /// <summary>
     /// nakresli mrizku
     /// </summary>
-    /// <param name="g"></param>
-    /// <param name="pen"></param>
-    /// <param name="brush"></param>
-    /// <param name="topLeft"></param>
-    /// <param name="bottomRight"></param>
-    /// <param name="tipLength"></param>
+    /// <param name="g">graficky kontext</param>
+    /// <param name="pen">predane pero</param>
+    /// <param name="brush">predany stetec</param>
+    /// <param name="topLeft">horni levy roh</param>
+    /// <param name="bottomRight">dolni pravy roh</param>
+    /// <param name="tipLength">delka sipky</param>
     private void DrawGrid(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight, float tipLength)
     {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
@@ -59,8 +59,12 @@ public class Grid : IGrid
         DrawArrows(g, brush, rightCenter, topCenter, tipLength);
     }
 
-    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, Pen pen, Brush brush, float tipLength)
+    public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
+        Color color = Color.FromArgb(40, Color.White);
+        Pen pen = new Pen(color, 2 / scale);
+        Brush brush = new SolidBrush(color);
+
         DrawGrid(g, pen, brush, topLeft, bottomRight, tipLength);
     }
 }
