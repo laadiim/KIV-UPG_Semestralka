@@ -7,7 +7,7 @@ using static System.Windows.Forms.AxHost;
 
 namespace UPG_SP_2024.Primitives;
 
-public class Probe
+public class Probe : IProbe
 {
     private PointF center;
     private float radius;

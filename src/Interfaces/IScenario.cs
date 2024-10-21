@@ -1,6 +1,5 @@
 namespace UPG_SP_2024.Interfaces;
 
-
 /// <summary>
 /// Rozhrani pro scenar vizualizace
 /// </summary>
@@ -31,10 +30,13 @@ public interface IScenario
     /// <param name="id">id naboje</param>
     /// <returns>odstraneny naboj</returns>
     INaboj RemoveCharge(int id);
-    
+
     /// <summary>
     /// vykresli scenar
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    void Draw(Graphics g, float width, float height, int starTime);
+    /// <param name="width">sirka scenare</param>
+    /// <param name="height">vyska scenare</param>
+    /// <param name="startTime">zacatek casovace</param>
+    void Draw(Graphics g, float width, float height, int startTime);
 }

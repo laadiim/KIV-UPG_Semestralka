@@ -1,5 +1,8 @@
 namespace UPG_SP_2024.Interfaces;
 
+/// <summary>
+/// Rozhrani pro vizualizaci naboje
+/// </summary>
 public interface INaboj
 {
     /// <summary>
