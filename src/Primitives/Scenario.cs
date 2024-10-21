@@ -183,10 +183,10 @@ public class Scenario : IScenario
         {
             Colors = new Color[] {
                     Color.FromArgb(200, Color.MidnightBlue),
-                    Color.FromArgb(200, Color.FromArgb(200, 40, 140, 140)),
-                    Color.FromArgb(200, Color.DarkCyan)
+                    Color.FromArgb(200, Color.FromArgb(200, 30, 70, 100)),
+                    Color.FromArgb(200, Color.FromArgb(200, 30, 130, 140))
                 },
-            Positions = new float[] { 0f, 0.8f, 1f }
+            Positions = new float[] { 0f, 0.4f, 1f }
         };
 
         g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
@@ -194,7 +194,7 @@ public class Scenario : IScenario
 
         IGrid grid = new Grid();
 
-        Color color = Color.FromArgb(70, Color.White);
+        Color color = Color.FromArgb(80, Color.White);
 
         Pen pen = new Pen(color, 2 / scale);
         Brush brush = new SolidBrush(color);

@@ -74,42 +74,35 @@ public class Naboj : INaboj
                 if (this.charge < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(250, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(250, 30, 40, 60) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(250, 40, 50, 70) };
                 }
                 else
                 {
                     brushEll.CenterColor = Color.FromArgb(250, 250, 220, 160);
                     brushEll.SurroundColors = new[] { Color.FromArgb(250, 80, 20, 30) };
                 }
-                    brushEll.FocusScales = new PointF(0.02f, 0.02f);
+                    brushEll.FocusScales = new PointF(0f, 0f);
                 
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
 
-                //TODO: upravit vykreslovani barev
-                brushEll.CenterPoint = new PointF(radius / 2f, radius / 2f);
+                brushEll.CenterPoint = new PointF(radius / 2.2f, radius / 2.2f);
 
                 if (this.charge < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(130, 130, 130, 160) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(120, 140, 140, 170) };
                 }
                 else
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 250, 220, 160);
                     brushEll.SurroundColors = new[] { Color.FromArgb(130, 90, 190, 230) };
                 }
-                brushEll.FocusScales = new PointF(0.8f, 0.8f);
+                brushEll.FocusScales = new PointF(0.7f, 0.7f);
 
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
             }
 
         }
-        //g.FillEllipse(brush, 0, 0, radius * 2, radius * 2);
-        
-        /* ohraniceni pro naboj, zatim to nechceme
-        Pen pen = new Pen(Color.FromArgb(150, Color.White), 2 / scale);
-        g.DrawEllipse(pen, 0, 0, radius * 2, radius * 2);
-        */
 
         string label = $"{this.charge} C";
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
