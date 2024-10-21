@@ -69,7 +69,7 @@ public class Naboj : INaboj
             ellipsePath.AddEllipse(0, 0, radius * 2, radius * 2);
             using (var brushEll = new PathGradientBrush(ellipsePath))
             {
-                brushEll.CenterPoint = new PointF(radius /1.7f, radius / 1.7f);
+                brushEll.CenterPoint = new PointF(radius / 1.7f, radius / 1.7f);
 
                 if (this.charge < 0)
                 {
@@ -81,24 +81,24 @@ public class Naboj : INaboj
                     brushEll.CenterColor = Color.FromArgb(250, 250, 220, 160);
                     brushEll.SurroundColors = new[] { Color.FromArgb(250, 80, 20, 30) };
                 }
-                    brushEll.FocusScales = new PointF(0.1f, 0.1f);
+                    brushEll.FocusScales = new PointF(0.02f, 0.02f);
                 
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
 
                 //TODO: upravit vykreslovani barev
-                brushEll.CenterPoint = new PointF(1.5f * radius, 1.5f * radius);
+                brushEll.CenterPoint = new PointF(radius / 2f, radius / 2f);
 
                 if (this.charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(250, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(250, 30, 40, 60) };
+                    brushEll.CenterColor = Color.FromArgb(0, 70, 240, 240);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(130, 130, 130, 160) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(250, 250, 220, 160);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(250, 80, 20, 30) };
+                    brushEll.CenterColor = Color.FromArgb(0, 250, 220, 160);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(130, 90, 190, 230) };
                 }
-                brushEll.FocusScales = new PointF(0.1f, 0.1f);
+                brushEll.FocusScales = new PointF(0.8f, 0.8f);
 
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
             }

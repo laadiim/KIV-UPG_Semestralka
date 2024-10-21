@@ -88,7 +88,6 @@ public class Probe
             return Math.Max(min, Math.Min(max, value));
         }
 
-        
         float endX = Clamp(x, -10000f, 10000f);
         float endY = Clamp(y, -10000f, 10000f);
 

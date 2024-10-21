@@ -182,9 +182,9 @@ public class Scenario : IScenario
         brush_scen.InterpolationColors = new ColorBlend()
         {
             Colors = new Color[] {
-                    Color.FromArgb(200, Color.DarkBlue),
-                    Color.FromArgb(200, Color.DarkCyan),
-                    Color.FromArgb(200, Color.DarkSeaGreen)
+                    Color.FromArgb(200, Color.MidnightBlue),
+                    Color.FromArgb(200, Color.FromArgb(200, 40, 140, 140)),
+                    Color.FromArgb(200, Color.DarkCyan)
                 },
             Positions = new float[] { 0f, 0.8f, 1f }
         };
