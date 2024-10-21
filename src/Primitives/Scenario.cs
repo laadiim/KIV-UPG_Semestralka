@@ -65,7 +65,11 @@ public class Scenario : IScenario
         throw new Exception("naboj nebyl nalezen");
     }
 
-    public Tuple<float[], float[]> GetPositions()
+    /// <summary>
+    /// ulozi vsechny krajni pozice na mape
+    /// </summary>
+    /// <returns>dvojice seznamu s pozicemi x a y</returns>
+    private Tuple<float[], float[]> GetPositions()
     {
         int j = 0;
         float[] positionsX = new float[chargesCount * 2];
@@ -90,7 +94,7 @@ public class Scenario : IScenario
         float sum_ch = 0;
         int count_ch = 0;
 
-        // First loop: Calculate the sum of charges
+        // spocitame sumu hodnoty naboju a pocet jednotlivych naboju
         foreach (var charge in charges)
         {
             if (charge != null)
@@ -100,10 +104,9 @@ public class Scenario : IScenario
             }
         }
 
-        
-        if (sum_ch > 0) // Ensure sum is greater than 0 to avoid division by zero
+        if (sum_ch > 0) // zajistime, abychom nedelili nulou
         {
-            // Second loop: Adjust radius based on the sum of charges
+            // upravime polomer na zaklade velikosti naboje
             foreach (var charge in charges)
             {
                 if (charge != null & count_ch >= 2)
@@ -115,11 +118,13 @@ public class Scenario : IScenario
                 }
                 else if(charge != null & count_ch == 1)
                 {
-                    charge.SetRadius(0.5f);
+                    charge.SetRadius(0.7f);
                 }
             }
         }
 
+
+        // ziskani krajnich pozic naboju
         Tuple<float[], float[]> positions = GetPositions();
 
         float xMax = positions.Item1.Max();
@@ -130,14 +135,16 @@ public class Scenario : IScenario
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
 
+        // v pripade 1 naboje upravime velikost panelu tak, aby nebyl moc velky
         if (chargesCount == 1)
         {
-            xMin -= viewportWidth * 2;
-            xMax += viewportWidth * 2;
-            yMin -= viewportHeight * 2;
-            yMax += viewportHeight * 2;
+            xMin -= viewportWidth * 1.3f;
+            xMax += viewportWidth * 1.3f;
+            yMin -= viewportHeight * 1.3f;
+            yMax += viewportHeight * 1.3f;
 
         }
+        
         else
         {
             xMin -= viewportWidth / 4f;
@@ -146,10 +153,11 @@ public class Scenario : IScenario
             yMax += viewportHeight / 4f;
         }
         
-        
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);
         float scale;
+        
+        // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
         if (scaleX > scaleY)
         {
             scale = scaleY;
@@ -158,6 +166,7 @@ public class Scenario : IScenario
             xMin = xMin - difX / (2 * scale);
 
         }
+        // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
         else
         {
             scale = scaleX;
@@ -170,44 +179,39 @@ public class Scenario : IScenario
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
-        /* pro debug
-        Console.WriteLine(scale);
-        Console.WriteLine(center.ToString());
-        Console.WriteLine(xMin + ", " + yMin + ", " + xMax + ", " + yMax);
-        */
 
+        // kresleni pozadi pro scenar
         LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(xMin, yMin), new PointF(xMax, yMax),
                                                                  Color.DarkBlue, Color.DarkCyan);
-
         brush_scen.InterpolationColors = new ColorBlend()
         {
             Colors = new Color[] {
-                    Color.FromArgb(200, Color.DarkBlue),
-                    Color.FromArgb(200, Color.DarkCyan),
-                    Color.FromArgb(200, Color.DarkSeaGreen)
+                    Color.FromArgb(200, Color.FromArgb(255, 10, 30, 70)),
+                    Color.FromArgb(200, Color.FromArgb(255, 30, 70, 100)),
+                    Color.FromArgb(200, Color.FromArgb(255, 30, 130, 140))
                 },
-            Positions = new float[] { 0f, 0.8f, 1f }
+            Positions = new float[] { 0f, 0.4f, 1f }
         };
-
         g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
 
 
+        // kresleni mrizky
         IGrid grid = new Grid();
-
-        Color color = Color.FromArgb(70, Color.White);
-
+        Color color = Color.FromArgb(40, Color.White);
         Pen pen = new Pen(color, 2 / scale);
         Brush brush = new SolidBrush(color);
-
-        float tipLength = 10f;
-
+        float tipLength = 10f; // nastaveni velikosti sipky
         grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), pen, brush, tipLength / scale);
 
+
+        // kresleni naboju
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
         
+
+        // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale);
     }

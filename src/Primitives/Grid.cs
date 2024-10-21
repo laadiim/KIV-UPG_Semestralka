@@ -15,6 +15,14 @@ public class Grid : IGrid
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// vykresli scenar
+    /// </summary>
+    /// <param name="g">graficky kontext</param>
+    /// <param name="brush">stetec</param>
+    /// <param name="rightCenter">prostredek prave strany scenare</param>
+    /// <param name="topCenter">prostredek horni strany scenare</param>
+    /// <param name="tipLength">delka sipky</param>
     private void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
     {
         var points = new PointF[3];
@@ -30,7 +38,15 @@ public class Grid : IGrid
 
         g.FillPolygon(brush, points);
     }
-
+    /// <summary>
+    /// nakresli mrizku
+    /// </summary>
+    /// <param name="g"></param>
+    /// <param name="pen"></param>
+    /// <param name="brush"></param>
+    /// <param name="topLeft"></param>
+    /// <param name="bottomRight"></param>
+    /// <param name="tipLength"></param>
     private void DrawGrid(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight, float tipLength)
     {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
