@@ -13,6 +13,7 @@ public class Naboj : INaboj
     {
         this.charge = charge;
         this.center = center;
+        this.center.Y = -center.Y;
         this.id = id;
         this.radius = 1f;
     }
@@ -53,10 +54,11 @@ public class Naboj : INaboj
 
     public void Draw(Graphics g, PointF panelCenter, float scale)
     {
+        
         Brush brush = new SolidBrush(Color.DarkTurquoise);
         
         g.TranslateTransform(center.X - radius, center.Y - radius);
-        
+
         //TODO: grafika naboju
 
         g.FillEllipse(brush, 0, 0, radius * 2, radius * 2);

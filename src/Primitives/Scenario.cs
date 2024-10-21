@@ -122,10 +122,10 @@ public class Scenario : IScenario
 
         Tuple<float[], float[]> positions = GetPositions();
 
-        float xMin = - positions.Item1.Max();
         float xMax = positions.Item1.Max();
-        float yMin = - positions.Item2.Max();
+        float xMin = -xMax;
         float yMax = positions.Item2.Max();
+        float yMin = -yMax;
         
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
