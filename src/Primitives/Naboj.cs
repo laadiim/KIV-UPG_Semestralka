@@ -58,10 +58,39 @@ public class Naboj : INaboj
     {  
         g.TranslateTransform(center.X - radius, center.Y - radius);
 
+        using (var shadowPath = new GraphicsPath())
+        {
+            shadowPath.AddEllipse(0, 0, radius * 2.05f, radius * 2.05f);
+
+            using (var brushEll = new PathGradientBrush(shadowPath))
+            {
+                // stin
+                brushEll.CenterPoint = new PointF(radius * 1.7f, radius * 1.7f);
+
+                // nastaveni jine barvy pro zapornou hodnotu naboje
+                if (this.charge < 0)
+                {
+                    brushEll.CenterColor = Color.FromArgb(220, 100, 210, 200);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
+                }
+                else
+                {   
+                    brushEll.CenterColor = Color.FromArgb(220, 180, 200, 180);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
+                }
+                brushEll.FocusScales = new PointF(0f, 0f);
+
+                // vybarvi stin
+                g.FillEllipse(brushEll, 0, 0, radius * 2.1f, radius * 2.1f);
+            }
+        }
+
         // nastaveni barvy pro naboje
         using (var ellipsePath = new GraphicsPath())
         {
+
             ellipsePath.AddEllipse(0, 0, radius * 2, radius * 2);
+            
             using (var brushEll = new PathGradientBrush(ellipsePath))
             {
                 // prvni cast
@@ -108,7 +137,7 @@ public class Naboj : INaboj
         // napis - hodnota naboje
         string label = $"{this.charge} C";
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
-        Brush brush = new SolidBrush(Color.FromArgb(200, Color.White));
+        Brush brush = new SolidBrush(Color.FromArgb(230, Color.White));
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
         

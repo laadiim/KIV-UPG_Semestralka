@@ -61,7 +61,7 @@ public class Grid : IGrid
 
     public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
-        Color color = Color.FromArgb(40, Color.White);
+        Color color = Color.FromArgb(20, Color.White);
         Pen pen = new Pen(color, 2 / scale);
         Brush brush = new SolidBrush(color);
 
