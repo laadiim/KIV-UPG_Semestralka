@@ -72,6 +72,13 @@ public class Probe : IProbe
         g.TranslateTransform(- points[0].X, - points[0].Y);
     }
 
+    /// <summary>
+    /// vykresli sipku pro znazorneni vektoru intenzity
+    /// </summary>
+    /// <param name="g">graficky kontext</param>
+    /// <param name="sum">vysledny vektor</param>
+    /// <param name="scale">predany scale</param>
+    /// <param name="color">barva sipky</param>
     private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color)
     {
         float x = sum.X / 2;

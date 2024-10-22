@@ -16,7 +16,7 @@ public class Grid : IGrid
     }
 
     /// <summary>
-    /// vykresli scenar
+    /// vykresli sipky
     /// </summary>
     /// <param name="g">graficky kontext</param>
     /// <param name="brush">predany stetec</param>
