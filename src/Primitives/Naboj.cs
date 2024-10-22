@@ -64,8 +64,10 @@ public class Naboj : INaboj
             ellipsePath.AddEllipse(0, 0, radius * 2, radius * 2);
             using (var brushEll = new PathGradientBrush(ellipsePath))
             {
+                // prvni cast
                 brushEll.CenterPoint = new PointF(radius / 1.7f, radius / 1.7f);
 
+                // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (this.charge < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(255, 70, 240, 240);
@@ -76,12 +78,16 @@ public class Naboj : INaboj
                     brushEll.CenterColor = Color.FromArgb(255, 250, 220, 160);
                     brushEll.SurroundColors = new[] { Color.FromArgb(255, 80, 20, 30) };
                 }
-                    brushEll.FocusScales = new PointF(0f, 0f);
+                brushEll.FocusScales = new PointF(0f, 0f);
                 
+                // vybarvi naboj
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
 
+
+                // druha cast
                 brushEll.CenterPoint = new PointF(radius / 2.2f, radius / 2.2f);
 
+                // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (this.charge < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
@@ -94,6 +100,7 @@ public class Naboj : INaboj
                 }
                 brushEll.FocusScales = new PointF(0.7f, 0.7f);
 
+                // vybarvi pres naboj gradient pro zjemneni okraju
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
             }
         }
