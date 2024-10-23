@@ -65,23 +65,23 @@ public class Naboj : INaboj
             using (var brushEll = new PathGradientBrush(shadowPath))
             {
                 // stin
-                brushEll.CenterPoint = new PointF(radius * 1.7f, radius * 1.7f);
+                brushEll.CenterPoint = new PointF(radius * 1.66f, radius * 1.66f);
 
                 // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (this.charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(220, 100, 210, 200);
+                    brushEll.CenterColor = Color.FromArgb(255, 120, 230, 210);
                     brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
                 }
                 else
                 {   
-                    brushEll.CenterColor = Color.FromArgb(220, 180, 200, 180);
+                    brushEll.CenterColor = Color.FromArgb(255, 240, 220, 150);
                     brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
                 }
                 brushEll.FocusScales = new PointF(0f, 0f);
 
                 // vybarvi stin
-                g.FillEllipse(brushEll, 0, 0, radius * 2.1f, radius * 2.1f);
+                g.FillEllipse(brushEll, 0, 0, radius * 2.05f, radius * 2.05f);
             }
         }
 
