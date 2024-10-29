@@ -124,11 +124,16 @@ public class Scenario : IScenario
 
         // ziskani krajnich pozic naboju
         Tuple<float[], float[]> positions = GetPositions();
+        float xMax = 1, yMax = 1;
+        float xMin = -1, yMin = -1;
+        if (positions.Item1.Length != 0 && positions.Item2.Length != 0)
+        { 
+            xMax = positions.Item1.Max();
+            xMin = -xMax;
+            yMax = positions.Item2.Max();
+            yMin = -yMax;
+        }
 
-        float xMax = positions.Item1.Max();
-        float xMin = -xMax;
-        float yMax = positions.Item2.Max();
-        float yMin = -yMax;
         
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
