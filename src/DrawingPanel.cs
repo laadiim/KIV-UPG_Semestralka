@@ -14,17 +14,21 @@ namespace UPG_SP_2024
     public class DrawingPanel : Panel
     {
         Scenario scenario;
-        private int startTime;
+        private int startTime { get; set; }
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
         /// <param name="scenarioNum">ocislovani scenaria od 0 do 3</param>
-        public DrawingPanel(int scenarioNum, int startTime)
+        public DrawingPanel()
         {
             this.DoubleBuffered = true;
-            this.startTime = startTime;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
+        }
+
+
+        public void SetScenario(int scenarioNum)
+        {
             switch(scenarioNum)
             {
                 case 0:

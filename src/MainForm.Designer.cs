@@ -29,22 +29,24 @@ namespace UPG_SP_2024
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent(int scenario_num, int startTime)
+        private void InitializeComponent()
         {
-            drawingPanel = new DrawingPanel(scenario_num, startTime);
+            drawingPanel = new DrawingPanel();
             SuspendLayout();
             // 
             // drawingPanel
             // 
             drawingPanel.Dock = DockStyle.Fill;
             drawingPanel.Location = new Point(0, 0);
-            drawingPanel.Name = "drawingPanel";            
-            drawingPanel.TabIndex = 0;            
+            drawingPanel.Name = "drawingPanel";
+            drawingPanel.Size = new Size(1023, 626);
+            drawingPanel.TabIndex = 0;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;            
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1023, 626);
             Controls.Add(drawingPanel);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -54,6 +56,6 @@ namespace UPG_SP_2024
 
         #endregion
 
-        private Panel drawingPanel;
+        private DrawingPanel drawingPanel;
     }
 }
