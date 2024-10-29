@@ -1,9 +1,5 @@
-using System.Drawing;
-using System;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using UPG_SP_2024.Interfaces;
-using static System.Windows.Forms.AxHost;
 
 namespace UPG_SP_2024.Primitives;
 
