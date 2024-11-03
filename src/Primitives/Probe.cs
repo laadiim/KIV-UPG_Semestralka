@@ -1,4 +1,7 @@
+using System.Drawing.Drawing2D;
 using System.Numerics;
+using System.Security.Cryptography.Xml;
+using System.Transactions;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -18,13 +21,14 @@ public class Probe : IProbe
 
     public void Draw(Graphics g, int startTime, INaboj[] charges, float scale)
     {
+        var curTr = g.Transform;
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
         Vector2 end = new Vector2(0, 0);
         Vector2 sum = Vector2.Zero;
 
-        for (int i = 0; i < charges.Length; i++) 
+        for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] == null) continue;
 
@@ -47,6 +51,7 @@ public class Probe : IProbe
         float r = 0.3f / (float)Math.Sqrt(scale);
 
         g.TranslateTransform(points[0].X, points[0].Y);
+        var transform = g.Transform;
 
         float len = sum.Length() * 100;
         string label = $"{len.ToString("n2")}E-2 TN/C";
@@ -54,7 +59,7 @@ public class Probe : IProbe
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
 
-        g.DrawString(label, font, brush, 3/2 * r, - 6 * r);
+        g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
 
         g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
 
@@ -62,10 +67,10 @@ public class Probe : IProbe
         {
             sum /= 10E6f;
         }
-
+        
         DrawArrow(g, sum, scale, color);
 
-        g.TranslateTransform(- points[0].X, - points[0].Y);
+        g.TranslateTransform(-points[0].X, -points[0].Y);
     }
 
     /// <summary>
@@ -77,10 +82,8 @@ public class Probe : IProbe
     /// <param name="color">barva sipky</param>
     private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color)
     {
-        float x = sum.X / 2;
-        float y = sum.Y / 2;
-
-        float tipLen = 30f / scale;
+        float x = sum.X / 2f;
+        float y = sum.Y / 2f;
 
         float norma = 1 / (float)sum.Length();
 
@@ -88,20 +91,16 @@ public class Probe : IProbe
         float u_x = x * norma;
         float u_y = y * norma;
 
-        float Clamp(float value, float min, float max)
-        {
-            return Math.Max(min, Math.Min(max, value));
-        }
+        float tipLen = 30f / scale;
 
-        float endX = Clamp(x, -10000f, 10000f);
-        float endY = Clamp(y, -10000f, 10000f);
+        PointF point = new PointF(u_x / 1.5f, u_y / 1.5f);
 
-        g.DrawLine(new Pen(color, 5 / scale), 0, 0, endX, endY);
+        g.DrawLine(new Pen(color, 5 / scale), 0, 0, point.X, point.Y);
 
         var points_arrow = new PointF[3];
-        points_arrow[0] = new PointF(x - u_y * tipLen / 2, y + u_x * tipLen / 2);
-        points_arrow[1] = new PointF(x + u_x * tipLen, y + u_y * tipLen);
-        points_arrow[2] = new PointF(x + u_y * tipLen / 2, y - u_x * tipLen / 2);
+        points_arrow[0] = new PointF(point.X - u_y * tipLen / 2, point.Y + u_x * tipLen / 2);
+        points_arrow[1] = new PointF(point.X + u_x * tipLen, point.Y + u_y * tipLen);
+        points_arrow[2] = new PointF(point.X + u_y * tipLen / 2, point.Y - u_x * tipLen / 2);
 
         Brush brush = new SolidBrush(color);
 
