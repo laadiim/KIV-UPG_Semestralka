@@ -32,6 +32,13 @@ public interface IScenario
     INaboj RemoveCharge(int id);
 
     /// <summary>
+    /// vrati naboj podle ID
+    /// </summary>
+    /// <param name="id">ID</param>
+    /// <returns>instance naboje</returns>
+    INaboj GetCharge(int id);
+
+    /// <summary>
     /// vykresli scenar
     /// </summary>
     /// <param name="g">graficky kontext</param>

@@ -58,4 +58,10 @@ public interface INaboj
     /// </summary>
     /// <param name="radius">novy polomer</param>
     void SetRadius(float radius);
+    
+    /// <summary>
+    /// posune naboj na novou pozici
+    /// </summary>
+    /// <param name="point">pozice</param>
+    void Drag(PointF point);
 }

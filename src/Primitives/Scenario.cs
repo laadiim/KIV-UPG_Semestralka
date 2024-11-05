@@ -62,6 +62,20 @@ public class Scenario : IScenario
         }
         throw new Exception("naboj nebyl nalezen");
     }
+    public INaboj GetCharge(int id)
+    {
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] != null)
+            {
+                if (charges[i].GetID() == id)
+                {
+                    return charges[i];
+                }
+            }
+        }
+        throw new Exception("naboj nebyl nalezen");
+    }
 
     /// <summary>
     /// ulozi vsechny krajni pozice na mape

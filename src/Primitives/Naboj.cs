@@ -26,6 +26,12 @@ public class Naboj : INaboj
         return distance <= radius;
     }
 
+    public void Drag(PointF point)
+    { 
+        center.X += point.X;
+        center.Y += point.Y;
+    }
+
     public float GetCharge()
     {
         return this.charge;

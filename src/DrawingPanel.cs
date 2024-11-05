@@ -18,7 +18,7 @@ namespace UPG_SP_2024
         private int startTime { get; set; }
         private int chargeHit = -1;
         private float scale = 1;
-        private Matrix transform;
+        private PointF prevMouse = new PointF(0, 0);
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
@@ -31,6 +31,7 @@ namespace UPG_SP_2024
             this.MouseDown += (o, e) =>
             {
                 PointF point = new PointF(e.X , e.Y);
+                prevMouse = new PointF(point.X, point.Y);
                 point.X = (point.X - this.Width / 2) / scale;
                 point.Y = (point.Y - this.Height / 2) / scale;
                 INaboj[] charges = scenario.GetCharges();
@@ -43,7 +44,15 @@ namespace UPG_SP_2024
             };
             this.MouseMove += (o, e) =>
             {
-                
+                if (chargeHit == -1) return;
+                INaboj charge = scenario.GetCharge(chargeHit);
+                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
+                prevMouse.X = e.X;
+                prevMouse.Y = e.Y;
+            };
+            this.MouseUp += (o, e) =>
+            {
+                chargeHit = -1;
             };
         }
 
@@ -94,7 +103,6 @@ namespace UPG_SP_2024
             float panelHeight = this.Height;
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
-            transform = g.Transform;
             
             this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime);
 
