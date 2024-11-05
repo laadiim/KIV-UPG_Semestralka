@@ -9,7 +9,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Naboj.cs" afterDir="false" />
     </list>
@@ -165,6 +164,7 @@
       <workItem from="1730223189819" duration="65000" />
       <workItem from="1730798794749" duration="1578000" />
       <workItem from="1730809548156" duration="317000" />
+      <workItem from="1730810243401" duration="223000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
@@ -196,10 +196,10 @@
           <line>40</line>
           <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\DrawingPanel.cs" containingFunctionPresentation="Lambda expression inside Constructor 'DrawingPanel'">
             <startOffsets>
-              <option value="1372" />
+              <option value="1322" />
             </startOffsets>
             <endOffsets>
-              <option value="1441" />
+              <option value="1391" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1" />
