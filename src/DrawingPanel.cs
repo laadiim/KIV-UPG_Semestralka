@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
@@ -15,6 +16,9 @@ namespace UPG_SP_2024
     {
         Scenario scenario;
         private int startTime { get; set; }
+        private int chargeHit = -1;
+        private float scale = 1;
+        private Matrix transform;
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
@@ -24,6 +28,20 @@ namespace UPG_SP_2024
             this.DoubleBuffered = true;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
+            this.MouseDown += (o, e) =>
+            {
+                PointF point = new PointF(e.X , e.Y);
+                Console.WriteLine(point.X + " " + point.Y);
+                Console.WriteLine(point.X - this.Width / 2 + " " + point.Y / scale + this.Height);
+                INaboj[] charges = scenario.GetCharges();
+                if (charges.Length == 0) return;
+                for (int i = 0; i < charges.Length; i++)
+                {
+                    if (charges[i] == null) continue;
+                    chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
+                    Console.WriteLine(chargeHit);
+                }
+            };
         }
 
 
@@ -73,8 +91,9 @@ namespace UPG_SP_2024
             float panelHeight = this.Height;
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
+            transform = g.Transform;
             
-            scenario.Draw(g, panelWidth, panelHeight, this.startTime);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime);
 
             // Calling the base class OnPaint
             base.OnPaint(e);

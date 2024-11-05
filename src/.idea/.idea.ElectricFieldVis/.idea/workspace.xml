@@ -11,9 +11,9 @@
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainForm.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MainForm.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MainForm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainForm.resx" beforeDir="false" afterPath="$PROJECT_DIR$/MainForm.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interfaces/INaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaces/INaboj.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interfaces/IScenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaces/IScenario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Naboj.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +44,9 @@
     &quot;accountId&quot;: &quot;873eced5-3ca3-4ada-87e5-c476afe2f1ab&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e0601aa75a7462ad24e6c0cb86717b769ac1f02c19fd3f8cb2bcb66056b9ac/PointF.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -58,7 +61,7 @@
     ".NET Project.ElectricFieldVis.executor": "Run",
     ".NET Project.UPG_SP_2024.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "designer-fix",
+    "git-widget-placeholder": "moving",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -71,7 +74,7 @@
   <component name="RunManager" selected=".NET Project.UPG_SP_2024">
     <configuration name="UPG_SP_2024" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/UPG_SP_2024.exe" />
-      <option name="PROGRAM_PARAMETERS" value="5" />
+      <option name="PROGRAM_PARAMETERS" value="1" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bin/Debug/net8.0-windows" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -163,6 +166,7 @@
       <workItem from="1729537651863" duration="88000" />
       <workItem from="1729538179850" duration="43000" />
       <workItem from="1730223189819" duration="65000" />
+      <workItem from="1730798794749" duration="1578000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
@@ -185,5 +189,24 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="opraveni namespace" />
     <option name="LAST_COMMIT_MESSAGE" value="opraveni namespace" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/DrawingPanel.cs</url>
+          <line>40</line>
+          <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\DrawingPanel.cs" containingFunctionPresentation="Lambda expression inside Constructor 'DrawingPanel'">
+            <startOffsets>
+              <option value="1356" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1425" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

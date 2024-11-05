@@ -6,6 +6,12 @@ namespace UPG_SP_2024.Interfaces;
 public interface INaboj
 {
     /// <summary>
+    /// zkontroluje jestli je bod uvnitr naboje
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns> je bod uvnitr naboje </returns>
+    bool IsHit(PointF point);
+    /// <summary>
     /// vraci velikost a polaritu naboje
     /// </summary>
     /// <returns>naboj</returns>

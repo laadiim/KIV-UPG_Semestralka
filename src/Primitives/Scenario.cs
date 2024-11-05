@@ -87,7 +87,7 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    public void Draw(Graphics g, float width, float height, int startTime)
+    public float Draw(Graphics g, float width, float height, int startTime)
     {
         float sum_ch = 0;
         int count_ch = 0;
@@ -214,5 +214,7 @@ public class Scenario : IScenario
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale);
+
+        return scale;
     }
 }

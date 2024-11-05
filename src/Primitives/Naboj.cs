@@ -19,6 +19,11 @@ public class Naboj : INaboj
         this.radius = 1f;
     }
 
+    public bool IsHit(PointF point)
+    {
+        return MathF.Sqrt(MathF.Pow(point.X - this.center.X, 2) + MathF.Pow(point.Y - this.center.Y, 2)) <= radius;
+    }
+
     public float GetCharge()
     {
         return this.charge;
