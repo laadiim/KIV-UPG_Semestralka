@@ -23,9 +23,6 @@ public class Naboj : INaboj
     public bool IsHit(PointF point)
     {
         float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(center.X, center.Y));
-        Console.WriteLine("point " + point.X + ", " + point.Y);
-        Console.WriteLine("center" + center.X + ", " + center.Y + ", " + radius);
-        Console.WriteLine(distance);
         return distance <= radius;
     }
 
