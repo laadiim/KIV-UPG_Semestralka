@@ -1,4 +1,6 @@
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Numerics;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -8,6 +10,7 @@ public class Scenario : IScenario
     INaboj?[] charges = new INaboj?[1];
     int freeIndex = 0;
     int chargesCount = 0;
+    private float scale = 1;
 
     public INaboj[] GetCharges()
     {
@@ -101,6 +104,43 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
+    private void DrawColorMap(float width, float height, ColorMap colorMap)
+    {
+        int c = (int)(width * height);
+        int[] x = new int[c];
+        int[] y = new int[c];
+        double[] v = new double[c];
+
+        for (int i = 0; i < c; i++)
+        {
+            v[i] = CalcIntensity(new PointF((x[i] - (int)width / 2) / scale, (y[i] - (int)height / 2) / scale));
+        }
+        
+        var bmp = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
+        
+    }
+
+    private double CalcIntensity(PointF point)
+    { 
+        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
+        Vector2 start = new Vector2(point.X, point.Y);
+        Vector2 end = new Vector2(0, 0);
+        Vector2 sum = Vector2.Zero;
+
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] == null) continue;
+
+            PointF p = charges[i].GetPosition();
+            Vector2 vect = start - new Vector2(p.X, p.Y);
+            float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
+            sum += charges[i].GetCharge() * vect / l;
+        }
+
+        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
+        return sum.Length();
+    }
+
     public float Draw(Graphics g, float width, float height, int startTime)
     {
         float sum_ch = 0;
@@ -191,6 +231,8 @@ public class Scenario : IScenario
             yMax = yMax + difY / (2 * scale);
             yMin = yMin - difY / (2 * scale);
         }
+
+        this.scale = scale;
         
         g.ScaleTransform(scale, scale);
         

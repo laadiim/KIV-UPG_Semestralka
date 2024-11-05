@@ -9,8 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Naboj.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,21 +52,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.ElectricFieldVis.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.UPG_SP_2024.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;moving&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.maddyhome.idea.vim.ui.VimEmulationConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.ElectricFieldVis.executor": "Run",
+    ".NET Project.UPG_SP_2024.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "color-map",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.maddyhome.idea.vim.ui.VimEmulationConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.UPG_SP_2024">
     <configuration name="UPG_SP_2024" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/UPG_SP_2024.exe" />
@@ -165,6 +165,7 @@
       <workItem from="1730798794749" duration="1578000" />
       <workItem from="1730809548156" duration="317000" />
       <workItem from="1730810243401" duration="223000" />
+      <workItem from="1730840075149" duration="1046000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
@@ -187,24 +188,5 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="opraveni namespace" />
     <option name="LAST_COMMIT_MESSAGE" value="opraveni namespace" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/DrawingPanel.cs</url>
-          <line>40</line>
-          <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\DrawingPanel.cs" containingFunctionPresentation="Lambda expression inside Constructor 'DrawingPanel'">
-            <startOffsets>
-              <option value="1322" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1391" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
