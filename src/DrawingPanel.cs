@@ -32,7 +32,7 @@ namespace UPG_SP_2024
             {
                 PointF point = new PointF(e.X , e.Y);
                 Console.WriteLine(point.X + " " + point.Y);
-                Console.WriteLine(point.X - this.Width / 2 + " " + point.Y / scale + this.Height);
+                Console.WriteLine((point.X - this.Width / 2) / scale + " " + (point.Y - this.Height / 2) / scale);
                 INaboj[] charges = scenario.GetCharges();
                 if (charges.Length == 0) return;
                 for (int i = 0; i < charges.Length; i++)

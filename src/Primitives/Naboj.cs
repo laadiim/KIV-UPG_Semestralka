@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using System.Numerics;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -21,7 +22,11 @@ public class Naboj : INaboj
 
     public bool IsHit(PointF point)
     {
-        return MathF.Sqrt(MathF.Pow(point.X - this.center.X, 2) + MathF.Pow(point.Y - this.center.Y, 2)) <= radius;
+        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(center.X, center.Y));
+        Console.WriteLine("point " + point.X + ", " + point.Y);
+        Console.WriteLine("center" + center.X + ", " + center.Y + ", " + radius);
+        Console.WriteLine(distance);
+        return distance <= radius;
     }
 
     public float GetCharge()
