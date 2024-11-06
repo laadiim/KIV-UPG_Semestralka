@@ -1,6 +1,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -104,22 +105,50 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    private void DrawColorMap(float width, float height, ColorMap colorMap)
+    private void DrawColorMap(float width, float height,  colorMap)
     {
         int c = (int)(width * height);
-        int[] x = new int[c];
-        int[] y = new int[c];
+        int[] Arr = new int[c];
+        int[] yArr = new int[c];
         double[] v = new double[c];
 
         for (int i = 0; i < c; i++)
         {
-            v[i] = CalcIntensity(new PointF((x[i] - (int)width / 2) / scale, (y[i] - (int)height / 2) / scale));
+            v[i] = CalcIntensity(new PointF((Arr[i] - (int)width / 2) / scale, (yArr[i] - (int)height / 2) / scale));
         }
         
-        var bmp = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
+        var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
+        var bmp = img.LockBits(
+                new Rectangle(0, 0, img.Width, img.Height),
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format24bppRgb
+            );
         
+        byte[] pixels = new byte[bmp.Stride * bmp.Height];
+        Marshal.Copy(bmp.Scan0, pixels, 0, pixels.Length);
+        for (int y = 0, offset = 0; y < bmp.Height - 1; y++)
+            {
+                for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
+                {
+                    
+                }
+                offset += bmp.Stride;
+            }
     }
+    
+    private Color GetColorFromIntensity(double intensity)
+    {
+        // Clamp intensity to the range [0, 1]
+        intensity = Math.Max(0, Math.Min(1, intensity));
 
+        // Compute RGB values
+        int r = (int)(intensity * 255);       // Red channel increases with intensity
+        int g = 0;                            // Green channel stays constant
+        int b = (int)((1 - intensity) * 255); // Blue channel decreases with intensity
+
+        return Color.FromArgb(r, g, b);
+    }
+    
     private double CalcIntensity(PointF point)
     { 
         const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
