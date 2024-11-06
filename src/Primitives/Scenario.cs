@@ -105,18 +105,8 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
-    private void DrawColorMap(float width, float height,  colorMap)
+    private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
-        int c = (int)(width * height);
-        int[] Arr = new int[c];
-        int[] yArr = new int[c];
-        double[] v = new double[c];
-
-        for (int i = 0; i < c; i++)
-        {
-            v[i] = CalcIntensity(new PointF((Arr[i] - (int)width / 2) / scale, (yArr[i] - (int)height / 2) / scale));
-        }
-        
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
         var bmp = img.LockBits(
                 new Rectangle(0, 0, img.Width, img.Height),
@@ -126,21 +116,25 @@ public class Scenario : IScenario
         
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
         Marshal.Copy(bmp.Scan0, pixels, 0, pixels.Length);
-        for (int y = 0, offset = 0; y < bmp.Height - 1; y++)
+        Parallel.For(0, bmp.Height, y =>
+        {
+            int offset = y * bmp.Stride;
+            for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
             {
-                for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
-                {
-                    
-                }
-                offset += bmp.Stride;
+                Color color = ColorMap(CalcIntensity(new PointF((x - width / 2) / scale, (y - height / 2) / scale)));
+                pixels[index] = color.R;
+                pixels[index + 1] = color.G;
+                pixels[index + 2] = color.B;
             }
+        });
+        Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
+        img.UnlockBits(bmp);
+        g.DrawImage(img, new RectangleF((-width / 2)/scale, (-height/2)/scale, width/scale, height/scale));
     }
     
     private Color GetColorFromIntensity(double intensity)
     {
-        // Clamp intensity to the range [0, 1]
-        intensity = Math.Max(0, Math.Min(1, intensity));
-
+        intensity = Math.Min(1, intensity / 10E9);
         // Compute RGB values
         int r = (int)(intensity * 255);       // Red channel increases with intensity
         int g = 0;                            // Green channel stays constant
@@ -170,7 +164,7 @@ public class Scenario : IScenario
         return sum.Length();
     }
 
-    public float Draw(Graphics g, float width, float height, int startTime)
+    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap = false)
     {
         float sum_ch = 0;
         int count_ch = 0;
@@ -267,20 +261,26 @@ public class Scenario : IScenario
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
-
-        // kresleni pozadi pro scenar
-        LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(xMin, yMin), new PointF(xMax, yMax),
-                                                                 Color.DarkBlue, Color.DarkCyan);
-        brush_scen.InterpolationColors = new ColorBlend()
+        if (drawMap)
         {
-            Colors = new Color[] {
-                    Color.FromArgb(200, Color.FromArgb(255, 10, 30, 70)),
-                    Color.FromArgb(200, Color.FromArgb(255, 30, 70, 100)),
-                    Color.FromArgb(200, Color.FromArgb(255, 30, 130, 140))
-                },
-            Positions = new float[] { 0f, 0.4f, 1f }
-        };
-        g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
+            this.DrawColorMap(g, width, height, GetColorFromIntensity);
+        }
+        else
+        {
+            // kresleni pozadi pro scenar
+            LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(xMin, yMin), new PointF(xMax, yMax),
+                                                                     Color.DarkBlue, Color.DarkCyan);
+            brush_scen.InterpolationColors = new ColorBlend()
+            {
+                Colors = new Color[] {
+                        Color.FromArgb(200, Color.FromArgb(255, 10, 30, 70)),
+                        Color.FromArgb(200, Color.FromArgb(255, 30, 70, 100)),
+                        Color.FromArgb(200, Color.FromArgb(255, 30, 130, 140))
+                    },
+                Positions = new float[] { 0f, 0.4f, 1f }
+            };
+            g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
+        }
 
 
         // kresleni mrizky

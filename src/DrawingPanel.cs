@@ -104,7 +104,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, true);
 
             // Calling the base class OnPaint
             base.OnPaint(e);
