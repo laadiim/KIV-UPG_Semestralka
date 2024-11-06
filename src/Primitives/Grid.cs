@@ -8,15 +8,20 @@ public class Grid : IGrid
 {
     float panelWidth;
     float panelHeight;
+    float xMin, xMax, yMin, yMax;
     float spacingX;
     float spacingY;
     int spacingXpixels;
     int spacingYpixels;
 
-    public Grid(float panelWidth, float panelHeight, int spacingXpixels = 0, int spacingYpixels = 0)
+    public Grid(float xMin, float xMax, float yMin, float yMax, int spacingXpixels = 0, int spacingYpixels = 0)
     {
-        this.panelWidth = panelWidth;
-        this.panelHeight = panelHeight;
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.panelWidth = xMax - xMin;
+        this.panelHeight = yMax - yMin;
         this.spacingX = spacingXpixels / panelWidth;
         this.spacingY = spacingYpixels / panelHeight;
     }
@@ -108,16 +113,32 @@ public class Grid : IGrid
     }
     private void DrawGrid(Graphics g, Pen pen)
     {
-        int nX, nY, aX, aY;
-        nX = (int)((this.panelWidth / 2) / this.spacingX);
-        nY = (int)((this.panelHeight / 2) / this.spacingY);
+        float width_half = this.panelWidth / 2;
+        float height_half = this.panelHeight / 2;
+        int nX, nY, n2x, n2y;
 
-        aX = 2 * nX - 1;
-        aY = 2 * nY - 1;
+        nX = (int)(width_half / this.spacingX);
+        nY = (int)(height_half / this.spacingY);
 
-        float[] intersectionsX = new float[aX * aY];
-        float[] intersectionsY = new float[aX * aY];
+        n2x = 2 * nX - 1;
+        n2y = 2 * nY - 1;
 
+        float[] intersectionsX = new float[n2x * n2y];
+        float[] intersectionsY = new float[n2x * n2y];
+
+        float x_minus = width_half;
+        float x_plus = width_half;
+        float y_minus = height_half;
+        float y_plus = height_half;
+
+        while (x_minus > 0 && x_plus < this.panelWidth)
+        {
+
+        }
+        while (y_minus > 0 && y_plus < this.panelHeight)
+        {
+
+        }
     }
 
     public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)

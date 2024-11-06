@@ -53,15 +53,18 @@ public class Probe : IProbe
         g.TranslateTransform(points[0].X, points[0].Y);
         var transform = g.Transform;
 
-        float len = sum.Length() * 100;
-        string label = $"{len.ToString("n2")}E-2 TN/C";
-        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
-        float width = g.MeasureString(label, font).Width;
-        float height = g.MeasureString(label, font).Height;
+        if (this.radius != 0 && this.anglePerSecond != 0)
+        {
+            float len = sum.Length() * 100;
+            string label = $"{len.ToString("n2")}E-2 TN/C";
+            Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
+            float width = g.MeasureString(label, font).Width;
+            float height = g.MeasureString(label, font).Height;
 
-        g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
+            g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
 
-        g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
+            g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
+        }
 
         if (sum.X > 2E9 || sum.Y > 2E9)
         {
