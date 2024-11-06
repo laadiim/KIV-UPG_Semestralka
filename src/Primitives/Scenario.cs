@@ -199,7 +199,7 @@ public class Scenario : IScenario
 
 
         // kresleni mrizky
-        IGrid grid = new Grid(xMax - xMin, yMax - yMin);
+        IGrid grid = new Grid(xMin, xMax, yMin, yMax);
         float tipLength = 10f; // nastaveni velikosti sipky
         grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
 

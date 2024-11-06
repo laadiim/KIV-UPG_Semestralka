@@ -126,18 +126,24 @@ public class Grid : IGrid
         float[] intersectionsX = new float[n2x * n2y];
         float[] intersectionsY = new float[n2x * n2y];
 
-        float x_minus = width_half;
-        float x_plus = width_half;
-        float y_minus = height_half;
-        float y_plus = height_half;
+        float x_minus = width_half - this.spacingX;
+        float x_plus = width_half + this.spacingX;
+        float y_minus = height_half - this.spacingY;
+        float y_plus = height_half + this.spacingY;
 
         while (x_minus > 0 && x_plus < this.panelWidth)
         {
-
+            g.DrawString();
+            g.DrawString();
+            x_minus -= this.spacingX;
+            x_plus += this.spacingX;
         }
         while (y_minus > 0 && y_plus < this.panelHeight)
         {
-
+            g.DrawString();
+            g.DrawString();
+            y_minus -= this.spacingY;
+            y_plus += this.spacingY;
         }
     }
 
