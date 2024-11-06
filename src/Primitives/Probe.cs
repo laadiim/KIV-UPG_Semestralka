@@ -70,8 +70,16 @@ public class Probe : IProbe
         {
             sum /= 10E6f;
         }
-        
-        DrawArrow(g, sum, scale, color);
+
+        if (this.radius == 0 && this.anglePerSecond == 0)
+        {
+            Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
+            DrawArrow(g, sum, scale, color_arr_grid);
+        } 
+        else
+        {
+            DrawArrow(g, sum, scale, color);
+        }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
     }
@@ -94,11 +102,19 @@ public class Probe : IProbe
         float u_x = x * norma;
         float u_y = y * norma;
 
-        float tipLen = 30f / scale;
+        float tipLen = 2f / (float)Math.Sqrt(scale);
+
+        if (this.anglePerSecond == 0 && this.radius == 0)
+        {
+            u_x = (x * norma) / 3f;
+            u_y = (y * norma) / 3f;
+            tipLen = 3f / (float)Math.Sqrt(scale);
+        }
 
         PointF point = new PointF(u_x / 1.5f, u_y / 1.5f);
 
-        g.DrawLine(new Pen(color, 5 / scale), 0, 0, point.X, point.Y);
+
+        g.DrawLine(new Pen(color, 0.2f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
 
         var points_arrow = new PointF[3];
         points_arrow[0] = new PointF(point.X - u_y * tipLen / 2, point.Y + u_x * tipLen / 2);

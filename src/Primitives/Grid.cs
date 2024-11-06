@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Runtime.InteropServices;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -9,21 +10,35 @@ public class Grid : IGrid
     float panelWidth;
     float panelHeight;
     float xMin, xMax, yMin, yMax;
+    int startTime;
+    INaboj[] charges;
+    float scale;
     float spacingX;
     float spacingY;
     int spacingXpixels;
     int spacingYpixels;
 
-    public Grid(float xMin, float xMax, float yMin, float yMax, int spacingXpixels = 0, int spacingYpixels = 0)
+    public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels = 0, int spacingYpixels = 0)
     {
         this.xMin = xMin;
         this.xMax = xMax;
         this.yMin = yMin;
         this.yMax = yMax;
+
         this.panelWidth = xMax - xMin;
         this.panelHeight = yMax - yMin;
-        this.spacingX = spacingXpixels / panelWidth;
-        this.spacingY = spacingYpixels / panelHeight;
+
+        this.startTime = startTime;
+        this.charges = charges;
+        this.scale = scale;
+
+        this.spacingXpixels = spacingXpixels;
+        this.spacingYpixels = spacingYpixels;
+
+        float min = Math.Min(this.panelWidth, this.panelHeight);
+
+        this.spacingX = spacingXpixels / min;
+        this.spacingY = spacingYpixels / min;
     }
 
     public int GetNumberOfGridLines()
@@ -107,7 +122,7 @@ public class Grid : IGrid
 
         if (this.spacingXpixels != 0 && this.spacingYpixels != 0)
         {
-            Pen penGrid = new Pen(color, 3 / scale);
+            Pen penGrid = new Pen(color, 0.1f / (float)Math.Sqrt(scale));
             DrawGrid(g, penGrid);
         }
     }
@@ -120,37 +135,80 @@ public class Grid : IGrid
         nX = (int)(width_half / this.spacingX);
         nY = (int)(height_half / this.spacingY);
 
-        n2x = 2 * nX - 1;
-        n2y = 2 * nY - 1;
+        n2x = 2 * nX + 1;
+        n2y = 2 * nY + 1;
 
-        float[] intersectionsX = new float[n2x * n2y];
-        float[] intersectionsY = new float[n2x * n2y];
+        float[] intersectionsX = new float[n2x + 1];
+        float[] intersectionsY = new float[n2y + 1];
 
-        float x_minus = width_half - this.spacingX;
-        float x_plus = width_half + this.spacingX;
-        float y_minus = height_half - this.spacingY;
-        float y_plus = height_half + this.spacingY;
+        float x_minus = this.xMin + width_half - this.spacingX;
+        float x_plus = this.xMax - width_half + this.spacingX;
+        float y_minus = this.yMin + height_half - this.spacingY;
+        float y_plus = this.yMax - height_half + this.spacingY;
 
-        while (x_minus > 0 && x_plus < this.panelWidth)
+        int i = 0;
+        int j = 0;
+
+        while (x_minus >= this.xMin)
         {
-            g.DrawString();
-            g.DrawString();
+            g.DrawLine(pen, x_minus, this.yMin, x_minus, this.yMax);
+            intersectionsX[i] = x_minus;
+
             x_minus -= this.spacingX;
-            x_plus += this.spacingX;
+
+            i++;
         }
-        while (y_minus > 0 && y_plus < this.panelHeight)
+
+        intersectionsX[i] = xMin + width_half;
+
+        while (x_plus <= this.xMax)
         {
-            g.DrawString();
-            g.DrawString();
-            y_minus -= this.spacingY;
+            g.DrawLine(pen, x_plus, this.yMin, x_plus, this.yMax);
+            intersectionsX[i] = x_plus;
+
+            x_plus += this.spacingX;
+            i++;
+        }
+
+        intersectionsX[i + 1] = x_plus;
+
+        while (y_minus >= this.yMin)
+        {
+            g.DrawLine(pen, this.xMin, y_minus, this.xMax, y_minus);
+            intersectionsY[j] = y_minus;
+
+            y_minus -= this.spacingY;    
+            j++;
+        }
+
+        intersectionsY[j] = yMin + height_half;
+
+        while (y_plus <= this.yMax)
+        {
+            g.DrawLine(pen, this.xMin, y_plus, this.xMax, y_plus);
+            intersectionsY[j] = y_plus;
+
             y_plus += this.spacingY;
+            j++;
+        }
+
+        intersectionsY[j + 1] = y_plus;
+
+        for (int x = 0; x < intersectionsX.Length; x++)
+        {
+            for (int y = 0; y < intersectionsY.Length; y++)
+            {
+                PointF point = new PointF(intersectionsX[x] - spacingX / 2f, intersectionsY[y] - spacingY / 2f);
+                IProbe probe = new Probe(point, 0, 0);
+                probe.Draw(g, this.startTime, this.charges, scale);
+            }
         }
     }
 
     public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
         Color color = Color.FromArgb(40, Color.White);
-        Pen pen = new Pen(color, 3 / scale);
+        Pen pen = new Pen(color, 0.2f / (float)Math.Sqrt(scale));
         Brush brush = new SolidBrush(color);
 
         tipLength = 1f / (float)Math.Sqrt(scale);
