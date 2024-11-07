@@ -102,7 +102,7 @@ public class Grid : IGrid
     /// <param name="topLeft">horni levy roh</param>
     /// <param name="bottomRight">dolni pravy roh</param>
     /// <param name="tipLength">delka sipky</param>
-    private void DrawAxes(Graphics g, Pen pen, Brush brush, PointF topLeft, PointF bottomRight, float tipLength, float scale, Color color)
+    private void DrawAxes(Graphics g, Pen pen, Brush brush, Brush brush_str, PointF topLeft, PointF bottomRight, float tipLength, float scale, Color color)
     {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
         PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
@@ -112,11 +112,12 @@ public class Grid : IGrid
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
         SizeF size = new SizeF(tipLength, 0);
 
+       
         g.DrawLine(pen, rightCenter - size, leftCenter);
-        g.DrawString("x", font, brush, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
+        g.DrawString("x", font, brush_str, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
 
         g.DrawLine(pen, topCenter + new SizeF(0, tipLength), bottomCenter);
-        g.DrawString("y", font, brush, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
+        g.DrawString("y", font, brush_str, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
 
         DrawArrows(g, brush, rightCenter, topCenter, tipLength);
 
@@ -210,8 +211,9 @@ public class Grid : IGrid
         Color color = Color.FromArgb(40, Color.White);
         Pen pen = new Pen(color, 0.2f / (float)Math.Sqrt(scale));
         Brush brush = new SolidBrush(color);
+        Brush brush_str = new SolidBrush(Color.White);
 
         tipLength = 1f / (float)Math.Sqrt(scale);
-        DrawAxes(g, pen, brush, topLeft, bottomRight, tipLength, scale, color);
+        DrawAxes(g, pen, brush, brush_str, topLeft, bottomRight, tipLength, scale, color);
     }
 }
