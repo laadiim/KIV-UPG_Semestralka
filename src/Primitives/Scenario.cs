@@ -1,7 +1,9 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
+using System.Threading.Channels;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -134,18 +136,38 @@ public class Scenario : IScenario
     
     private Color GetColorFromIntensity(double intensity)
     {
-        intensity = Math.Min(1, intensity / 10E9);
-        // Compute RGB values
-        int r = (int)(intensity * 255);       // Red channel increases with intensity
-        int g = 0;                            // Green channel stays constant
-        int b = (int)((1 - intensity) * 255); // Blue channel decreases with intensity
+        // Cap the intensity value to a maximum of 1.0 for a smoother transition.
+        double intst = Math.Min(1.0, intensity);
+
+        // Define colors for the transition
+        int BlueR = 0, minBlueG = 100, minBlueB = 255;  // Mild blue
+        int lightBlueR = 173, lightBlueG = 216, lightBlueB = 230; // Light blue
+        int whiteR = 255, whiteG = 255, whiteB = 255; // White
+
+        // Calculate intermediate colors based on intensity
+        int r, g, b;
+        if (intst < 0.5)
+        {
+            // Transition from mild blue to light blue
+            double factor = intst / 0.5;
+            r = (int)(BlueR + factor * (lightBlueR - BlueR));
+            g = (int)(minBlueG + factor * (lightBlueG - minBlueG));
+            b = (int)(minBlueB + factor * (lightBlueB - minBlueB));
+        }
+        else
+        {
+            // Transition from light blue to white
+            double factor = (intst - 0.5) / 0.5;
+            r = (int)(lightBlueR + factor * (whiteR - lightBlueR));
+            g = (int)(lightBlueG + factor * (whiteG - lightBlueG));
+            b = (int)(lightBlueB + factor * (whiteB - lightBlueB));
+        }
 
         return Color.FromArgb(r, g, b);
     }
     
     private double CalcIntensity(PointF point)
     { 
-        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
         Vector2 start = new Vector2(point.X, point.Y);
         Vector2 end = new Vector2(0, 0);
         Vector2 sum = Vector2.Zero;
@@ -159,8 +181,6 @@ public class Scenario : IScenario
             float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
             sum += charges[i].GetCharge() * vect / l;
         }
-
-        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
         return sum.Length();
     }
 
