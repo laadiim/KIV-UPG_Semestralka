@@ -59,7 +59,8 @@ public class Naboj : INaboj
 
         using (var shadowPath = new GraphicsPath())
         {
-            shadowPath.AddEllipse(0, 0, radius * 2.05f, radius * 2.05f);
+            float r = 2.03f;
+            shadowPath.AddEllipse(0, 0, radius * r, radius * r);
 
             using (var brushEll = new PathGradientBrush(shadowPath))
             {
@@ -80,7 +81,7 @@ public class Naboj : INaboj
                 brushEll.FocusScales = new PointF(0f, 0f);
 
                 // vybarvi stin
-                g.FillEllipse(brushEll, 0, 0, radius * 2.05f, radius * 2.05f);
+                g.FillEllipse(brushEll, 0, 0, radius * r, radius * r);
             }
         }
 

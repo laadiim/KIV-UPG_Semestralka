@@ -9,14 +9,20 @@ public class Grid : IGrid
 {
     float panelWidth;
     float panelHeight;
+
     float xMin, xMax, yMin, yMax;
+
     int startTime;
     INaboj[] charges;
     float scale;
+
     float spacingX;
     float spacingY;
+
     int spacingXpixels;
     int spacingYpixels;
+
+    float min;
 
     public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels = 0, int spacingYpixels = 0)
     {
@@ -35,30 +41,13 @@ public class Grid : IGrid
         this.spacingXpixels = spacingXpixels;
         this.spacingYpixels = spacingYpixels;
 
-        float min = Math.Min(this.panelWidth, this.panelHeight);
+        this.min = Math.Min(this.panelWidth, this.panelHeight);
 
         this.spacingX = spacingXpixels / min;
         this.spacingY = spacingYpixels / min;
-    }
 
-    public int GetNumberOfGridLines()
-    {
-        throw new NotImplementedException();
-    }
 
-    public void SetNumberOfGridLines(int row, int column)
-    {
-        throw new NotImplementedException();
     }
-
-    /*
-    Prostor okna bude pravidelnì vzorkován (møížka) a v každém vzorku bude zobrazena šipka
-    znázoròující intenzitu elektrického pole (tj. de facto se jedná o statické sondy)
-     
-    Pøi spouštìní programu z pøíkazové øádky bude možné volitelnì specifikovat
-    parametr -g<X>x<Y>, kde za <X> a <Y> jsou celoèíselné hodnoty udávající rozteè vzorkù møížky v ose x
-    a y v pixlech
-    */
 
     public int GetSpacingXinPixels()
     {
@@ -93,16 +82,20 @@ public class Grid : IGrid
 
         g.FillPolygon(brush, points);
     }
+
     /// <summary>
     /// nakresli mrizku
     /// </summary>
     /// <param name="g">graficky kontext</param>
-    /// <param name="pen">predane pero</param>
+    /// <param name="penAxes">predane pero pro pro osy</param>
+    /// <param name="penGrid">predane pero pro mrizku</param>
     /// <param name="brush">predany stetec</param>
+    /// <param name="brushStr">predany stetec pro string</param>
     /// <param name="topLeft">horni levy roh</param>
     /// <param name="bottomRight">dolni pravy roh</param>
     /// <param name="tipLength">delka sipky</param>
-    private void DrawAxes(Graphics g, Pen pen, Brush brush, Brush brush_str, PointF topLeft, PointF bottomRight, float tipLength, float scale, Color color)
+    /// <param name="scale">predany scale</param>
+    private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
         PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
         PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
@@ -111,19 +104,17 @@ public class Grid : IGrid
 
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
         SizeF size = new SizeF(tipLength, 0);
-
        
-        g.DrawLine(pen, rightCenter - size, leftCenter);
-        g.DrawString("x", font, brush_str, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
+        g.DrawLine(penAxes, rightCenter - size, leftCenter);
+        g.DrawString("x", font, brushStr, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
 
-        g.DrawLine(pen, topCenter + new SizeF(0, tipLength), bottomCenter);
-        g.DrawString("y", font, brush_str, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
+        g.DrawLine(penAxes, topCenter + new SizeF(0, tipLength), bottomCenter);
+        g.DrawString("y", font, brushStr, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
 
         DrawArrows(g, brush, rightCenter, topCenter, tipLength);
 
         if (this.spacingXpixels != 0 && this.spacingYpixels != 0)
         {
-            Pen penGrid = new Pen(color, 0.1f / (float)Math.Sqrt(scale));
             DrawGrid(g, penGrid);
         }
     }
@@ -195,11 +186,15 @@ public class Grid : IGrid
 
         intersectionsY[j + 1] = y_plus;
 
+
+        PointF point = new PointF(0, 0);
         for (int x = 0; x < intersectionsX.Length; x++)
         {
             for (int y = 0; y < intersectionsY.Length; y++)
             {
-                PointF point = new PointF(intersectionsX[x] - spacingX / 2f, intersectionsY[y] - spacingY / 2f);
+                point.X = intersectionsX[x] - spacingX / 2f;
+                point.Y = intersectionsY[y] - spacingY / 2f;
+
                 IProbe probe = new Probe(point, 0, 0);
                 probe.Draw(g, this.startTime, this.charges, scale);
             }
@@ -208,12 +203,17 @@ public class Grid : IGrid
 
     public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
-        Color color = Color.FromArgb(40, Color.White);
-        Pen pen = new Pen(color, 0.2f / (float)Math.Sqrt(scale));
-        Brush brush = new SolidBrush(color);
-        Brush brush_str = new SolidBrush(Color.White);
+        Color colorAxes = Color.FromArgb(80, Color.White);
+        Color colorGrid = Color.FromArgb(40, Color.White);
+
+        Pen penAxes = new Pen(colorAxes, 2f / scale);
+        Pen penGrid = new Pen(colorGrid, 1f / scale);
+
+
+        Brush brush = new SolidBrush(colorAxes);
+        Brush brushStr = new SolidBrush(Color.White);
 
         tipLength = 1f / (float)Math.Sqrt(scale);
-        DrawAxes(g, pen, brush, brush_str, topLeft, bottomRight, tipLength, scale, color);
+        DrawAxes(g, penAxes, penGrid, brush, brushStr, topLeft, bottomRight, tipLength, scale);
     }
 }
