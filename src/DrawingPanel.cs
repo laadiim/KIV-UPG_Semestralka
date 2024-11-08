@@ -91,7 +91,7 @@ namespace UPG_SP_2024
         }
 
         /// <summary>TODO: Custom visualization code comes into this method</summary>
-        /// <remarks>Raises the <see cref="E:System.Windows.Forms.Control.Paint">Paint</see> event.</remarks>
+        /// <remarks>Raises the <see cref="E:System.Windows.Forms.Control.ControlPanelPaint">ControlPanelPaint</see> event.</remarks>
         /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs">PaintEventArgs</see> that contains the event data.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
