@@ -4,7 +4,6 @@ using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
 
-//TODO: doplnit cely Grid
 public class Grid : IGrid
 {
     float panelWidth;

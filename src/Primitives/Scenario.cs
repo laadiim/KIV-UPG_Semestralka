@@ -137,12 +137,12 @@ public class Scenario : IScenario
     private Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(1.0, intensity);
+        double intst = Math.Min(1, intensity);
 
         // Define colors for the transition
-        int BlueR = 0, minBlueG = 100, minBlueB = 255;  // Mild blue
-        int lightBlueR = 173, lightBlueG = 216, lightBlueB = 230; // Light blue
-        int whiteR = 255, whiteG = 255, whiteB = 255; // White
+        int DarkBlueR = 200, DarkBlueG = 255, DarkBlueB = 150;
+        int BlueR = 190, BlueG = 130, BlueB = 190;
+        int LightBlueR = 200, LightBlueG = 140, LightBlueB = 140;
 
         // Calculate intermediate colors based on intensity
         int r, g, b;
@@ -150,17 +150,17 @@ public class Scenario : IScenario
         {
             // Transition from mild blue to light blue
             double factor = intst / 0.5;
-            r = (int)(BlueR + factor * (lightBlueR - BlueR));
-            g = (int)(minBlueG + factor * (lightBlueG - minBlueG));
-            b = (int)(minBlueB + factor * (lightBlueB - minBlueB));
+            r = (int)(DarkBlueR + factor * (BlueR - DarkBlueR));
+            g = (int)(DarkBlueG + factor * (BlueG - DarkBlueG));
+            b = (int)(DarkBlueB + factor * (BlueB - DarkBlueB));
         }
         else
         {
             // Transition from light blue to white
-            double factor = (intst - 0.5) / 0.5;
-            r = (int)(lightBlueR + factor * (whiteR - lightBlueR));
-            g = (int)(lightBlueG + factor * (whiteG - lightBlueG));
-            b = (int)(lightBlueB + factor * (whiteB - lightBlueB));
+            double factor = (intst - 0.5) / 0.2f;
+            r = (int)(BlueR + factor * (LightBlueR - BlueR));
+            g = (int)(BlueG + factor * (LightBlueG - BlueG));
+            b = (int)(BlueB + factor * (LightBlueB - BlueB));
         }
 
         return Color.FromArgb(r, g, b);
@@ -204,16 +204,24 @@ public class Scenario : IScenario
             // upravime polomer na zaklade velikosti naboje
             foreach (var charge in charges)
             {
-                if (charge != null & count_ch >= 2)
+                if (charge != null)
                 {
                     float currentCharge = (float)Math.Sqrt(Math.Abs(charge.GetCharge()));
-                    
-                    float newRadius = (float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch);
-                    charge.SetRadius(newRadius); 
-                }
-                else if(charge != null & count_ch == 1)
-                {
-                    charge.SetRadius(0.7f);
+
+                    if (count_ch > 2)
+                    {
+                        float newRadius = (float)Math.Sqrt(charge.GetRadius() * 0.7 * currentCharge / Math.Sqrt(sum_ch));
+                        charge.SetRadius(newRadius);
+                    }
+                    else if (count_ch == 2)
+                    {
+                        float newRadius = (float)Math.Sqrt(charge.GetRadius() * 0.4f * currentCharge / Math.Sqrt(sum_ch));
+                        charge.SetRadius(newRadius);
+                    }
+                    else if (count_ch == 1)
+                    {
+                        charge.SetRadius(0.3f);
+                    }
                 }
             }
         }
@@ -235,22 +243,35 @@ public class Scenario : IScenario
         float viewportWidth = xMax - xMin;
         float viewportHeight = yMax - yMin;
 
-        // v pripade 1 naboje upravime velikost panelu tak, aby nebyl moc velky
+        // v pripade 1 naboje upravime velikost panelu tak, aby naboj nebyl moc velky
         if (chargesCount == 1)
         {
-            xMin -= viewportWidth * 1.3f;
-            xMax += viewportWidth * 1.3f;
-            yMin -= viewportHeight * 1.3f;
-            yMax += viewportHeight * 1.3f;
+            float size = 2f;
+            xMin -= viewportWidth * size;
+            xMax += viewportWidth * size;
+            yMin -= viewportHeight * size;
+            yMax += viewportHeight * size;
 
         }
-        
+
+        // v pripade 2 naboju upravime velikost panelu tak, aby nebyly moc velky
+        else if (chargesCount == 2)
+        {
+            float size = 0.8f;
+            xMin -= viewportWidth * size;
+            xMax += viewportWidth * size;
+            yMin -= viewportHeight * size;
+            yMax += viewportHeight * size;
+
+        }
+
         else
         {
-            xMin -= viewportWidth / 4f;
-            xMax += viewportWidth / 4f;
-            yMin -= viewportHeight / 4f;
-            yMax += viewportHeight / 4f;
+            float size = 4f;
+            xMin -= viewportWidth / size;
+            xMax += viewportWidth / size;
+            yMin -= viewportHeight / size;
+            yMax += viewportHeight / size;
         }
         
         float scaleX = width / (xMax - xMin);
@@ -266,6 +287,7 @@ public class Scenario : IScenario
             xMin = xMin - difX / (2 * scale);
 
         }
+
         // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
         else
         {
