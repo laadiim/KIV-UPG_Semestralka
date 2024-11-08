@@ -67,19 +67,22 @@ public class Naboj : INaboj
     }
 
     public void Draw(Graphics g, PointF panelCenter, float scale)
-    {  
+    {
         g.TranslateTransform(center.X - radius, center.Y - radius);
-
         /*
+        float r = 2.5f * radius;
+        float shift = (radius * 2 - r) / 2;
+
         using (var shadowPath = new GraphicsPath())
         {
-            float r = 2.03f;
-            shadowPath.AddEllipse(0, 0, radius * r, radius * r);
+           
+
+            shadowPath.AddEllipse((radius * 2 - r) / 2, (radius * 2 - r) / 2, r, r);
 
             using (var brushEll = new PathGradientBrush(shadowPath))
             {
                 // stin
-                brushEll.CenterPoint = new PointF(radius * 1.66f, radius * 1.66f);
+                brushEll.CenterPoint = new PointF(0, 0);
 
                 // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (this.charge < 0)
@@ -95,7 +98,7 @@ public class Naboj : INaboj
                 brushEll.FocusScales = new PointF(0f, 0f);
 
                 // vybarvi stin
-                g.FillEllipse(brushEll, 0, 0, radius * r, radius * r);
+                g.FillEllipse(brushEll, (radius * 2 - r) / 2, (radius * 2 - r) / 2, r, r);
             }
         }
         */

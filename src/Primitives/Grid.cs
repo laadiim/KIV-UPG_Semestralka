@@ -44,8 +44,6 @@ public class Grid : IGrid
 
         this.spacingX = spacingXpixels / min;
         this.spacingY = spacingYpixels / min;
-
-
     }
 
     public int GetSpacingXinPixels()
