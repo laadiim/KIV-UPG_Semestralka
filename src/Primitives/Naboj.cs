@@ -70,6 +70,7 @@ public class Naboj : INaboj
     {  
         g.TranslateTransform(center.X - radius, center.Y - radius);
 
+        /*
         using (var shadowPath = new GraphicsPath())
         {
             float r = 2.03f;
@@ -97,6 +98,7 @@ public class Naboj : INaboj
                 g.FillEllipse(brushEll, 0, 0, radius * r, radius * r);
             }
         }
+        */
 
         // nastaveni barvy pro naboje
         using (var ellipsePath = new GraphicsPath())
@@ -112,13 +114,13 @@ public class Naboj : INaboj
                 // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (this.charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(255, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 40, 50, 70) };
+                    brushEll.CenterColor = Color.FromArgb(255, 180, 220, 255);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 20, 100, 190) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(255, 250, 220, 160);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 80, 20, 30) };
+                    brushEll.CenterColor = Color.FromArgb(255, 250, 200, 190);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 80, 20, 70) };
                 }
                 brushEll.FocusScales = new PointF(0f, 0f);
                 
@@ -133,12 +135,13 @@ public class Naboj : INaboj
                 if (this.charge < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(120, 140, 140, 170) };
+                    //brushEll.SurroundColors = new[] { Color.FromArgb(120, 140, 140, 170) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(220, 30, 60, 90) };
                 }
                 else
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(130, 90, 190, 230) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(220, 50, 80, 90) };
                 }
                 brushEll.FocusScales = new PointF(0.7f, 0.7f);
 

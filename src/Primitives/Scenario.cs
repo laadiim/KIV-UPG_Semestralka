@@ -131,40 +131,59 @@ public class Scenario : IScenario
         });
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
-        g.DrawImage(img, new RectangleF((-width / 2)/scale, (-height/2)/scale, width/scale, height/scale));
+        g.DrawImage(img, new RectangleF((- width / 2) / scale, (- height / 2) / scale, width / scale, height / scale));
     }
     
     private Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(1, intensity);
+        double intst = Math.Min(6, Math.Max(0, intensity)) / 6;
 
         // Define colors for the transition
-        int DarkBlueR = 200, DarkBlueG = 255, DarkBlueB = 150;
-        int BlueR = 190, BlueG = 130, BlueB = 190;
-        int LightBlueR = 200, LightBlueG = 140, LightBlueB = 140;
+        int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
+        int blueR = 200, blueG = 200, blueB = 240;                 // Blue
+        int lightBlueR = 150, lightBlueG = 110, lightBlueB = 180; // Light blue
+        int whiteR = 100, whiteG = 70, whiteB = 110;              // White
+        int orangeR = 90, orangeG = 60, orangeB = 50;            // Orange
 
-        // Calculate intermediate colors based on intensity
         int r, g, b;
-        if (intst < 0.5)
+
+        if (intst < 0.25)
         {
-            // Transition from mild blue to light blue
-            double factor = intst / 0.5;
-            r = (int)(DarkBlueR + factor * (BlueR - DarkBlueR));
-            g = (int)(DarkBlueG + factor * (BlueG - DarkBlueG));
-            b = (int)(DarkBlueB + factor * (BlueB - DarkBlueB));
+            // Transition from dark blue to blue
+            double factor = intst / 0.25;
+            r = (int)(darkBlueR + factor * (blueR - darkBlueR));
+            g = (int)(darkBlueG + factor * (blueG - darkBlueG));
+            b = (int)(darkBlueB + factor * (blueB - darkBlueB));
+        }
+        else if (intst < 0.5)
+        {
+            // Transition from blue to light blue
+            double factor = (intst - 0.25) / 0.25;
+            r = (int)(blueR + factor * (lightBlueR - blueR));
+            g = (int)(blueG + factor * (lightBlueG - blueG));
+            b = (int)(blueB + factor * (lightBlueB - blueB));
+        }
+        else if (intst < 0.75)
+        {
+            // Transition from light blue to white
+            double factor = (intst - 0.5) / 0.25;
+            r = (int)(lightBlueR + factor * (whiteR - lightBlueR));
+            g = (int)(lightBlueG + factor * (whiteG - lightBlueG));
+            b = (int)(lightBlueB + factor * (whiteB - lightBlueB));
         }
         else
         {
-            // Transition from light blue to white
-            double factor = (intst - 0.5) / 0.2f;
-            r = (int)(BlueR + factor * (LightBlueR - BlueR));
-            g = (int)(BlueG + factor * (LightBlueG - BlueG));
-            b = (int)(BlueB + factor * (LightBlueB - BlueB));
+            // Transition from white to orange
+            double factor = (intst - 0.75) / 0.25;
+            r = (int)(whiteR + factor * (orangeR - whiteR));
+            g = (int)(whiteG + factor * (orangeG - whiteG));
+            b = (int)(whiteB + factor * (orangeB - whiteB));
         }
 
         return Color.FromArgb(r, g, b);
     }
+
     
     private double CalcIntensity(PointF point)
     { 

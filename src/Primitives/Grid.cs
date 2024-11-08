@@ -103,19 +103,19 @@ public class Grid : IGrid
 
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
         SizeF size = new SizeF(tipLength, 0);
-       
+
+        if (this.spacingXpixels != 0 && this.spacingYpixels != 0)
+        {
+            DrawGrid(g, penGrid);
+        }
+
         g.DrawLine(penAxes, rightCenter - size, leftCenter);
         g.DrawString("x", font, brushStr, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
 
         g.DrawLine(penAxes, topCenter + new SizeF(0, tipLength), bottomCenter);
         g.DrawString("y", font, brushStr, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
 
-        DrawArrows(g, brush, rightCenter, topCenter, tipLength);
-
-        if (this.spacingXpixels != 0 && this.spacingYpixels != 0)
-        {
-            DrawGrid(g, penGrid);
-        }
+        DrawArrows(g, brush, rightCenter, topCenter, tipLength);   
     }
     private void DrawGrid(Graphics g, Pen pen)
     {
@@ -202,8 +202,8 @@ public class Grid : IGrid
 
     public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
     {
-        Color colorAxes = Color.FromArgb(80, Color.White);
-        Color colorGrid = Color.FromArgb(40, Color.White);
+        Color colorAxes = Color.FromArgb(220, Color.White);
+        Color colorGrid = Color.FromArgb(150, Color.White);
 
         Pen penAxes = new Pen(colorAxes, 2f / scale);
         Pen penGrid = new Pen(colorGrid, 1f / scale);

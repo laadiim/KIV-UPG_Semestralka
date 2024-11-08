@@ -46,7 +46,7 @@ public class Probe : IProbe
         points[0] = new PointF(start.X, start.Y); // bod zacatku sipky
         points[1] = new PointF(end.X, end.Y); // bod konce sipky
 
-        Color color = Color.FromArgb(120, Color.White);
+        Color color = Color.FromArgb(230, Color.White);
         Brush brush = new SolidBrush(Color.White);
         float r = 0.3f / (float)Math.Sqrt(scale);
 
@@ -73,7 +73,7 @@ public class Probe : IProbe
 
         if (this.radius == 0 && this.anglePerSecond == 0)
         {
-            Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
+            Color color_arr_grid = Color.FromArgb(100, Color.White);
             DrawArrow(g, sum, scale, color_arr_grid);
         } 
         else
