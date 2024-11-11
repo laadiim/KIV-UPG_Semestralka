@@ -284,7 +284,7 @@ public class Scenario : IScenario
 
 
         // kresleni mrizky
-        IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, 50, 100, width, height);
+        IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, 50, 50, width, height);
         float tipLength = 10f; // nastaveni velikosti sipky
         grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
 
