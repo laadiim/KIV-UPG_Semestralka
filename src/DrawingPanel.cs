@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
@@ -45,6 +46,11 @@ namespace UPG_SP_2024
             this.MouseMove += (o, e) =>
             {
                 if (chargeHit == -1) return;
+                if (e.X < this.Width / 9 || e.X >= this.Width - this.Width / 9 || e.Y < this.Height / 9 || e.Y >= this.Height - this.Height / 9)
+                {
+                    chargeHit = -1;
+                    return;
+                }
                 INaboj charge = scenario.GetCharge(chargeHit);
                 charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
                 prevMouse.X = e.X;
@@ -104,7 +110,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, true);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, true, this.chargeHit);
 
             // Calling the base class OnPaint
             base.OnPaint(e);

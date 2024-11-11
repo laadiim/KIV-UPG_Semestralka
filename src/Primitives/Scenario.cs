@@ -164,7 +164,7 @@ public class Scenario : IScenario
         return sum.Length();
     }
 
-    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap = false)
+    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit)
     {
         float sum_ch = 0;
         int count_ch = 0;
@@ -227,35 +227,47 @@ public class Scenario : IScenario
         
         else
         {
-            xMin -= viewportWidth / 4f;
-            xMax += viewportWidth / 4f;
-            yMin -= viewportHeight / 4f;
-            yMax += viewportHeight / 4f;
-        }
-        
-        float scaleX = width / (xMax - xMin);
-        float scaleY = height / (yMax - yMin);
-        float scale;
-        
-        // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
-        if (scaleX > scaleY)
-        {
-            scale = scaleY;
-            float difX = width - scale * (xMax - xMin);
-            xMax = xMax + difX / (2 * scale);
-            xMin = xMin - difX / (2 * scale);
-
-        }
-        // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
-        else
-        {
-            scale = scaleX;
-            float difY = height - scale * (yMax - yMin);
-            yMax = yMax + difY / (2 * scale);
-            yMin = yMin - difY / (2 * scale);
+            xMin -= viewportWidth / 9f;
+            xMax += viewportWidth / 9f;
+            yMin -= viewportHeight / 9f;
+            yMax += viewportHeight / 9f;
         }
 
-        this.scale = scale;
+        if (chargeHit != -1 || this.scale == 1)
+        {
+            float scaleX = width / (xMax - xMin);
+            float scaleY = height / (yMax - yMin);
+            float scale;
+
+            // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
+            if (scaleX > scaleY)
+            {
+                scale = scaleY;
+                float difX = width - scale * (xMax - xMin);
+                xMax = xMax + difX / (2 * scale);
+                xMin = xMin - difX / (2 * scale);
+
+            }
+            // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
+            else
+            {
+                scale = scaleX;
+                float difY = height - scale * (yMax - yMin);
+                yMax = yMax + difY / (2 * scale);
+                yMin = yMin - difY / (2 * scale);
+            }
+
+            this.scale = scale;
+        }
+        else 
+        {
+            float difX = width - this.scale * (xMax - xMin);
+            float difY = height - this.scale * (yMax - yMin);
+            xMax = xMax + difX / (2 * this.scale);
+            xMin = xMin - difX / (2 * this.scale);
+            yMax = yMax + difY / (2 * this.scale);
+            yMin = yMin - difY / (2 * this.scale);
+        }
         
         g.ScaleTransform(scale, scale);
         

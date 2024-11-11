@@ -46,5 +46,5 @@ public interface IScenario
     /// <param name="height">vyska scenare</param>
     /// <param name="startTime">zacatek casovace</param>
     /// <returns> scale </returns>
-    float Draw(Graphics g, float width, float height, int startTime, bool drawMap);
+    float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit);
 }
