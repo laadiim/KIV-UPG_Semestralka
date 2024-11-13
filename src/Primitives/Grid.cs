@@ -24,7 +24,7 @@ public class Grid : IGrid
 
     float min;
 
-    public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels = 0, int spacingYpixels = 0)
+    public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
     {
         this.xMin = xMin;
         this.xMax = xMax;
@@ -40,11 +40,13 @@ public class Grid : IGrid
 
         this.spacingXpixels = spacingXpixels;
         this.spacingYpixels = spacingYpixels;
+        
+        float countX = viewportWidth / spacingXpixels;
+        float countY = viewportHeight / spacingYpixels;
 
-        this.min = Math.Min(this.panelWidth, this.panelHeight);
 
-        this.spacingX = spacingXpixels / min;
-        this.spacingY = spacingYpixels / min;
+        this.spacingX = panelWidth / countX;
+        this.spacingY = panelHeight / countY;
 
 
     }
@@ -196,7 +198,7 @@ public class Grid : IGrid
                 point.Y = intersectionsY[y] - spacingY / 2f;
 
                 IProbe probe = new Probe(point, 0, 0);
-                probe.Draw(g, this.startTime, this.charges, scale);
+                probe.Draw(g, this.startTime, this.charges, 110);
             }
         }
     }
