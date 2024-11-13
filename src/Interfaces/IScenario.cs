@@ -47,4 +47,18 @@ public interface IScenario
     /// <param name="startTime">zacatek casovace</param>
     /// <returns> scale </returns>
     float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit);
+
+    /// <summary>
+    /// priblizi scenu
+    /// </summary>
+    /// <param name="x">priblizeni na x</param>
+    /// <param name="y">priblizeni na y</param>
+    void ZoomIn(float x, float y);
+
+    /// <summary>
+    /// oddali scenu
+    /// </summary>
+    /// <param name="x">priblizeni na x</param>
+    /// <param name="y">priblizeni na y</param>
+    void ZoomOut(float x, float y);
 }

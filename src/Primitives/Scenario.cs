@@ -12,6 +12,9 @@ public class Scenario : IScenario
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
+    public float worldWidth = 2;
+    public float worldHeight = 2;
+    public PointF worldPosition = new PointF(0, 0);
 
     public INaboj[] GetCharges()
     {
@@ -164,6 +167,16 @@ public class Scenario : IScenario
         return sum.Length();
     }
 
+    public void ZoomIn(float x, float y)
+    { 
+        worldWidth *= x; worldHeight *= y;
+    }
+
+    public void ZoomOut(float x, float y)
+    { 
+        worldWidth /= x; worldHeight /= y;
+    }
+
     public float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit)
     {
         float sum_ch = 0;
@@ -200,7 +213,7 @@ public class Scenario : IScenario
 
 
         // ziskani krajnich pozic naboju
-        Tuple<float[], float[]> positions = GetPositions();
+        /*Tuple<float[], float[]> positions = GetPositions();
         float xMax = 1, yMax = 1;
         float xMin = -1, yMin = -1;
         if (positions.Item1.Length != 0 && positions.Item2.Length != 0)
@@ -231,45 +244,39 @@ public class Scenario : IScenario
             xMax += viewportWidth / 9f;
             yMin -= viewportHeight / 9f;
             yMax += viewportHeight / 9f;
-        }
+        }*/
 
-        if (chargeHit != -1 || this.scale == 1)
+        float xMin = worldPosition.X - worldWidth;
+        float xMax = worldPosition.X + worldWidth;
+        float yMin = worldPosition.Y - worldHeight;
+        float yMax = worldPosition.Y + worldHeight;
+
+        float scaleX = width / (xMax - xMin);
+        float scaleY = height / (yMax - yMin);
+        float scale;
+
+        // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
+        if (scaleX > scaleY)
         {
-            float scaleX = width / (xMax - xMin);
-            float scaleY = height / (yMax - yMin);
-            float scale;
+            scale = scaleY;
+            float difX = width - scale * (xMax - xMin);
+            xMax = xMax + difX / (2 * scale);
+            xMin = xMin - difX / (2 * scale);
 
-            // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
-            if (scaleX > scaleY)
-            {
-                scale = scaleY;
-                float difX = width - scale * (xMax - xMin);
-                xMax = xMax + difX / (2 * scale);
-                xMin = xMin - difX / (2 * scale);
-
-            }
-            // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
-            else
-            {
-                scale = scaleX;
-                float difY = height - scale * (yMax - yMin);
-                yMax = yMax + difY / (2 * scale);
-                yMin = yMin - difY / (2 * scale);
-            }
-
-            this.scale = scale;
         }
-        else 
+        // upravime yMax a yMin tak, aby stred scenaria byl pokazde ve stredu panelu
+        else
         {
-            float difX = width - this.scale * (xMax - xMin);
-            float difY = height - this.scale * (yMax - yMin);
-            xMax = xMax + difX / (2 * this.scale);
-            xMin = xMin - difX / (2 * this.scale);
-            yMax = yMax + difY / (2 * this.scale);
-            yMin = yMin - difY / (2 * this.scale);
+            scale = scaleX;
+            float difY = height - scale * (yMax - yMin);
+            yMax = yMax + difY / (2 * scale);
+            yMin = yMin - difY / (2 * scale);
         }
+
+        this.scale = scale;
         
         g.ScaleTransform(scale, scale);
+
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
@@ -312,6 +319,11 @@ public class Scenario : IScenario
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale);
 
+        g.DrawLines(new Pen(Color.Black, 1/scale), new PointF[] {
+            new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),
+            new PointF(worldPosition.X - worldWidth, worldPosition.Y + worldHeight),
+            new PointF(worldPosition.X + worldWidth, worldPosition.Y + worldHeight),
+            new PointF(worldPosition.X + worldWidth, worldPosition.Y - worldHeight)});
         return scale;
     }
 }

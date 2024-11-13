@@ -46,13 +46,13 @@ namespace UPG_SP_2024
             this.MouseMove += (o, e) =>
             {
                 if (chargeHit == -1) return;
-                if (e.X < this.Width / 9 || e.X >= this.Width - this.Width / 9 || e.Y < this.Height / 9 || e.Y >= this.Height - this.Height / 9)
+                if (e.X < this.Width / 9 || e.X >= this.Width - this.Width / 9 || e.Y < scale * (scenario.worldPosition.Y - scenario.worldHeight) || e.Y >= this.Height)
                 {
                     chargeHit = -1;
                     return;
                 }
                 INaboj charge = scenario.GetCharge(chargeHit);
-                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
+                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.worldWidth, scenario.worldHeight, scenario.worldPosition);
                 prevMouse.X = e.X;
                 prevMouse.Y = e.Y;
             };
