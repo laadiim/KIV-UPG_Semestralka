@@ -14,6 +14,9 @@ public class Scenario : IScenario
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
+    public float worldWidth = 2;
+    public float worldHeight = 2;
+    public PointF worldPosition = new PointF(0, 0);
 
     public INaboj[] GetCharges()
     {
@@ -184,7 +187,17 @@ public class Scenario : IScenario
         return sum.Length();
     }
 
-    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap = false)
+    public void ZoomIn(float x, float y)
+    { 
+        worldWidth /= x; worldHeight /= y;
+    }
+
+    public void ZoomOut(float x, float y)
+    { 
+        worldWidth *= x; worldHeight *= y;
+    }
+
+    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit)
     {
         float sum_ch = 0;
         int count_ch = 0;
@@ -220,7 +233,7 @@ public class Scenario : IScenario
 
 
         // ziskani krajnich pozic naboju
-        Tuple<float[], float[]> positions = GetPositions();
+        /*Tuple<float[], float[]> positions = GetPositions();
         float xMax = 1, yMax = 1;
         float xMin = -1, yMin = -1;
         if (positions.Item1.Length != 0 && positions.Item2.Length != 0)
@@ -247,16 +260,21 @@ public class Scenario : IScenario
         
         else
         {
-            xMin -= viewportWidth / 4f;
-            xMax += viewportWidth / 4f;
-            yMin -= viewportHeight / 4f;
-            yMax += viewportHeight / 4f;
-        }
-        
+            xMin -= viewportWidth / 9f;
+            xMax += viewportWidth / 9f;
+            yMin -= viewportHeight / 9f;
+            yMax += viewportHeight / 9f;
+        }*/
+
+        float xMin = worldPosition.X - worldWidth;
+        float xMax = worldPosition.X + worldWidth;
+        float yMin = worldPosition.Y - worldHeight;
+        float yMax = worldPosition.Y + worldHeight;
+
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);
         float scale;
-        
+
         // upravime xMax a xMin tak, aby stred scenaria byl pokazde ve stredu panelu
         if (scaleX > scaleY)
         {
@@ -278,6 +296,7 @@ public class Scenario : IScenario
         this.scale = scale;
         
         g.ScaleTransform(scale, scale);
+
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
@@ -319,7 +338,14 @@ public class Scenario : IScenario
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale);
-
+        
+        if (chargeHit != -1) g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
+            new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),
+            new PointF(worldPosition.X - worldWidth, worldPosition.Y + worldHeight),
+            new PointF(worldPosition.X + worldWidth, worldPosition.Y + worldHeight),
+            new PointF(worldPosition.X + worldWidth, worldPosition.Y - worldHeight)
+            
+        });
         return scale;
     }
 }

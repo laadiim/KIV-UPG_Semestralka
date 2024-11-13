@@ -26,10 +26,10 @@ public class Naboj : INaboj
         return distance <= radius;
     }
 
-    public void Drag(PointF point)
-    { 
-        center.X += point.X;
-        center.Y += point.Y;
+    public void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition)
+    {
+        center.X = MathF.Max(MathF.Min(center.X + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
+        center.Y = MathF.Max(MathF.Min(center.Y + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
     }
 
     public float GetCharge()

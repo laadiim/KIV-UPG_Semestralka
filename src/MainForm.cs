@@ -13,6 +13,15 @@ namespace UPG_SP_2024
         {
             Console.WriteLine(scenario_num);
             this.ClientSize = new System.Drawing.Size(800, 600);
+            this.KeyPreview = true;
+            this.KeyDown += (o, e) =>
+            {
+                if (e.KeyCode == Keys.I)
+                {
+                    drawingPanel.scenario.ZoomIn(2, 2);
+                }
+                if (e.KeyCode == Keys.O) drawingPanel.scenario.ZoomOut(2, 2);
+            };            
             InitializeComponent();
             DrawingPanel p = (DrawingPanel)drawingPanel;
             p.SetScenario(scenario_num);
