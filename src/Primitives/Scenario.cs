@@ -169,12 +169,12 @@ public class Scenario : IScenario
 
     public void ZoomIn(float x, float y)
     { 
-        worldWidth *= x; worldHeight *= y;
+        worldWidth /= x; worldHeight /= y;
     }
 
     public void ZoomOut(float x, float y)
     { 
-        worldWidth /= x; worldHeight /= y;
+        worldWidth *= x; worldHeight *= y;
     }
 
     public float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit)
@@ -318,12 +318,14 @@ public class Scenario : IScenario
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale);
-
-        g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
+        
+        if (chargeHit != -1) g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
             new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),
             new PointF(worldPosition.X - worldWidth, worldPosition.Y + worldHeight),
             new PointF(worldPosition.X + worldWidth, worldPosition.Y + worldHeight),
-            new PointF(worldPosition.X + worldWidth, worldPosition.Y - worldHeight)});
+            new PointF(worldPosition.X + worldWidth, worldPosition.Y - worldHeight)
+            
+        });
         return scale;
     }
 }

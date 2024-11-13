@@ -15,7 +15,7 @@ namespace UPG_SP_2024
     /// </summary>
     public class DrawingPanel : Panel
     {
-        Scenario scenario;
+        public Scenario scenario;
         private int startTime { get; set; }
         private int chargeHit = -1;
         private float scale = 1;
@@ -29,11 +29,7 @@ namespace UPG_SP_2024
             this.DoubleBuffered = true;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
-            this.KeyDown += (o, e) =>
-            {
-                if (e.KeyCode == Keys.I) scenario.ZoomIn(2, 2);
-                if (e.KeyCode == Keys.O) scenario.ZoomOut(2, 2);
-            };
+            
             this.MouseDown += (o, e) =>
             {
                 PointF point = new PointF(e.X , e.Y);
@@ -52,8 +48,6 @@ namespace UPG_SP_2024
             {
                 if (chargeHit == -1) return;
                 PointF point = new PointF((e.X - this.Width/2)/scale , (e.Y - this.Height/2)/scale);
-                Console.WriteLine($"{(e.X - this.Width/2) / scale}, {e.Y / scale}");
-                Console.WriteLine($"{scenario.worldPosition.X + scenario.worldWidth}, {scenario.worldHeight}");
                 if (point.X < (scenario.worldPosition.X - scenario.worldWidth) || point.X >= (scenario.worldPosition.X + scenario.worldWidth)|| point.Y < (scenario.worldPosition.Y - scenario.worldHeight) || point.Y >= (scenario.worldPosition.Y + scenario.worldHeight))
                 {
                     chargeHit = -1;
