@@ -4,52 +4,60 @@ using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
 
-public class Naboj : INaboj
+public class PeriodicNaboj : INaboj
 {
-    private float charge;
+    private Func<float, float> charge;
     private float radius;
-    private PointF center;
+    private Func<float, float> X;
+    private Func<float, float> Y;
     private int id;
+    private float startTime;
     
-    public Naboj(int charge, PointF center, int id)
+    public PeriodicNaboj(Func<float, float> charge, Func<float, float> X, Func<float, float> Y, int id, float startTime)
     {
         this.charge = charge;
-        this.center = center;
-        this.center.Y = -center.Y;
+        this.X = X;
+        this.Y = Y;
         this.id = id;
         this.radius = 1f;
+        this.startTime = startTime;
     }
 
     public bool IsHit(PointF point)
     {
-        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(center.X, center.Y));
+        float t = (Environment.TickCount - startTime) / 1000;
+        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(X(t), Y(t)));
         return distance <= radius;
     }
 
     public void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition)
     {
-        center.X = MathF.Max(MathF.Min(center.X + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
-        center.Y = MathF.Max(MathF.Min(center.Y + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
+        float t = (Environment.TickCount - startTime) / 1000;
+        float newX = MathF.Max(MathF.Min(X(t) + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
+        float newY = MathF.Max(MathF.Min(Y(t) + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
+        X = (t) => { return newX + X(t); };
+        Y = (t) => { return newY + Y(t); };
     }
 
     public float GetCharge()
     {
-        return this.charge;
+        return this.charge((Environment.TickCount - startTime) / 1000);
     }
 
-    public void SetCharge(float charge)
+    public void SetCharge(Func<float, float> charge)
     {
         this.charge = charge;
     }
 
     public PointF GetPosition()
     {
-        return this.center;
+        return new PointF(X((Environment.TickCount - startTime) / 1000), Y((Environment.TickCount - startTime) / 1000));
     }
 
-    public void SetPosition(PointF point)
+    public void SetPosition(Func<float, float> X, Func<float, float> Y)
     {
-        this.center = point;
+        this.X = X;
+        this.Y = Y;
     }
     public float GetRadius()
     {
@@ -68,7 +76,10 @@ public class Naboj : INaboj
 
     public void Draw(Graphics g, PointF panelCenter, float scale)
     {  
-        g.TranslateTransform(center.X - radius, center.Y - radius);
+        float t = Environment.TickCount - startTime;
+        t /= 1000;
+        Console.WriteLine(t);
+        g.TranslateTransform(X(t) - radius, Y(t) - radius);
 
         using (var shadowPath = new GraphicsPath())
         {
@@ -81,7 +92,7 @@ public class Naboj : INaboj
                 brushEll.CenterPoint = new PointF(radius * 1.66f, radius * 1.66f);
 
                 // nastaveni jine barvy pro zapornou hodnotu naboje
-                if (this.charge < 0)
+                if (this.charge(t) < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(255, 120, 230, 210);
                     brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
@@ -110,7 +121,7 @@ public class Naboj : INaboj
                 brushEll.CenterPoint = new PointF(radius / 1.7f, radius / 1.7f);
 
                 // nastaveni jine barvy pro zapornou hodnotu naboje
-                if (this.charge < 0)
+                if (this.charge(t) < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(255, 70, 240, 240);
                     brushEll.SurroundColors = new[] { Color.FromArgb(255, 40, 50, 70) };
@@ -130,7 +141,7 @@ public class Naboj : INaboj
                 brushEll.CenterPoint = new PointF(radius / 2.2f, radius / 2.2f);
 
                 // nastaveni jine barvy pro zapornou hodnotu naboje
-                if (this.charge < 0)
+                if (this.charge(t) < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
                     brushEll.SurroundColors = new[] { Color.FromArgb(120, 140, 140, 170) };
@@ -148,7 +159,7 @@ public class Naboj : INaboj
         }
 
         // napis - hodnota naboje
-        string label = $"{this.charge} C";
+        string label = $"{this.charge(t)} C";
         Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
         Brush brush = new SolidBrush(Color.FromArgb(230, Color.White));
         float width = g.MeasureString(label, font).Width;
@@ -156,7 +167,7 @@ public class Naboj : INaboj
         
         g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
 
-        g.TranslateTransform(radius - center.X, radius - center.Y);
+        g.TranslateTransform(radius - X(t), radius - Y(t));
     }
     
 }

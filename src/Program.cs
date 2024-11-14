@@ -17,7 +17,7 @@ namespace UPG_SP_2024
             else
             {
                 n = int.Parse(args[0]);
-                if (n < 0 || n > 3)
+                if (n < 0 || n > 5)
                 {
                     n = 0;
                 }

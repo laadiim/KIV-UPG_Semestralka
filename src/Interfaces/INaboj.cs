@@ -21,7 +21,7 @@ public interface INaboj
     /// nastavi novou hodnotu naboje
     /// </summary>
     /// <param name="charge">novy naboj</param>
-    void SetCharge(float charge);
+    void SetCharge(Func<float, float> charge);
     
     /// <summary>
     /// vrati pozici stredu naboje
@@ -33,7 +33,7 @@ public interface INaboj
     /// nastavi novy stred
     /// </summary>
     /// <param name="point">novy stred</param>
-    void SetPosition(PointF point);
+    void SetPosition(Func<float, float> X, Func<float, float> Y);
     
     /// <summary>
     /// vykresli naboj

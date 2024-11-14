@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using UPG_SP_2024.Interfaces;
@@ -70,30 +71,40 @@ namespace UPG_SP_2024
             switch(scenarioNum)
             {
                 case 0:
-                    INaboj naboj = new Naboj(1, new PointF(0, 0), 0);
+                    INaboj naboj = new PeriodicNaboj((_) => { return 1; }, (_) => { return 0; }, (_) => { return 0; }, 0, startTime);
                     scenario.AddCharge(naboj);
                     break;
                 case 1:
-                    INaboj naboj1 = new Naboj(1, new PointF(-1, 0), 0);
-                    INaboj naboj2 = new Naboj(1, new PointF(1, 0), 1);
+                    INaboj naboj1 = new PeriodicNaboj((_) => { return 1; }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
+                    INaboj naboj2 = new PeriodicNaboj((_) => { return 1; }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
                     scenario.AddCharge(naboj1);
                     scenario.AddCharge(naboj2);
                     break;
                 case 2:
-                    INaboj naboj3 = new Naboj(-1, new PointF(-1, 0), 0);
-                    INaboj naboj4 = new Naboj(2, new PointF(1, 0), 1);
+                    INaboj naboj3 = new PeriodicNaboj((_) => { return -1; }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
+                    INaboj naboj4 = new PeriodicNaboj((_) => { return 2; }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
                     scenario.AddCharge(naboj3);
                     scenario.AddCharge(naboj4);
                     break;
                 case 3:
-                    INaboj naboj5 = new Naboj(1, new PointF(-1, -1), 0);
-                    INaboj naboj6 = new Naboj(2, new PointF(1, -1), 1);
-                    INaboj naboj7 = new Naboj(-3, new PointF(1, 1), 2);
-                    INaboj naboj8 = new Naboj(-4, new PointF(-1, 1), 3);
+                    INaboj naboj5 = new PeriodicNaboj((_) => { return 1; }, (_) => { return -1; }, (_) => { return -1; }, 0, startTime);
+                    INaboj naboj6 = new PeriodicNaboj((_) => { return 2; }, (_) => { return 1; }, (_) => { return -1; }, 1, startTime);
+                    INaboj naboj7 = new PeriodicNaboj((_) => { return -3; }, (_) => { return 1; }, (_) => { return 1; }, 2, startTime);
+                    INaboj naboj8 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return 1; }, 3, startTime);
                     scenario.AddCharge(naboj5);
                     scenario.AddCharge(naboj6);
                     scenario.AddCharge(naboj7);
                     scenario.AddCharge(naboj8);
+                    break;
+                case 4:
+                    INaboj naboj9 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
+                    INaboj naboj10 = new PeriodicNaboj((t) => { return (float)(1 - 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
+                    scenario.AddCharge(naboj10);
+                    scenario.AddCharge(naboj9);
+                    break;
+                case 5:
+                    INaboj naboj11 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
+                    scenario.AddCharge(naboj11);
                     break;
             }
         }
