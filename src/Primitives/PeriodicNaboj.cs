@@ -32,11 +32,7 @@ public class PeriodicNaboj : INaboj
 
     public void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition)
     {
-        float t = (Environment.TickCount - startTime) / 1000;
-        float newX = MathF.Max(MathF.Min(X(t) + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
-        float newY = MathF.Max(MathF.Min(Y(t) + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
-        X = (t) => { return newX + X(t); };
-        Y = (t) => { return newY + Y(t); };
+        return;
     }
 
     public float GetCharge()
