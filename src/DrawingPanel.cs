@@ -106,6 +106,12 @@ namespace UPG_SP_2024
                     INaboj naboj11 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
                     scenario.AddCharge(naboj11);
                     break;
+                case 6:
+                    INaboj naboj12 = new StaticNaboj(-4, new PointF(-1, 1), 3);;
+                    INaboj naboj13 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
+                    scenario.AddCharge(naboj12);
+                    scenario.AddCharge(naboj13);
+                    break;
             }
         }
 
