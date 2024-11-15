@@ -37,9 +37,9 @@ public class StaticNaboj : INaboj
         return this.charge;
     }
 
-    public void SetCharge(float charge)
+    public void SetCharge(Func<float, float> charge)
     {
-        this.charge = charge;
+        this.charge = charge(0);
     }
 
     public PointF GetPosition()
@@ -47,9 +47,10 @@ public class StaticNaboj : INaboj
         return this.center;
     }
 
-    public void SetPosition(PointF point)
+    public void SetPosition(Func<float, float> X, Func<float, float> Y)
     {
-        this.center = point;
+        this.center.X = X(0);
+        this.center.Y = Y(0);
     }
     public float GetRadius()
     {

@@ -71,26 +71,26 @@ namespace UPG_SP_2024
             switch(scenarioNum)
             {
                 case 0:
-                    INaboj naboj = new PeriodicNaboj((_) => { return 1; }, (_) => { return 0; }, (_) => { return 0; }, 0, startTime);
+                    INaboj naboj = new StaticNaboj(1, new PointF(0, 0), 0);
                     scenario.AddCharge(naboj);
                     break;
                 case 1:
-                    INaboj naboj1 = new PeriodicNaboj((_) => { return 1; }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
-                    INaboj naboj2 = new PeriodicNaboj((_) => { return 1; }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
+                    INaboj naboj1 = new StaticNaboj(1, new PointF(-1, 0), 0);
+                    INaboj naboj2 = new StaticNaboj(1, new PointF(1, 0), 1);
                     scenario.AddCharge(naboj1);
                     scenario.AddCharge(naboj2);
                     break;
                 case 2:
-                    INaboj naboj3 = new PeriodicNaboj((_) => { return -1; }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
-                    INaboj naboj4 = new PeriodicNaboj((_) => { return 2; }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
+                    INaboj naboj3 = new StaticNaboj(-1, new PointF(-1, 0), 0);
+                    INaboj naboj4 = new StaticNaboj(2,  new PointF(1, 0), 1);
                     scenario.AddCharge(naboj3);
                     scenario.AddCharge(naboj4);
                     break;
                 case 3:
-                    INaboj naboj5 = new PeriodicNaboj((_) => { return 1; }, (_) => { return -1; }, (_) => { return -1; }, 0, startTime);
-                    INaboj naboj6 = new PeriodicNaboj((_) => { return 2; }, (_) => { return 1; }, (_) => { return -1; }, 1, startTime);
-                    INaboj naboj7 = new PeriodicNaboj((_) => { return -3; }, (_) => { return 1; }, (_) => { return 1; }, 2, startTime);
-                    INaboj naboj8 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return 1; }, 3, startTime);
+                    INaboj naboj5 = new StaticNaboj(1, new PointF(-1, -1), 0);
+                    INaboj naboj6 = new StaticNaboj( 2, new PointF(1, -1), 1);
+                    INaboj naboj7 = new StaticNaboj(-3, new PointF(1, 1), 2);
+                    INaboj naboj8 = new StaticNaboj(-4, new PointF(-1, 1), 3);;
                     scenario.AddCharge(naboj5);
                     scenario.AddCharge(naboj6);
                     scenario.AddCharge(naboj7);

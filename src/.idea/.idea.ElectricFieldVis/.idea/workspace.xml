@@ -9,14 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Primitives/StaticNaboj.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DrawingPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DrawingPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interfaces/INaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interfaces/INaboj.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Primitives/Naboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/PeriodicNaboj.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/launchSettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/StaticNaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/StaticNaboj.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +73,7 @@
   <component name="RunManager" selected=".NET Project.UPG_SP_2024">
     <configuration name="UPG_SP_2024" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/UPG_SP_2024.exe" />
-      <option name="PROGRAM_PARAMETERS" value="5" />
+      <option name="PROGRAM_PARAMETERS" value="3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bin/Debug/net8.0-windows" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
@@ -183,6 +178,7 @@
       <workItem from="1731588970409" duration="563000" />
       <workItem from="1731589572402" duration="11000" />
       <workItem from="1731589670971" duration="65000" />
+      <workItem from="1731659351599" duration="937000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
