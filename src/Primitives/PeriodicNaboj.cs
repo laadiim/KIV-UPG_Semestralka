@@ -97,7 +97,6 @@ public class PeriodicNaboj : INaboj
     {  
         float t = Environment.TickCount - startTime;
         t /= 1000;
-        Console.WriteLine(t);
         g.TranslateTransform(GetX(t) - radius, GetY(t) - radius);
 
         using (var shadowPath = new GraphicsPath())

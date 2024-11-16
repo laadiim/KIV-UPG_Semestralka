@@ -10,6 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ControlPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ControlPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/PeriodicNaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/PeriodicNaboj.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,9 +58,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     ".NET Project.ElectricFieldVis.executor": "Run",
-    ".NET Project.UPG_SP_2024.executor": "Run",
+    ".NET Project.UPG_SP_2024.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "control-panel",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -180,6 +182,7 @@
       <workItem from="1731660533622" duration="399000" />
       <workItem from="1731754484233" duration="916000" />
       <workItem from="1731755687717" duration="26000" />
+      <workItem from="1731779799807" duration="214000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
@@ -202,5 +205,24 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="opraveni namespace" />
     <option name="LAST_COMMIT_MESSAGE" value="opraveni namespace" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ControlPanel.cs</url>
+          <line>66</line>
+          <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\ControlPanel.cs" containingFunctionPresentation="Method 'ColormapCheckBox_CheckedChanged'">
+            <startOffsets>
+              <option value="1799" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1820" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -24,7 +24,7 @@ namespace UPG_SP_2024
         public void SetSettings(SettingsObject settings)
         { 
             this.settings = settings;
-            Console.WriteLine(this.settings);
+            Console.WriteLine(this.settings.scenario);
         }
 
         // Initialize custom controls
@@ -62,12 +62,13 @@ namespace UPG_SP_2024
         }
 
         private void ColormapCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            if (settings != null)
             {
-                if (settings != null)
-                {
-                    settings.colorMap = colormapCheckBox.Checked;
-                    MessageBox.Show($"Colormap set to: {settings.colorMap}");
-                }
+                settings.colorMap = colormapCheckBox.Checked;
+                MessageBox.Show($"Colormap set to: {settings.colorMap}");
             }
+        }
     }
 }
