@@ -12,7 +12,9 @@ public class PeriodicNaboj : INaboj
     private Func<float, float> Y;
     private int id;
     private float startTime;
-    
+    private float _xOffset;
+    private float _yOffset;
+
     public PeriodicNaboj(Func<float, float> charge, Func<float, float> X, Func<float, float> Y, int id, float startTime)
     {
         this.charge = charge;
@@ -23,20 +25,37 @@ public class PeriodicNaboj : INaboj
         this.startTime = startTime;
     }
 
+    public float GetX(float t)
+    {
+        return X(t) + _xOffset;
+    }
+
+    public float GetY(float t)
+    {
+        return Y(t) + _yOffset;
+    }
+    
     public bool IsHit(PointF point)
     {
         float t = (Environment.TickCount - startTime) / 1000;
-        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(X(t), Y(t)));
+        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(GetX(t), GetY(t)));
         return distance <= radius;
     }
 
     public void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition)
     {
         float t = (Environment.TickCount - startTime) / 1000;
-        float newX = MathF.Max(MathF.Min(X(t) + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
-        float newY = MathF.Max(MathF.Min(Y(t) + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
-        X = (t) => { return newX + X(t); };
-        Y = (t) => { return newY + Y(t); };
+        // Calculate current and new positions
+        float currentX = GetX(t);
+        float currentY = GetY(t);
+        
+        float newX = MathF.Max(MathF.Min(currentX + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
+        float newY = MathF.Max(MathF.Min(currentY + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
+
+
+        // Update offsets
+        _xOffset += newX - currentX;
+        _yOffset += newY - currentY;
     }
 
     public float GetCharge()
@@ -51,7 +70,7 @@ public class PeriodicNaboj : INaboj
 
     public PointF GetPosition()
     {
-        return new PointF(X((Environment.TickCount - startTime) / 1000), Y((Environment.TickCount - startTime) / 1000));
+        return new PointF(GetX((Environment.TickCount - startTime) / 1000), GetY((Environment.TickCount - startTime) / 1000));
     }
 
     public void SetPosition(Func<float, float> X, Func<float, float> Y)
@@ -79,7 +98,7 @@ public class PeriodicNaboj : INaboj
         float t = Environment.TickCount - startTime;
         t /= 1000;
         Console.WriteLine(t);
-        g.TranslateTransform(X(t) - radius, Y(t) - radius);
+        g.TranslateTransform(GetX(t) - radius, GetY(t) - radius);
 
         using (var shadowPath = new GraphicsPath())
         {
@@ -167,7 +186,7 @@ public class PeriodicNaboj : INaboj
         
         g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
 
-        g.TranslateTransform(radius - X(t), radius - Y(t));
+        g.TranslateTransform(radius - GetX(t), radius - GetY(t));
     }
     
 }
