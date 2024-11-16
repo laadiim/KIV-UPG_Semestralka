@@ -64,7 +64,7 @@ namespace UPG_SP_2024
         private void ColormapCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             
-            if (settings != null)
+            if (this.settings != null)
             {
                 settings.colorMap = colormapCheckBox.Checked;
                 MessageBox.Show($"Colormap set to: {settings.colorMap}");
