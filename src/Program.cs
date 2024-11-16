@@ -10,6 +10,8 @@ namespace UPG_SP_2024
         static void Main(string[] args)
         {
             int n;
+            int gridX = 50;
+            int gridY = 50;
             if (args.Length != 1)
             {
                 n = 0;
@@ -26,7 +28,7 @@ namespace UPG_SP_2024
             Console.WriteLine("Creating scenario #" + scenario_num + "...");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(scenario_num));
+            Application.Run(new MainForm(scenario_num, gridX, gridY));
         }
     }
 }

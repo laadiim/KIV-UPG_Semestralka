@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Windows.Forms;
-using WinFormsApp;
 using Timer = System.Windows.Forms.Timer;
 
 namespace UPG_SP_2024
@@ -9,10 +8,12 @@ namespace UPG_SP_2024
     {
 
         private int startTime;
+        private SettingsObject settings;
 
-        public MainForm(int scenario_num)
+        public MainForm(int scenario_num, int gridX, int gridY)
         {
             Console.WriteLine(scenario_num);
+            this.settings = new SettingsObject(scenario_num, gridX, gridY);
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.KeyPreview = true;
             this.KeyDown += (o, e) =>
@@ -26,12 +27,14 @@ namespace UPG_SP_2024
             InitializeComponent();
             DrawingPanel p = (DrawingPanel)drawingPanel;
             // Create and add the custom ControlPanel
-            ControlPanel myControlPanel = new ControlPanel
+            ControlPanel c = new ControlPanel();
             {
-                Location = new System.Drawing.Point(50, 50)
+                Location = new System.Drawing.Point(50, 50);
             };
-            this.Controls.Add(myControlPanel);
+            this.Controls.Add(c);
             p.SetScenario(scenario_num);
+            p.SetSettings(this.settings);
+            c.SetSettings(this.settings);
             this.Text = "A23B0149P + A23B0152P - Semestralni prace KIV/UPG 2024/2025";
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TimerTick;

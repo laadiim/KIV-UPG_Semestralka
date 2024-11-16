@@ -21,6 +21,7 @@ namespace UPG_SP_2024
         private int chargeHit = -1;
         private float scale = 1;
         private PointF prevMouse = new PointF(0, 0);
+        private SettingsObject settings;
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
@@ -65,6 +66,11 @@ namespace UPG_SP_2024
             };
         }
 
+        public void SetSettings(SettingsObject settings)
+        {
+            this.settings = settings;
+            this.scenario.settings = settings;
+        }
 
         public void SetScenario(int scenarioNum)
         {
@@ -129,7 +135,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, true, this.chargeHit);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, this.chargeHit);
 
             // Calling the base class OnPaint
             base.OnPaint(e);

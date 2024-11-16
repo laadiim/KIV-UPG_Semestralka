@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace UPG_SP_2024
 {
-    internal class SettingsObject
+    public class SettingsObject
     {
         public int scenario;
         public bool colorMap;
         public bool gridShown;
-        public bool gridX;
-        public bool gridY;
-        public SettingsObject() { }
+        public int gridX;
+        public int gridY;
+        public SettingsObject(int scenario, int gridX, int gridY) 
+        {
+            this.scenario = scenario;
+            this.colorMap = false;
+            this.gridShown = false;
+            this.gridX = gridX;
+            this.gridY = gridY;
+        }
     }
 }

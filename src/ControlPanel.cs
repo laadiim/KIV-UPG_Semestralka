@@ -2,10 +2,14 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace WinFormsApp
+namespace UPG_SP_2024
 {
     public class ControlPanel : Panel
     {
+        private SettingsObject settings;
+
+        private CheckBox colormapCheckBox;
+
         // Constructor
         public ControlPanel()
         {
@@ -15,6 +19,12 @@ namespace WinFormsApp
 
             // Add example controls
             InitializeControls();
+        }
+
+        public void SetSettings(SettingsObject settings)
+        { 
+            this.settings = settings;
+            Console.WriteLine(this.settings);
         }
 
         // Initialize custom controls
@@ -28,6 +38,15 @@ namespace WinFormsApp
                 AutoSize = true
             };
             this.Controls.Add(label);
+            
+            CheckBox colormapCheckBox = new CheckBox
+            {
+                Text = "Enable Colormap",
+                Location = new Point(10, 40),
+                AutoSize = true
+            };
+            colormapCheckBox.CheckedChanged += ColormapCheckBox_CheckedChanged;
+            this.Controls.Add(colormapCheckBox);
 
             // Add a Button
             Button button = new Button
@@ -37,6 +56,18 @@ namespace WinFormsApp
             };
             button.Click += (sender, e) => MessageBox.Show("Button clicked!");
             this.Controls.Add(button);
+
+            
+
         }
+
+        private void ColormapCheckBox_CheckedChanged(object sender, EventArgs e)
+            {
+                if (settings != null)
+                {
+                    settings.colorMap = colormapCheckBox.Checked;
+                    MessageBox.Show($"Colormap set to: {settings.colorMap}");
+                }
+            }
     }
 }

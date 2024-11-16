@@ -17,6 +17,7 @@ public class Scenario : IScenario
     public float worldWidth = 2;
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
+    public SettingsObject settings;
 
     public INaboj[] GetCharges()
     {
@@ -197,7 +198,7 @@ public class Scenario : IScenario
         worldWidth *= x; worldHeight *= y;
     }
 
-    public float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit)
+    public float Draw(Graphics g, float width, float height, int startTime, int chargeHit)
     {
         float sum_ch = 0;
         int count_ch = 0;
@@ -300,7 +301,7 @@ public class Scenario : IScenario
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
 
-        if (drawMap)
+        if (this.settings.colorMap)
         {
             this.DrawColorMap(g, width, height, GetColorFromIntensity);
         }
@@ -323,9 +324,12 @@ public class Scenario : IScenario
 
 
         // kresleni mrizky
-        IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, 50, 50, width, height);
-        float tipLength = 10f; // nastaveni velikosti sipky
-        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
+        if (this.settings.gridShown)
+        {
+            IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, this.settings.gridX, this.settings.gridY, width, height);
+            float tipLength = 10f; // nastaveni velikosti sipky
+            grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
+        }
 
 
         // kresleni naboju

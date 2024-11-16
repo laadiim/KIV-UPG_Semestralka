@@ -33,7 +33,7 @@ namespace UPG_SP_2024
         {
             splitContainer1 = new SplitContainer();
             drawingPanel = new DrawingPanel();
-            controlPanel = new WinFormsApp.ControlPanel();
+            controlPanel = new ControlPanel();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -94,6 +94,6 @@ namespace UPG_SP_2024
 
         private SplitContainer splitContainer1;
         private DrawingPanel drawingPanel;
-        private WinFormsApp.ControlPanel controlPanel;
+        private ControlPanel controlPanel;
     }
 }
