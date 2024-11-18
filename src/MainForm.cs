@@ -8,12 +8,15 @@ namespace UPG_SP_2024
     {
 
         private int startTime;
-        private SettingsObject settings;
-
         public MainForm(int scenario_num, int gridX, int gridY)
         {
             Console.WriteLine(scenario_num);
-            this.settings = new SettingsObject(scenario_num, gridX, gridY);
+            SettingsObject.colorMap = false;
+            SettingsObject.gridX = gridX;
+            SettingsObject.gridY = gridY;
+            SettingsObject.scenario = scenario_num;
+            SettingsObject.gridShown = false;
+
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.KeyPreview = true;
             this.KeyDown += (o, e) =>
@@ -33,8 +36,8 @@ namespace UPG_SP_2024
             };
             this.Controls.Add(c);
             p.SetScenario(scenario_num);
-            p.SetSettings(this.settings);
-            c.SetSettings(this.settings);
+            SettingsObject.drawingPanel = p;
+            SettingsObject.controlPanel = c;
             this.Text = "A23B0149P + A23B0152P - Semestralni prace KIV/UPG 2024/2025";
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TimerTick;

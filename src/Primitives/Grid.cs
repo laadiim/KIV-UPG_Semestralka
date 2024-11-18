@@ -115,7 +115,7 @@ public class Grid : IGrid
 
         DrawArrows(g, brush, rightCenter, topCenter, tipLength);
 
-        if (this.spacingXpixels != 0 && this.spacingYpixels != 0)
+        if (SettingsObject.gridShown)
         {
             DrawGrid(g, penGrid);
         }

@@ -61,4 +61,9 @@ public interface IScenario
     /// <param name="x">priblizeni na x</param>
     /// <param name="y">priblizeni na y</param>
     void ZoomOut(float x, float y);
+
+    /// <summary>
+    /// vyprazdni pole naboju
+    /// </summary>
+    void EmptyCharges();
 }

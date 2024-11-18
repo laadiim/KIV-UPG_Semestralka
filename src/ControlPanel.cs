@@ -6,30 +6,13 @@ namespace UPG_SP_2024
 {
     public class ControlPanel : Panel
     {
-        private SettingsObject settings;
         private CheckBox colormapCheckBox;
+        private CheckBox gridCheckBox;
+        private ComboBox scenarioDropdown;
 
         public ControlPanel()
         {
             InitializeControls();
-        }
-
-        public void SetSettings(SettingsObject settings)
-        {
-            this.settings = settings;
-
-            // Sync UI with current settings
-            if (settings != null)
-            {
-                colormapCheckBox.Checked = settings.colorMap;
-
-                // Optionally listen for changes to settings
-                settings.SettingsChanged += (s, e) =>
-                {
-                    // Update UI if needed
-                    Console.WriteLine("Settings changed in ControlPanel.");
-                };
-            }
         }
 
         private void InitializeControls()
@@ -50,12 +33,60 @@ namespace UPG_SP_2024
             };
             colormapCheckBox.CheckedChanged += (o, e) =>
             {
-                if (settings != null)
-                {
-                    settings.colorMap = colormapCheckBox.Checked; // Fires SettingsChanged
-                }
+                SettingsObject.colorMap = colormapCheckBox.Checked;
             };
             this.Controls.Add(colormapCheckBox);
+
+            gridCheckBox = new CheckBox
+            {
+                Text = "Enable Grid",
+                Location = new Point(10, 70),
+                AutoSize = true
+            };
+            gridCheckBox.CheckedChanged += (o, e) =>
+            {
+                SettingsObject.gridShown = gridCheckBox.Checked;
+                Console.WriteLine(SettingsObject.gridShown);
+            };
+            this.Controls.Add(gridCheckBox);
+
+            Label dropdownLabel = new Label
+            {
+                Text = "Select Scenario:",
+                Location = new Point(10, 100),
+                AutoSize = true
+            };
+            this.Controls.Add(dropdownLabel);
+
+            // Scenario selection dropdown
+            scenarioDropdown = new ComboBox
+            {
+                Location = new Point(10, 130),
+                Width = 150,
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+
+            // Populate dropdown with scenario numbers 0-6
+            for (int i = 0; i <= 6; i++)
+            {
+                scenarioDropdown.Items.Add($"Scenario {i}");
+            }
+
+            // Set default selection
+            scenarioDropdown.SelectedIndex = SettingsObject.scenario;
+
+            // Handle scenario selection change
+            scenarioDropdown.SelectedIndexChanged += (o, e) =>
+            {
+                int selectedScenario = scenarioDropdown.SelectedIndex;
+                Console.WriteLine($"Scenario changed to: {selectedScenario}");
+
+                // Trigger the event to notify listeners
+                SettingsObject.scenario = selectedScenario;
+                SettingsObject.drawingPanel.SetScenario( selectedScenario );
+            };
+
+            this.Controls.Add(scenarioDropdown);
         }
     }
 }

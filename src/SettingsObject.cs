@@ -6,26 +6,14 @@ using System.Threading.Tasks;
 
 namespace UPG_SP_2024
 {
-    public class SettingsObject
+    public static class SettingsObject
     {
-        public int scenario;
-        public bool colorMap;
-        public bool gridShown;
-        public int gridX;
-        public int gridY;
-        public event EventHandler SettingsChanged;
-
-        public SettingsObject(int scenario, int gridX, int gridY) 
-        {
-            this.scenario = scenario;
-            this.colorMap = false;
-            this.gridShown = false;
-            this.gridX = gridX;
-            this.gridY = gridY;
-        }
-        protected virtual void OnSettingsChanged()
-        {
-            SettingsChanged?.Invoke(this, EventArgs.Empty);
-        }
+        public static int scenario;
+        public static bool colorMap;
+        public static bool gridShown;
+        public static int gridX;
+        public static int gridY;
+        public static DrawingPanel drawingPanel;
+        public static ControlPanel controlPanel;
     }
 }
