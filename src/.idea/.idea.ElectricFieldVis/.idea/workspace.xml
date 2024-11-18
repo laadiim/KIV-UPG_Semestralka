@@ -9,7 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Grid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Grid.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Probe.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Probe.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/Scenario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/Scenario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Primitives/StaticNaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/StaticNaboj.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/launchSettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +62,7 @@
     ".NET Project.ElectricFieldVis.executor": "Run",
     ".NET Project.UPG_SP_2024.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Merging main",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -180,6 +184,7 @@
       <workItem from="1731660533622" duration="399000" />
       <workItem from="1731754484233" duration="916000" />
       <workItem from="1731755687717" duration="26000" />
+      <workItem from="1731936130220" duration="66000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
