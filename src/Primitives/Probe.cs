@@ -11,6 +11,7 @@ public class Probe : IProbe
     private PointF center;
     private float radius;
     private float anglePerSecond;
+    private Vector2 v;
 
     public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
     {
@@ -23,24 +24,9 @@ public class Probe : IProbe
     {
         var curTr = g.Transform;
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
-        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
-        Vector2 end = new Vector2(0, 0);
-        Vector2 sum = Vector2.Zero;
-
-        for (int i = 0; i < charges.Length; i++)
-        {
-            if (charges[i] == null) continue;
-
-            PointF p = charges[i].GetPosition();
-            Vector2 vect = start - new Vector2(p.X, p.Y);
-            float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
-            sum += charges[i].GetCharge() * vect / l;
-        }
-
-        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
-        sum *= 10E-12f; // prevod na TN/C
-        end = start + sum; // vektor konce sipky
+        if (this.v.Length() == 0) this.Calc(start, charges);
+        Vector2 end = start + this.v;
 
         PointF[] points = new PointF[2];
         points[0] = new PointF(start.X, start.Y); // bod zacatku sipky
@@ -55,7 +41,7 @@ public class Probe : IProbe
 
         if (this.radius != 0 && this.anglePerSecond != 0)
         {
-            float len = sum.Length() * 100;
+            float len = this.v.Length() * 100;
             string label = $"{len.ToString("n2")}E-2 TN/C";
             Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
             float width = g.MeasureString(label, font).Width;
@@ -66,19 +52,19 @@ public class Probe : IProbe
             g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
         }
 
-        if (sum.X > 2E9 || sum.Y > 2E9)
+        if (this.v.X > 2E9 || this.v.Y > 2E9)
         {
-            sum /= 10E6f;
+            this.v /= 10E6f;
         }
 
         if (this.radius == 0 && this.anglePerSecond == 0)
         {
             Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
-            DrawArrow(g, sum, scale, color_arr_grid);
+            DrawArrow(g, this.v, scale, color_arr_grid);
         } 
         else
         {
-            DrawArrow(g, sum, scale, color);
+            DrawArrow(g, this.v, scale, color);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -124,5 +110,47 @@ public class Probe : IProbe
         Brush brush = new SolidBrush(color);
 
         g.FillPolygon(brush, points_arrow);
+    }
+
+    public void Calc(Vector2 start, INaboj[] charges)
+    {
+        Vector2 sum = Vector2.Zero;
+        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
+        
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] == null) continue;
+
+            PointF p = charges[i].GetPosition();
+            Vector2 vect = start - new Vector2(p.X, p.Y);
+            float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
+            sum += charges[i].GetCharge() * vect / l;
+        }
+        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
+        sum *= 10E-12f; // prevod na TN/C
+        this.v = sum;
+        
+    }
+
+    public void Calc(int startTime, INaboj[] charges)
+    {
+        Vector2 sum = Vector2.Zero;
+        const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
+        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+
+        for (int i = 0; i < charges.Length; i++)
+        {
+            if (charges[i] == null) continue;
+
+            PointF p = charges[i].GetPosition();
+            Vector2 vect = start - new Vector2(p.X, p.Y);
+            float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
+            sum += charges[i].GetCharge() * vect / l;
+        }
+        sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
+        sum *= 10E-12f; // prevod na TN/C
+        this.v = sum;
+
     }
 }

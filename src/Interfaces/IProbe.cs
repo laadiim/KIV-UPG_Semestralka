@@ -1,4 +1,6 @@
-﻿namespace UPG_SP_2024.Interfaces;
+﻿using System.Numerics;
+
+namespace UPG_SP_2024.Interfaces;
 
 /// <summary>
 /// Rozhrani pro vizualizaci sondy
@@ -13,5 +15,8 @@ public interface IProbe
     /// <param name="charges">seznam naboju</param>
     /// <param name="scale">scale</param>
     void Draw(Graphics g, int startTime, INaboj[] charges, float scale);
+
+    public void Calc(Vector2 start, INaboj[] charges);
+    public void Calc(int startTime, INaboj[] charges);
 }
 
