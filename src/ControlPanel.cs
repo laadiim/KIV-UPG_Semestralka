@@ -1,74 +1,61 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace UPG_SP_2024
 {
     public class ControlPanel : Panel
     {
         private SettingsObject settings;
-
         private CheckBox colormapCheckBox;
 
-        // Constructor
         public ControlPanel()
         {
-            // Set default properties
-            this.Size = new Size(300, 150);
-            this.BackColor = Color.LightBlue;
-
-            // Add example controls
             InitializeControls();
         }
 
         public void SetSettings(SettingsObject settings)
-        { 
+        {
             this.settings = settings;
-            Console.WriteLine(this.settings.scenario);
+
+            // Sync UI with current settings
+            if (settings != null)
+            {
+                colormapCheckBox.Checked = settings.colorMap;
+
+                // Optionally listen for changes to settings
+                settings.SettingsChanged += (s, e) =>
+                {
+                    // Update UI if needed
+                    Console.WriteLine("Settings changed in ControlPanel.");
+                };
+            }
         }
 
-        // Initialize custom controls
         private void InitializeControls()
         {
-            // Add a Label
             Label label = new Label
             {
-                Text = "Welcome to the Control Panel!",
+                Text = "Control Panel",
                 Location = new Point(10, 10),
                 AutoSize = true
             };
             this.Controls.Add(label);
-            
-            CheckBox colormapCheckBox = new CheckBox
+
+            colormapCheckBox = new CheckBox
             {
                 Text = "Enable Colormap",
                 Location = new Point(10, 40),
                 AutoSize = true
             };
-            colormapCheckBox.CheckedChanged += ColormapCheckBox_CheckedChanged;
-            this.Controls.Add(colormapCheckBox);
-
-            // Add a Button
-            Button button = new Button
+            colormapCheckBox.CheckedChanged += (o, e) =>
             {
-                Text = "Click Me",
-                Location = new Point(10, 40)
+                if (settings != null)
+                {
+                    settings.colorMap = colormapCheckBox.Checked; // Fires SettingsChanged
+                }
             };
-            button.Click += (sender, e) => MessageBox.Show("Button clicked!");
-            this.Controls.Add(button);
-
-            
-
-        }
-
-        private void ColormapCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            
-            if (this.settings != null)
-            {
-                settings.colorMap = colormapCheckBox.Checked;
-                MessageBox.Show($"Colormap set to: {settings.colorMap}");
-            }
+            this.Controls.Add(colormapCheckBox);
         }
     }
 }

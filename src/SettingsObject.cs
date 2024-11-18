@@ -13,6 +13,8 @@ namespace UPG_SP_2024
         public bool gridShown;
         public int gridX;
         public int gridY;
+        public event EventHandler SettingsChanged;
+
         public SettingsObject(int scenario, int gridX, int gridY) 
         {
             this.scenario = scenario;
@@ -20,6 +22,10 @@ namespace UPG_SP_2024
             this.gridShown = false;
             this.gridX = gridX;
             this.gridY = gridY;
+        }
+        protected virtual void OnSettingsChanged()
+        {
+            SettingsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

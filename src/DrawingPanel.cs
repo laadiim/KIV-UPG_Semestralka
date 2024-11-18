@@ -69,7 +69,16 @@ namespace UPG_SP_2024
         public void SetSettings(SettingsObject settings)
         {
             this.settings = settings;
-            this.scenario.settings = settings;
+            this.scenario.settings = settings; 
+            if (settings != null)
+            {
+                // Listen for changes in settings
+                settings.SettingsChanged += (s, e) =>
+                {
+                    Console.WriteLine("Settings changed in DrawingPanel.");
+                    this.Invalidate(); // Trigger repaint
+                };
+            }
         }
 
         public void SetScenario(int scenarioNum)

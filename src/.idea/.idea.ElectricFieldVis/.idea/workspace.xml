@@ -11,7 +11,6 @@
     <list default="true" id="68a6da37-0038-4c7e-a5d2-5ab371b826f2" name="Changes" comment="opraveni namespace">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ElectricFieldVis/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ControlPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ControlPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Primitives/PeriodicNaboj.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Primitives/PeriodicNaboj.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,6 +182,7 @@
       <workItem from="1731754484233" duration="916000" />
       <workItem from="1731755687717" duration="26000" />
       <workItem from="1731779799807" duration="214000" />
+      <workItem from="1731780373409" duration="699000" />
     </task>
     <task id="LOCAL-00001" summary="opraveni namespace">
       <option name="closed" value="true" />
@@ -210,17 +210,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/ControlPanel.cs</url>
-          <line>66</line>
-          <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\ControlPanel.cs" containingFunctionPresentation="Method 'ColormapCheckBox_CheckedChanged'">
+          <url>file://$PROJECT_DIR$/MainForm.cs</url>
+          <line>14</line>
+          <properties documentPath="C:\Users\cakor\Documents\GitHub\UPG_Semestralka\src\MainForm.cs" containingFunctionPresentation="Constructor 'MainForm'">
             <startOffsets>
-              <option value="1799" />
+              <option value="324" />
             </startOffsets>
             <endOffsets>
-              <option value="1820" />
+              <option value="356" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
