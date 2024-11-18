@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
 using System.Security.Cryptography.Xml;
@@ -79,33 +80,42 @@ public class Probe : IProbe
     /// <param name="color">barva sipky</param>
     private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color)
     {
-        float x = sum.X / 2f;
-        float y = sum.Y / 2f;
+        float x = sum.X / 3f;
+        float y = sum.Y / 3f;
 
-        float norma = 1 / (float)sum.Length();
+        Vector2 newSum = new Vector2(x, y);
 
-        // vektor u bude jednotkovy
-        float u_x = x * norma;
-        float u_y = y * norma;
+        float norma = 1 / (float)newSum.Length();
 
-        float tipLen = 2f / (float)Math.Sqrt(scale);
+        float u_x, u_y;
+        float tipLen;
+
+        PointF point;
 
         if (this.anglePerSecond == 0 && this.radius == 0)
         {
-            u_x = (x * norma) / 3f;
-            u_y = (y * norma) / 3f;
-            tipLen = 3f / (float)Math.Sqrt(scale);
+            norma /= 6f;
+            u_x = x * norma;
+            u_y = y * norma;
+            point = new PointF(u_x / 1.5f, u_y / 1.5f);
+            tipLen = 3.5f / (float)Math.Sqrt(scale);
+            g.DrawLine(new Pen(color, 0.15f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
         }
 
-        PointF point = new PointF(u_x / 1.5f, u_y / 1.5f);
-
-
-        g.DrawLine(new Pen(color, 0.2f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
+        else
+        {
+            // vektor u bude jednotkovy
+            u_x = x * norma;
+            u_y = y * norma;
+            point = new PointF(u_x / 1.5f, u_y / 1.5f);
+            tipLen = 2f / (float)Math.Sqrt(scale);
+            g.DrawLine(new Pen(color, 0.3f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
+        }
 
         var points_arrow = new PointF[3];
-        points_arrow[0] = new PointF(point.X - u_y * tipLen / 2, point.Y + u_x * tipLen / 2);
+        points_arrow[0] = new PointF(point.X - u_y * tipLen / 2f, point.Y + u_x * tipLen / 2f);
         points_arrow[1] = new PointF(point.X + u_x * tipLen, point.Y + u_y * tipLen);
-        points_arrow[2] = new PointF(point.X + u_y * tipLen / 2, point.Y - u_x * tipLen / 2);
+        points_arrow[2] = new PointF(point.X + u_y * tipLen / 2f, point.Y - u_x * tipLen / 2f);
 
         Brush brush = new SolidBrush(color);
 

@@ -165,7 +165,10 @@ public class Grid : IGrid
                 i++;
             }
 
-            intersectionsX[i + 1] = x_plus;
+            if (intersectionsX.Length == (i + 2))
+            {
+                intersectionsX[i + 1] = x_plus;
+            }
 
             while (y_minus >= this.yMin)
             {
@@ -187,7 +190,10 @@ public class Grid : IGrid
                 j++;
             }
 
-            intersectionsY[j + 1] = y_plus;
+            if (intersectionsY.Length == (j + 2))
+            {
+                intersectionsY[j + 1] = y_plus;
+            }
 
             IProbe[,] probes = new IProbe[intersectionsX.Length, intersectionsY.Length];
             PointF point = new PointF(0, 0);

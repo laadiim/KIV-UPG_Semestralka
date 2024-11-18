@@ -139,7 +139,7 @@ public class Scenario : IScenario
     
     private Color GetColorFromIntensity(double intensity)
     { // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(5, Math.Max(0, intensity)) / 5;
+        double intst = Math.Min(4, Math.Max(0, intensity)) / 4;
 
         // Define colors for the transition
         int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
