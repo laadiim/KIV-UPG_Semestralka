@@ -32,23 +32,21 @@ namespace UPG_SP_2024
         private void InitializeComponent()
         {
             drawingPanel = new DrawingPanel();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             SuspendLayout();
             // 
             // drawingPanel
             // 
-            drawingPanel.Dock = DockStyle.Left;
+            drawingPanel.Dock = DockStyle.Fill;
             drawingPanel.Location = new Point(0, 0);
             drawingPanel.Name = "drawingPanel";
-            drawingPanel.Size = new Size(810, 630);
+            drawingPanel.Size = new Size(1023, 626);
             drawingPanel.TabIndex = 0;
-            drawingPanel.Paint += drawingPanel_Paint;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1022, 630);
+            ClientSize = new Size(1023, 626);
             Controls.Add(drawingPanel);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -59,6 +57,5 @@ namespace UPG_SP_2024
         #endregion
 
         private DrawingPanel drawingPanel;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
