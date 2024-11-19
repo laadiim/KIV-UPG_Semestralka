@@ -46,7 +46,7 @@ public interface IScenario
     /// <param name="height">vyska scenare</param>
     /// <param name="startTime">zacatek casovace</param>
     /// <returns> scale </returns>
-    float Draw(Graphics g, float width, float height, int startTime, bool drawMap, int chargeHit);
+    float Draw(Graphics g, float width, float height, int startTime, int chargeHit);
 
     /// <summary>
     /// priblizi scenu
@@ -61,4 +61,9 @@ public interface IScenario
     /// <param name="x">priblizeni na x</param>
     /// <param name="y">priblizeni na y</param>
     void ZoomOut(float x, float y);
+
+    /// <summary>
+    /// vyprazdni pole naboju
+    /// </summary>
+    void EmptyCharges();
 }

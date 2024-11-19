@@ -1,10 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using UPG_SP_2024.Interfaces;
+﻿using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
 
@@ -65,9 +59,9 @@ namespace UPG_SP_2024
             };
         }
 
-
         public void SetScenario(int scenarioNum)
         {
+            scenario.EmptyCharges();
             switch(scenarioNum)
             {
                 case 0:
@@ -129,7 +123,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, true, this.chargeHit);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, this.chargeHit);
 
             // Calling the base class OnPaint
             base.OnPaint(e);
