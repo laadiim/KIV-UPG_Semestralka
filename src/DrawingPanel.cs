@@ -1,10 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using UPG_SP_2024.Interfaces;
+﻿using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
 
