@@ -21,7 +21,7 @@ public class Probe : IProbe
         this.anglePerSecond = anglePerSecond;
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale)
+    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacingX, float spacingY)
     {
         var curTr = g.Transform;
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
@@ -61,11 +61,11 @@ public class Probe : IProbe
         if (this.radius == 0 && this.anglePerSecond == 0)
         {
             Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
-            DrawArrow(g, this.v, scale, color_arr_grid);
+            DrawArrow(g, this.v, scale, color_arr_grid, Math.Min(spacingX, spacingY));
         } 
         else
         {
-            DrawArrow(g, this.v, scale, color);
+            DrawArrow(g, this.v, scale, color, 0);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -78,7 +78,7 @@ public class Probe : IProbe
     /// <param name="sum">vysledny vektor</param>
     /// <param name="scale">predany scale</param>
     /// <param name="color">barva sipky</param>
-    private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color)
+    private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color, float spacing)
     {
         float x = sum.X / 3f;
         float y = sum.Y / 3f;
@@ -92,17 +92,7 @@ public class Probe : IProbe
 
         PointF point;
 
-        if (this.anglePerSecond == 0 && this.radius == 0)
-        {
-            norma /= 6f;
-            u_x = x * norma;
-            u_y = y * norma;
-            tipLen = 30f / scale;
-            point = new PointF(u_x * tipLen * 1.5f, u_y * tipLen * 1.5f);
-            g.DrawLine(new Pen(color, 0.15f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
-        }
-
-        else
+        if (this.anglePerSecond != 0 && this.radius != 0)
         {
             // vektor u bude jednotkovy
             u_x = x * norma;
@@ -111,6 +101,18 @@ public class Probe : IProbe
             point = new PointF(u_x * tipLen * 2f, u_y * tipLen * 2f);
             g.DrawLine(new Pen(color, 0.3f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
         }
+
+        else
+        {
+            norma /= 6f;
+            u_x = x * norma;
+            u_y = y * norma;
+            tipLen = spacing;
+            point = new PointF(u_x * 2 * tipLen, u_y * 2 * tipLen);
+            g.DrawLine(new Pen(color, tipLen / 15f), 0, 0, point.X, point.Y);
+        }
+
+        
 
         var points_arrow = new PointF[3];
         points_arrow[0] = new PointF(point.X - u_y * tipLen / 2f, point.Y + u_x * tipLen / 2f);

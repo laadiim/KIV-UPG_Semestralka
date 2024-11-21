@@ -354,7 +354,7 @@ public class Scenario : IScenario
 
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime, this.charges, scale);
+        probe.Draw(g, startTime, this.charges, scale, 0, 0);
         
         if (chargeHit != -1) g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
             new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),

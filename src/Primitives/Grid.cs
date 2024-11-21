@@ -213,7 +213,7 @@ public class Grid : IGrid
             {
                 for (int y = 0; y < intersectionsY.Length; y++)
                 {
-                    probes[x, y].Draw(g, startTime, charges, 110);
+                    probes[x, y].Draw(g, startTime, charges, 110, this.spacingX, this.spacingY);
                 }
             }
         }
