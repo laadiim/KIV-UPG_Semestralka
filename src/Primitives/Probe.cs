@@ -97,8 +97,8 @@ public class Probe : IProbe
             norma /= 6f;
             u_x = x * norma;
             u_y = y * norma;
-            point = new PointF(u_x / 1.5f, u_y / 1.5f);
-            tipLen = 3.5f / (float)Math.Sqrt(scale);
+            tipLen = 30f / scale;
+            point = new PointF(u_x * tipLen * 1.5f, u_y * tipLen * 1.5f);
             g.DrawLine(new Pen(color, 0.15f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
         }
 
@@ -107,8 +107,8 @@ public class Probe : IProbe
             // vektor u bude jednotkovy
             u_x = x * norma;
             u_y = y * norma;
-            point = new PointF(u_x / 1.5f, u_y / 1.5f);
-            tipLen = 2f / (float)Math.Sqrt(scale);
+            tipLen = 20f / scale;
+            point = new PointF(u_x * tipLen * 2f, u_y * tipLen * 2f);
             g.DrawLine(new Pen(color, 0.3f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
         }
 
