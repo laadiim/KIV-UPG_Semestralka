@@ -209,11 +209,13 @@ public class Grid : IGrid
                     probe.Calc(this.startTime, this.charges);
                 }
             }
+
+            float spacing = Math.Min(spacingX, spacingY);
             for (int x = 0; x < intersectionsX.Length; x++)
             {
                 for (int y = 0; y < intersectionsY.Length; y++)
                 {
-                    probes[x, y].Draw(g, startTime, charges, 110, this.spacingX, this.spacingY);
+                    probes[x, y].Draw(g, startTime, charges, scale, spacing);
                 }
             }
         }

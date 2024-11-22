@@ -21,7 +21,7 @@ public class Probe : IProbe
         this.anglePerSecond = anglePerSecond;
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacingX, float spacingY)
+    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing = 0)
     {
         var curTr = g.Transform;
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
@@ -35,18 +35,19 @@ public class Probe : IProbe
 
         Color color = Color.FromArgb(120, Color.White);
         Brush brush = new SolidBrush(Color.White);
-        float r = 0.3f / (float)Math.Sqrt(scale);
+        float r = 0.3f / (float)Math.Sqrt(scale); 
 
         g.TranslateTransform(points[0].X, points[0].Y);
         var transform = g.Transform;
+
+        float l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
+                (SettingsObject.corners[1] - SettingsObject.corners[3]) / 2);
 
         if (this.radius != 0 && this.anglePerSecond != 0)
         {
             float len = this.v.Length() * 100;
             string label = $"{len.ToString("n2")}E-2 TN/C";
-            Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
-            float width = g.MeasureString(label, font).Width;
-            float height = g.MeasureString(label, font).Height;
+            Font font = new Font("Arial", l / 22f, FontStyle.Bold);
 
             g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
 
@@ -61,12 +62,10 @@ public class Probe : IProbe
         if (this.radius == 0 && this.anglePerSecond == 0)
         {
             Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
-            DrawArrow(g, this.v, scale, color_arr_grid, Math.Min(spacingX, spacingY));
+            DrawArrow(g, this.v, scale, color_arr_grid, spacing);
         } 
         else
         {
-            float l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
-                (SettingsObject.corners[1] - SettingsObject.corners[3]) / 2);
             DrawArrow(g, this.v, scale, color, l);
         }
 
@@ -101,7 +100,7 @@ public class Probe : IProbe
             u_y = y * norma;
             tipLen = 20f / scale;
             point = new PointF(u_x * tipLen * 2f, u_y * tipLen * 2f);
-            g.DrawLine(new Pen(color, tipLen/5f), 0, 0, point.X, point.Y);
+            g.DrawLine(new Pen(color, tipLen / 5f), 0, 0, point.X, point.Y);
         }
 
         else
@@ -113,8 +112,6 @@ public class Probe : IProbe
             point = new PointF(u_x * 2 * tipLen, u_y * 2 * tipLen);
             g.DrawLine(new Pen(color, tipLen / 15f), 0, 0, point.X, point.Y);
         }
-
-        
 
         var points_arrow = new PointF[3];
         points_arrow[0] = new PointF(point.X - u_y * tipLen / 2f, point.Y + u_x * tipLen / 2f);
@@ -142,8 +139,7 @@ public class Probe : IProbe
         }
         sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
         sum *= 10E-12f; // prevod na TN/C
-        this.v = sum;
-        
+        this.v = sum;    
     }
 
     public void Calc(int startTime, INaboj[] charges)
@@ -165,6 +161,5 @@ public class Probe : IProbe
         sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
         sum *= 10E-12f; // prevod na TN/C
         this.v = sum;
-
     }
 }

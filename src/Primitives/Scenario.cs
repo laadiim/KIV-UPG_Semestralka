@@ -14,9 +14,11 @@ public class Scenario : IScenario
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
-    public float worldWidth = 2;
-    public float worldHeight = 2;
-    public PointF worldPosition = new PointF(0, 0);
+    public float worldWidthHalf = 2;
+    public float worldHeightHalf = 2;
+    public PointF worldCenterPosition = new PointF(0, 0);
+
+    /* xMax, yMax, xMin, yMin*/
     public float[] corners = new float[4];
 
     public void EmptyCharges()
@@ -147,28 +149,26 @@ public class Scenario : IScenario
     
     private Color GetColorFromIntensity(double intensity)
     { // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(4, Math.Max(0, intensity)) / 4;
+        double intst = Math.Min(6, Math.Max(0, intensity)) / 6;
 
         // Define colors for the transition
-        int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
-        int blueR = 200, blueG = 200, blueB = 240;                 // Blue
-        int lightBlueR = 150, lightBlueG = 110, lightBlueB = 180; // Light blue
-        int whiteR = 100, whiteG = 70, whiteB = 110;              // White
-        int orangeR = 90, orangeG = 60, orangeB = 50;            // Orange
+        int firstR = 120, firstG = 80, firstB = 90;      
+        int blueR = 200, blueG = 200, blueB = 240;                
+        int lightBlueR = 150, lightBlueG = 110, lightBlueB = 180; 
+        int whiteR = 100, whiteG = 70, whiteB = 110;              
+        int orangeR = 90, orangeG = 60, orangeB = 50;            
 
         int r, g, b;
 
         if (intst < 0.25)
         {
-            // Transition from dark blue to blue
             double factor = intst / 0.25;
-            r = (int)(darkBlueR + factor * (blueR - darkBlueR));
-            g = (int)(darkBlueG + factor * (blueG - darkBlueG));
-            b = (int)(darkBlueB + factor * (blueB - darkBlueB));
+            r = (int)(firstR + factor * (blueR - firstR));
+            g = (int)(firstG + factor * (blueG - firstG));
+            b = (int)(firstB + factor * (blueB - firstB));
         }
         else if (intst < 0.5)
         {
-            // Transition from blue to light blue
             double factor = (intst - 0.25) / 0.25;
             r = (int)(blueR + factor * (lightBlueR - blueR));
             g = (int)(blueG + factor * (lightBlueG - blueG));
@@ -176,7 +176,6 @@ public class Scenario : IScenario
         }
         else if (intst < 0.75)
         {
-            // Transition from light blue to white
             double factor = (intst - 0.5) / 0.25;
             r = (int)(lightBlueR + factor * (whiteR - lightBlueR));
             g = (int)(lightBlueG + factor * (whiteG - lightBlueG));
@@ -184,7 +183,6 @@ public class Scenario : IScenario
         }
         else
         {
-            // Transition from white to orange
             double factor = (intst - 0.75) / 0.25;
             r = (int)(whiteR + factor * (orangeR - whiteR));
             g = (int)(whiteG + factor * (orangeG - whiteG));
@@ -214,12 +212,12 @@ public class Scenario : IScenario
 
     public void ZoomIn(float x, float y)
     { 
-        worldWidth /= x; worldHeight /= y;
+        worldWidthHalf /= x; worldHeightHalf /= y;
     }
 
     public void ZoomOut(float x, float y)
     { 
-        worldWidth *= x; worldHeight *= y;
+        worldWidthHalf *= x; worldHeightHalf *= y;
     }
 
     public float Draw(Graphics g, float width, float height, int startTime, int chargeHit)
@@ -256,7 +254,7 @@ public class Scenario : IScenario
             }
         }
 
-
+        /* prozatim to tu nechame - neresit
         // ziskani krajnich pozic naboju
         /*Tuple<float[], float[]> positions = GetPositions();
         float xMax = 1, yMax = 1;
@@ -291,10 +289,10 @@ public class Scenario : IScenario
             yMax += viewportHeight / 9f;
         }*/
 
-        float xMin = worldPosition.X - worldWidth;
-        float xMax = worldPosition.X + worldWidth;
-        float yMin = worldPosition.Y - worldHeight;
-        float yMax = worldPosition.Y + worldHeight;
+        float xMin = worldCenterPosition.X - worldWidthHalf;
+        float xMax = worldCenterPosition.X + worldWidthHalf;
+        float yMin = worldCenterPosition.Y - worldHeightHalf;
+        float yMax = worldCenterPosition.Y + worldHeightHalf;
 
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);
@@ -323,6 +321,8 @@ public class Scenario : IScenario
         this.corners[1] = yMax;
         this.corners[2] = xMin;
         this.corners[3] = yMin;
+
+        SettingsObject.corners = this.corners;
         
         g.ScaleTransform(scale, scale);
 
@@ -368,7 +368,7 @@ public class Scenario : IScenario
 
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime, this.charges, scale, 0, 0);
+        probe.Draw(g, startTime, this.charges, scale);
         
         return scale;
     }
