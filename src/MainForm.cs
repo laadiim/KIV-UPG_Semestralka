@@ -16,6 +16,7 @@ namespace UPG_SP_2024
             SettingsObject.gridY = gridY;
             SettingsObject.scenario = scenario_num;
             SettingsObject.gridShown = false;
+            SettingsObject.corners = new float[4];
 
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.KeyPreview = true;

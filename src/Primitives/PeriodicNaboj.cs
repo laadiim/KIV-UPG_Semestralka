@@ -42,15 +42,15 @@ public class PeriodicNaboj : INaboj
         return distance <= radius;
     }
 
-    public void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition)
+    public void Drag(PointF point, float[] corners)
     {
         float t = (Environment.TickCount - startTime) / 1000;
         // Calculate current and new positions
         float currentX = GetX(t);
         float currentY = GetY(t);
         
-        float newX = MathF.Max(MathF.Min(currentX + point.X, worldWidth + worldPosition.X), worldPosition.X - worldWidth);
-        float newY = MathF.Max(MathF.Min(currentY + point.Y, worldHeight + worldPosition.Y), worldPosition.Y - worldHeight);
+        float newX = MathF.Max(MathF.Min(currentX + point.X, corners[0]), corners[2]);
+        float newY = MathF.Max(MathF.Min(currentY + point.Y, corners[1]), corners[3]);
 
 
         // Update offsets

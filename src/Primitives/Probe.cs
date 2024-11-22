@@ -65,7 +65,9 @@ public class Probe : IProbe
         } 
         else
         {
-            DrawArrow(g, this.v, scale, color, 0);
+            float l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
+                (SettingsObject.corners[1] - SettingsObject.corners[3]) / 2);
+            DrawArrow(g, this.v, scale, color, l);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -99,7 +101,7 @@ public class Probe : IProbe
             u_y = y * norma;
             tipLen = 20f / scale;
             point = new PointF(u_x * tipLen * 2f, u_y * tipLen * 2f);
-            g.DrawLine(new Pen(color, 0.3f / (float)Math.Sqrt(scale)), 0, 0, point.X, point.Y);
+            g.DrawLine(new Pen(color, tipLen/5f), 0, 0, point.X, point.Y);
         }
 
         else

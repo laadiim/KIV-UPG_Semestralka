@@ -63,5 +63,5 @@ public interface INaboj
     /// posune naboj na novou pozici
     /// </summary>
     /// <param name="point">pozice</param>
-    void Drag(PointF point, float worldWidth, float worldHeight, PointF worldPosition);
+    void Drag(PointF point, float[] corners);
 }

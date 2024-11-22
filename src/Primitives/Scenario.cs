@@ -17,6 +17,7 @@ public class Scenario : IScenario
     public float worldWidth = 2;
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
+    public float[] corners = new float[4];
 
     public void EmptyCharges()
     { 
@@ -318,6 +319,10 @@ public class Scenario : IScenario
         }
 
         this.scale = scale;
+        this.corners[0] = xMax;
+        this.corners[1] = yMax;
+        this.corners[2] = xMin;
+        this.corners[3] = yMin;
         
         g.ScaleTransform(scale, scale);
 
@@ -365,13 +370,6 @@ public class Scenario : IScenario
         Probe probe = new Probe(new PointF(0, 0));
         probe.Draw(g, startTime, this.charges, scale, 0, 0);
         
-        if (chargeHit != -1) g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
-            new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),
-            new PointF(worldPosition.X - worldWidth, worldPosition.Y + worldHeight),
-            new PointF(worldPosition.X + worldWidth, worldPosition.Y + worldHeight),
-            new PointF(worldPosition.X + worldWidth, worldPosition.Y - worldHeight)
-            
-        });
         return scale;
     }
 }

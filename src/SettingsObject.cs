@@ -15,5 +15,6 @@ namespace UPG_SP_2024
         public static int gridY;
         public static DrawingPanel drawingPanel;
         public static ControlPanel controlPanel;
+        public static float[] corners;
     }
 }

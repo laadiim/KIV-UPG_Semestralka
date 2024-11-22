@@ -43,13 +43,13 @@ namespace UPG_SP_2024
             {
                 if (chargeHit == -1) return;
                 PointF point = new PointF((e.X - this.Width/2)/scale , (e.Y - this.Height/2)/scale);
-                if (point.X < (scenario.worldPosition.X - scenario.worldWidth) || point.X >= (scenario.worldPosition.X + scenario.worldWidth)|| point.Y < (scenario.worldPosition.Y - scenario.worldHeight) || point.Y >= (scenario.worldPosition.Y + scenario.worldHeight))
+                if (point.X < (scenario.corners[2]) || point.X >= (scenario.corners[0])|| point.Y < (scenario.corners[3]) || point.Y >= (scenario.corners[1]))
                 {
                     chargeHit = -1;
                     return;
                 }
                 INaboj charge = scenario.GetCharge(chargeHit);
-                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.worldWidth, scenario.worldHeight, scenario.worldPosition);
+                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.corners);
                 prevMouse.X = e.X;
                 prevMouse.Y = e.Y;
             };
@@ -101,7 +101,7 @@ namespace UPG_SP_2024
                     scenario.AddCharge(naboj11);
                     break;
                 case 6:
-                    INaboj naboj12 = new StaticNaboj(-4, new PointF(-1, 1), 3);;
+                    INaboj naboj12 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return -1; }, 3, startTime);
                     INaboj naboj13 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
                     scenario.AddCharge(naboj12);
                     scenario.AddCharge(naboj13);
