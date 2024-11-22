@@ -99,34 +99,7 @@ public class PeriodicNaboj : INaboj
         t /= 1000;
         g.TranslateTransform(GetX(t) - radius, GetY(t) - radius);
 
-        using (var shadowPath = new GraphicsPath())
-        {
-            float r = 2.03f;
-            shadowPath.AddEllipse(0, 0, radius * r, radius * r);
-
-            using (var brushEll = new PathGradientBrush(shadowPath))
-            {
-                // stin
-                brushEll.CenterPoint = new PointF(radius * 1.66f, radius * 1.66f);
-
-                // nastaveni jine barvy pro zapornou hodnotu naboje
-                if (this.charge(t) < 0)
-                {
-                    brushEll.CenterColor = Color.FromArgb(255, 120, 230, 210);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
-                }
-                else
-                {   
-                    brushEll.CenterColor = Color.FromArgb(255, 240, 220, 150);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
-                }
-                brushEll.FocusScales = new PointF(0f, 0f);
-
-                // vybarvi stin
-                g.FillEllipse(brushEll, 0, 0, radius * r, radius * r);
-            }
-        }
-
+        
         // nastaveni barvy pro naboje
         using (var ellipsePath = new GraphicsPath())
         {
@@ -142,15 +115,15 @@ public class PeriodicNaboj : INaboj
                 if (this.charge(t) < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(255, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 40, 50, 70) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 100, 50, 90) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(255, 250, 220, 160);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 80, 20, 30) };
+                    brushEll.CenterColor = Color.FromArgb(255, 240, 220, 220);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 100, 20, 100) };
                 }
                 brushEll.FocusScales = new PointF(0f, 0f);
-                
+
                 // vybarvi naboj
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
 
@@ -162,16 +135,30 @@ public class PeriodicNaboj : INaboj
                 if (this.charge(t) < 0)
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(120, 140, 140, 170) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(220, 160, 150, 190) };
                 }
                 else
                 {
                     brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(130, 90, 190, 230) };
+                    brushEll.SurroundColors = new[] { Color.FromArgb(210, 140, 190, 200) };
                 }
                 brushEll.FocusScales = new PointF(0.7f, 0.7f);
 
                 // vybarvi pres naboj gradient pro zjemneni okraju
+                g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
+
+                if (this.charge(t) < 0)
+                {
+                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(150, 240, 170, 190) };
+                }
+                else
+                {
+                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll.SurroundColors = new[] { Color.FromArgb(150, 240, 140, 190) };
+                }
+                brushEll.FocusScales = new PointF(0.9f, 0.9f);
+
                 g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
             }
         }

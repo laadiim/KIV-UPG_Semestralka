@@ -146,7 +146,7 @@ public class Scenario : IScenario
     
     private Color GetColorFromIntensity(double intensity)
     { // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(5, Math.Max(0, intensity)) / 5;
+        double intst = Math.Min(4, Math.Max(0, intensity)) / 4;
 
         // Define colors for the transition
         int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
@@ -363,7 +363,7 @@ public class Scenario : IScenario
 
         // kresleni sondy s vektorem intenzity
         Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime, this.charges, scale);
+        probe.Draw(g, startTime, this.charges, scale, 0, 0);
         
         if (chargeHit != -1) g.DrawPolygon(new Pen(Color.Black, 1/scale), new PointF[] {
             new PointF(worldPosition.X - worldWidth, worldPosition.Y - worldHeight),
