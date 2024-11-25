@@ -378,7 +378,11 @@ public class Scenario : IScenario
         //Probe probe = new Probe(new PointF(0, 0));
         //probe.Draw(g, startTime, this.charges, scale, 0, 0);
 
-				foreach (IProbe probe in this.probes) probe.Draw(g, startTime, this.charges, scale, 0);
+				foreach (IProbe probe in this.probes) 
+				{
+					probe.Calc(startTime, this.charges);
+					probe.Draw(g, startTime, this.charges, scale, 0);
+				}
         
         return scale;
     }

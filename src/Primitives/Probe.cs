@@ -13,12 +13,14 @@ public class Probe : IProbe
     private float radius;
     private float anglePerSecond;
     private Vector2 v;
+		private List<Tuple<int, float>> values;
 
     public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
     {
         this.center = center;
         this.radius = radius;
         this.anglePerSecond = anglePerSecond;
+				this.values = new List<Tuple<int, float>>();
     }
 
     public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing = 0)
@@ -42,6 +44,7 @@ public class Probe : IProbe
 
         float l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
                 (SettingsObject.corners[1] - SettingsObject.corners[3]) / 2);
+				l = l != 0 ? l : 1;
 
         if (this.radius != 0 && this.anglePerSecond != 0)
         {
@@ -161,5 +164,10 @@ public class Probe : IProbe
         sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
         sum *= 10E-12f; // prevod na TN/C
         this.v = sum;
+				if (Math.Abs((Environment.TickCount - startTime) % 50) < 10) 
+				{
+					values.Add(new Tuple<int, float>(Environment.TickCount - startTime, (float)sum.Length()));
+					System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
+				}
     }
 }
