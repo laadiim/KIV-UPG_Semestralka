@@ -15,21 +15,14 @@ public class Scenario : IScenario
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
-<<<<<<< HEAD
-    public float worldWidth = 2;
-    public float worldHeight = 2;
-    public PointF worldPosition = new PointF(0, 0);
-=======
+
     public float worldWidthHalf = 2;
     public float worldHeightHalf = 2;
     public PointF worldCenterPosition = new PointF(0, 0);
 
-    private readonly object lockObject = new object();
-
     /* xMax, yMax, xMin, yMin*/
->>>>>>> colormap---kacka
     public float[] corners = new float[4];
-		private List<IProbe> probes = new List<IProbe>();
+	private List<IProbe> probes = new List<IProbe>();
 
     /* kacka - doplneni pocitani bitmapy */
     // Define boundaries and colors as class-level fields
@@ -204,14 +197,9 @@ public class Scenario : IScenario
     
     
     private Color GetColorFromIntensity(double intensity)
-<<<<<<< HEAD
-    { // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(4, Math.Max(0, intensity)) / 4;
-=======
     { 
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
         double intst = Math.Min(6, Math.Max(0, intensity)) / 6f;
->>>>>>> colormap---kacka
 
         // Use binary search to find the correct segment
         int index = Array.BinarySearch(boundaries, intst);
@@ -317,12 +305,12 @@ public class Scenario : IScenario
 
     public void ZoomIn(float x, float y)
     { 
-        worldWidth /= x; worldHeight /= y;
+        worldWidthHalf /= x; worldHeightHalf /= y;
     }
 
     public void ZoomOut(float x, float y)
     { 
-        worldWidth *= x; worldHeight *= y;
+        worldWidthHalf *= x; worldHeightHalf *= y;
     }
 
     public float Draw(Graphics g, float width, float height, int startTime, int chargeHit)
@@ -394,10 +382,10 @@ public class Scenario : IScenario
             yMax += viewportHeight / 9f;
         }*/
 
-        float xMin = worldPosition.X - worldWidth;
-        float xMax = worldPosition.X + worldWidth;
-        float yMin = worldPosition.Y - worldHeight;
-        float yMax = worldPosition.Y + worldHeight;
+        float xMin = worldCenterPosition.X - worldWidthHalf;
+        float xMax = worldCenterPosition.X + worldWidthHalf;
+        float yMin = worldCenterPosition.Y - worldHeightHalf;
+        float yMax = worldCenterPosition.Y + worldHeightHalf;
 
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);

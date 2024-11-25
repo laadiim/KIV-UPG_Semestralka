@@ -119,7 +119,6 @@ namespace UPG_SP_2024
             Graphics g = e.Graphics;
 
 
-
             //TODO: Add custom paint code here
             float panelHeight = this.Height;
             float panelWidth = this.Width;
