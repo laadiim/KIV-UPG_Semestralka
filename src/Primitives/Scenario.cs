@@ -31,7 +31,7 @@ public class Scenario : IScenario
     {
         IProbe p = new Probe(center, radius, anglePerSecond);
         this.probes.Add(p);
-        //SettingsObject.graphPanel.Invalidate();
+        SettingsObject.graphPanel.Invalidate();
         return p;
     }
 

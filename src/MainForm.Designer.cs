@@ -59,8 +59,8 @@ namespace UPG_SP_2024
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(1023, 626);
-            splitContainer1.SplitterDistance = 789;
+            splitContainer1.Size = new Size(1085, 683);
+            splitContainer1.SplitterDistance = 836;
             splitContainer1.TabIndex = 0;
             // 
             // drawingPanel
@@ -68,7 +68,7 @@ namespace UPG_SP_2024
             drawingPanel.Dock = DockStyle.Fill;
             drawingPanel.Location = new Point(0, 0);
             drawingPanel.Name = "drawingPanel";
-            drawingPanel.Size = new Size(789, 626);
+            drawingPanel.Size = new Size(836, 683);
             drawingPanel.TabIndex = 0;
             // 
             // splitContainer2
@@ -85,8 +85,8 @@ namespace UPG_SP_2024
             // splitContainer2.Panel2
             // 
             splitContainer2.Panel2.Controls.Add(graphPanel1);
-            splitContainer2.Size = new Size(230, 626);
-            splitContainer2.SplitterDistance = 408;
+            splitContainer2.Size = new Size(245, 683);
+            splitContainer2.SplitterDistance = 445;
             splitContainer2.TabIndex = 0;
             // 
             // controlPanel
@@ -94,7 +94,7 @@ namespace UPG_SP_2024
             controlPanel.Dock = DockStyle.Fill;
             controlPanel.Location = new Point(0, 0);
             controlPanel.Name = "controlPanel";
-            controlPanel.Size = new Size(230, 408);
+            controlPanel.Size = new Size(245, 445);
             controlPanel.TabIndex = 0;
             // 
             // graphPanel1
@@ -102,14 +102,15 @@ namespace UPG_SP_2024
             graphPanel1.Dock = DockStyle.Fill;
             graphPanel1.Location = new Point(0, 0);
             graphPanel1.Name = "graphPanel1";
-            graphPanel1.Size = new Size(230, 214);
+            graphPanel1.Size = new Size(245, 234);
             graphPanel1.TabIndex = 0;
+            graphPanel1.Paint += graphPanel1_Paint;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1023, 626);
+            ClientSize = new Size(1085, 683);
             Controls.Add(splitContainer1);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -123,6 +124,11 @@ namespace UPG_SP_2024
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
+        }
+
+        private void graphPanel1_Paint(object sender, PaintEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         #endregion
