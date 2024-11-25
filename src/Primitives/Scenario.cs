@@ -18,6 +18,7 @@ public class Scenario : IScenario
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
     public float[] corners = new float[4];
+		private List<IProbe> probes = new List<IProbe>();
 
     public void EmptyCharges()
     { 
@@ -26,7 +27,14 @@ public class Scenario : IScenario
         charges = new INaboj?[1];
     }
 
-    public INaboj[] GetCharges()
+		public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
+		{
+			IProbe p = new Probe(center, radius, anglePerSecond);
+			this.probes.Add(p);
+			return p;
+		}
+
+    public INaboj?[] GetCharges()
     {
         return charges;
     }
@@ -367,8 +375,10 @@ public class Scenario : IScenario
         
 
         // kresleni sondy s vektorem intenzity
-        Probe probe = new Probe(new PointF(0, 0));
-        probe.Draw(g, startTime, this.charges, scale, 0, 0);
+        //Probe probe = new Probe(new PointF(0, 0));
+        //probe.Draw(g, startTime, this.charges, scale, 0, 0);
+
+				foreach (IProbe probe in this.probes) probe.Draw(g, startTime, this.charges, scale, 0, 0);
         
         return scale;
     }

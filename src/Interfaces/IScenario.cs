@@ -9,7 +9,7 @@ public interface IScenario
     /// vrati pole naboju
     /// </summary>
     /// <returns>pole naboju</returns>
-    INaboj[] GetCharges();
+    INaboj?[] GetCharges();
     
     /// <summary>
     /// prida naboj do sceny
@@ -66,4 +66,13 @@ public interface IScenario
     /// vyprazdni pole naboju
     /// </summary>
     void EmptyCharges();
+
+		/// <summary>
+		/// vytvori statickou sondu
+		/// </summary>
+		/// <param name="center"> misto sondy
+		/// <param name="radius"/> polomer obehu sondy
+		/// <param name="anglePerSecond"/> uhlova rychlost obehu
+		/// <returns> instance sondy </returns>
+		IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
 }
