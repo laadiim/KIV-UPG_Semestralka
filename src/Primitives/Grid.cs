@@ -8,22 +8,20 @@ namespace UPG_SP_2024.Primitives
 //TODO: doplnit cely Grid
 public class Grid : IGrid
 {
-    float panelWidth;
-    float panelHeight;
+    readonly float panelWidth;
+    readonly float panelHeight;
 
-    float xMin, xMax, yMin, yMax;
+    readonly float xMin, xMax, yMin, yMax;
 
-    int startTime;
-    INaboj[] charges;
-    float scale;
+    readonly int startTime;
+    readonly INaboj[] charges;
+    readonly float scale;
 
     float spacingX;
     float spacingY;
 
-    int spacingXpixels;
-    int spacingYpixels;
-
-    float min;
+    readonly int spacingXpixels;
+    readonly int spacingYpixels;
 
     public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
     {
@@ -48,8 +46,6 @@ public class Grid : IGrid
 
         this.spacingX = panelWidth / countX;
         this.spacingY = panelHeight / countY;
-
-
     }
 
     public int GetSpacingXinPixels()

@@ -1,3 +1,4 @@
+using System;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
@@ -14,11 +15,56 @@ public class Scenario : IScenario
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
+<<<<<<< HEAD
     public float worldWidth = 2;
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
+=======
+    public float worldWidthHalf = 2;
+    public float worldHeightHalf = 2;
+    public PointF worldCenterPosition = new PointF(0, 0);
+
+    private readonly object lockObject = new object();
+
+    /* xMax, yMax, xMin, yMin*/
+>>>>>>> colormap---kacka
     public float[] corners = new float[4];
 		private List<IProbe> probes = new List<IProbe>();
+
+    /* kacka - doplneni pocitani bitmapy */
+    // Define boundaries and colors as class-level fields
+    private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.8, 1.0 };
+    private readonly int[,] colors = {
+            { 80, 50, 30 },    // fifth
+            { 240, 200, 230 }, // fourth
+            { 180, 130, 120 }, // third
+            { 130, 60, 80 },   // second
+            { 90, 60, 50 }      // first
+        };
+
+    // Precomputed differences
+    private readonly double[] boundaryDiffs;
+    private readonly int[,] colorDiffs;
+    /* --------------------------------- */
+
+    public Scenario()
+    {
+        // Initialize boundaryDiffs
+        boundaryDiffs = new double[boundaries.Length - 1];
+        for (int i = 0; i < boundaries.Length - 1; i++)
+        {
+            boundaryDiffs[i] = boundaries[i + 1] - boundaries[i];
+        }
+
+        // Initialize colorDiffs
+        colorDiffs = new int[colors.GetLength(0) - 1, 3];
+        for (int i = 0; i < colors.GetLength(0) - 1; i++)
+        {
+            colorDiffs[i, 0] = colors[i + 1, 0] - colors[i, 0];
+            colorDiffs[i, 1] = colors[i + 1, 1] - colors[i, 1];
+            colorDiffs[i, 2] = colors[i + 1, 2] - colors[i, 2];
+        }
+    }
 
     public void EmptyCharges()
     { 
@@ -61,11 +107,12 @@ public class Scenario : IScenario
 
     public INaboj RemoveCharge(INaboj naboj)
     {
-        return RemoveCharge(naboj.GetID());
+        return RemoveCharge(naboj.GetID());   
     }
 
     public INaboj RemoveCharge(int id)
     {
+
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null)
@@ -129,14 +176,15 @@ public class Scenario : IScenario
     private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
-        var bmp = img.LockBits(
-                new Rectangle(0, 0, img.Width, img.Height),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format24bppRgb
-            );
+
+        var bmp = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
+                               ImageLockMode.WriteOnly,
+                               PixelFormat.Format24bppRgb
+                               );
         
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
         Marshal.Copy(bmp.Scan0, pixels, 0, pixels.Length);
+
         Parallel.For(0, bmp.Height, y =>
         {
             int offset = y * bmp.Stride;
@@ -148,15 +196,56 @@ public class Scenario : IScenario
                 pixels[index + 2] = color.B;
             }
         });
+
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
         g.DrawImage(img, new RectangleF((-width / 2)/scale, (-height/2)/scale, width/scale, height/scale));
     }
     
+    
     private Color GetColorFromIntensity(double intensity)
+<<<<<<< HEAD
     { // Cap the intensity value to a maximum of 1.0 for a smoother transition.
         double intst = Math.Min(4, Math.Max(0, intensity)) / 4;
+=======
+    { 
+        // Cap the intensity value to a maximum of 1.0 for a smoother transition.
+        double intst = Math.Min(6, Math.Max(0, intensity)) / 6f;
+>>>>>>> colormap---kacka
 
+        // Use binary search to find the correct segment
+        int index = Array.BinarySearch(boundaries, intst);
+        if (index < 0)
+        {
+            index = ~index - 1; // Convert to the nearest lower boundary index
+        }
+
+        // Handle edge case where intst == 1.0
+        if (index >= boundaries.Length - 1)
+        {
+            index = boundaries.Length - 2; // Assign to the last segment
+        }
+
+        // Calculate factor for interpolation
+        double factor = (intst - boundaries[index]) / boundaryDiffs[index];
+
+        // Ensure factor is within [0,1]
+        factor = Math.Max(0.0, Math.Min(1.0, factor));
+
+        // Interpolate colors
+        int r = (int)(colors[index, 0] + factor * colorDiffs[index, 0]);
+        int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
+        int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
+
+        // Clamp RGB values to [0,255]
+        r = Math.Max(0, Math.Min(255, r));
+        g = Math.Max(0, Math.Min(255, g));
+        b = Math.Max(0, Math.Min(255, b));
+
+        return Color.FromArgb(r, g, b);
+
+        /* jine reseni pro testovani 
+        
         // Define colors for the transition
         int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
         int blueR = 200, blueG = 200, blueB = 240;                 // Blue
@@ -200,24 +289,30 @@ public class Scenario : IScenario
         }
 
         return Color.FromArgb(r, g, b);
+        */
     }
     
     private double CalcIntensity(PointF point)
-    { 
+    {
         Vector2 start = new Vector2(point.X, point.Y);
-        Vector2 end = new Vector2(0, 0);
         Vector2 sum = Vector2.Zero;
 
-        for (int i = 0; i < charges.Length; i++)
+        foreach (var charge in charges)
         {
-            if (charges[i] == null) continue;
+            if (charge == null) continue;
 
-            PointF p = charges[i].GetPosition();
+            PointF p = charge.GetPosition();
             Vector2 vect = start - new Vector2(p.X, p.Y);
-            float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
-            sum += charges[i].GetCharge() * vect / l;
+
+            float lenSq = vect.LengthSquared();
+            float lenCubed = lenSq * (float)Math.Sqrt(lenSq); // Avoid recomputing length
+
+            float l = lenCubed > 0 ? 1 / lenCubed : 100f;
+
+            sum += charge.GetCharge() * vect * l;
         }
         return sum.Length();
+        
     }
 
     public void ZoomIn(float x, float y)

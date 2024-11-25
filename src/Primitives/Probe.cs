@@ -64,7 +64,7 @@ public class Probe : IProbe
 
         if (this.radius == 0 && this.anglePerSecond == 0)
         {
-            Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
+            Color color_arr_grid = Color.FromArgb(150, 240, 220, 250);
             DrawArrow(g, this.v, scale, color_arr_grid, spacing);
         } 
         else
