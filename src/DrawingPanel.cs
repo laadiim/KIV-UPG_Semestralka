@@ -24,7 +24,6 @@ namespace UPG_SP_2024
             this.DoubleBuffered = true;
             this.ClientSize = new System.Drawing.Size(800, 600);
             scenario = new Scenario();
-						scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
             
             this.MouseDown += (o, e) =>
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,12 +10,27 @@ namespace UPG_SP_2024
         private CheckBox colormapCheckBox;
         private CheckBox gridCheckBox;
         private ComboBox scenarioDropdown;
-				private NumericUpDown gridXSpinner;
-				private NumericUpDown gridYSpinner;
+        private NumericUpDown gridXSpinner;
+        private NumericUpDown gridYSpinner;
 
         public ControlPanel()
         {
+            if (!IsInDesignMode())
+            {
+                EnsureSettingsDefaults(); // Ensure SettingsObject values are valid
+            }
             InitializeControls();
+        }
+        
+        private bool IsInDesignMode()
+        {
+            return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
+        }
+
+        private void EnsureSettingsDefaults()
+        {
+            SettingsObject.gridX = Math.Max(1, SettingsObject.gridX);
+            SettingsObject.gridY = Math.Max(1, SettingsObject.gridY);
         }
 
         private void InitializeControls()
@@ -88,63 +104,63 @@ namespace UPG_SP_2024
                 SettingsObject.drawingPanel.SetScenario( selectedScenario );
             };
 
-						this.Controls.Add(scenarioDropdown);
+            this.Controls.Add(scenarioDropdown);
 
-						Label gridLabel = new Label
-						{
-								Text = "Grid:",
-								Location = new Point(10, 160),
-								AutoSize = true
-						};
-						this.Controls.Add(gridLabel);
+            Label gridLabel = new Label
+            {
+                    Text = "Grid:",
+                    Location = new Point(10, 160),
+                    AutoSize = true
+            };
+            this.Controls.Add(gridLabel);
 
-						Label XLabel = new Label
-						{
-								Text = "X:",
-								Location = new Point(10, 192),
-								AutoSize = true
-						};
-						this.Controls.Add(XLabel);
+            Label XLabel = new Label
+            {
+                    Text = "X:",
+                    Location = new Point(10, 192),
+                    AutoSize = true
+            };
+            this.Controls.Add(XLabel);
 
-						gridXSpinner = new NumericUpDown
-						{
-								Location = new Point(27, 190),
-								Width = 100,
-								Minimum = 1,
-								Maximum = 100,
-								Value = SettingsObject.gridX // Default gridX value
-						};
+            gridXSpinner = new NumericUpDown
+            {
+                    Location = new Point(27, 190),
+                    Width = 100,
+                    Minimum = 1,
+                    Maximum = 100,
+                    Value = Math.Max(1, SettingsObject.gridX) // Default gridX value
+            };
 
-						gridXSpinner.ValueChanged += (o, e) =>
-						{
-							SettingsObject.gridX = (int)gridXSpinner.Value;
-						};
+            gridXSpinner.ValueChanged += (o, e) =>
+            {
+                SettingsObject.gridX = (int)gridXSpinner.Value;
+            };
 
-						this.Controls.Add(gridXSpinner);
+            this.Controls.Add(gridXSpinner);
 
-						Label YLabel = new Label
-						{
-								Text = "Y:",
-								Location = new Point(10, 220),
-								AutoSize = true
-						};
-						this.Controls.Add(YLabel);
+            Label YLabel = new Label
+            {
+                    Text = "Y:",
+                    Location = new Point(10, 220),
+                    AutoSize = true
+            };
+            this.Controls.Add(YLabel);
 
-						gridYSpinner = new NumericUpDown
-						{
-								Location = new Point(27, 218),
-								Width = 100,
-								Minimum = 1,
-								Maximum = 100,
-								Value = SettingsObject.gridY // Default gridX value
-						};
+            gridYSpinner = new NumericUpDown
+            {
+                    Location = new Point(27, 218),
+                    Width = 100,
+                    Minimum = 1,
+                    Maximum = 100,
+                    Value = Math.Max(1, SettingsObject.gridY) // Default gridX value
+            };
 
-						gridYSpinner.ValueChanged += (o, e) =>
-						{
-							SettingsObject.gridY = (int)gridYSpinner.Value;
-						};
+            gridYSpinner.ValueChanged += (o, e) =>
+            {
+                SettingsObject.gridY = (int)gridYSpinner.Value;
+            };
 
-						this.Controls.Add(gridYSpinner);
-				}
+            this.Controls.Add(gridYSpinner);
+        }
     }
 }

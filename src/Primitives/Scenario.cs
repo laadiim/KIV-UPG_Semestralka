@@ -17,8 +17,8 @@ public class Scenario : IScenario
     public float worldWidth = 2;
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
-    public float[] corners = new float[4];
-		private List<IProbe> probes = new List<IProbe>();
+    public float[] corners = new float[4]; 
+    public List<IProbe> probes = new List<IProbe>();
 
     public void EmptyCharges()
     { 
@@ -27,12 +27,13 @@ public class Scenario : IScenario
         charges = new INaboj?[1];
     }
 
-		public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
-		{
-			IProbe p = new Probe(center, radius, anglePerSecond);
-			this.probes.Add(p);
-			return p;
-		}
+    public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
+    {
+        IProbe p = new Probe(center, radius, anglePerSecond);
+        this.probes.Add(p);
+        //SettingsObject.graphPanel.Invalidate();
+        return p;
+    }
 
     public INaboj?[] GetCharges()
     {

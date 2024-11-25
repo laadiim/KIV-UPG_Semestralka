@@ -29,16 +29,17 @@ namespace UPG_SP_2024
                 if (e.KeyCode == Keys.O) drawingPanel.scenario.ZoomOut(2, 2);
             };
             InitializeComponent();
+            GraphPanel g = new GraphPanel();
+            SettingsObject.graphPanel = g;
             DrawingPanel p = (DrawingPanel)drawingPanel;
             // Create and add the custom ControlPanel
             ControlPanel c = new ControlPanel();
-            {
-                Location = new System.Drawing.Point(50, 50);
-            };
             this.Controls.Add(c);
-            p.SetScenario(scenario_num);
+            this.Controls.Add(g);
             SettingsObject.drawingPanel = p;
             SettingsObject.controlPanel = c;
+            p.SetScenario(scenario_num);
+            p.scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
             this.Text = "A23B0149P + A23B0152P - Semestralni prace KIV/UPG 2024/2025";
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TimerTick;
