@@ -15,7 +15,7 @@ public interface IProbe
     /// <param name="charges">seznam naboju</param>
     /// <param name="scale">scale</param>
     /// <param name="spacing">minimum z romeru obdelniku mrizky</param>
-    void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing);
+    void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid);
 
     public void Calc(Vector2 start, INaboj[] charges);
     public void Calc(int startTime, INaboj[] charges);

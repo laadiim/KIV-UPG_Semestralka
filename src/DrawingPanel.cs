@@ -38,6 +38,11 @@ namespace UPG_SP_2024
                     if (charges[i] == null) continue;
                     chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
                 }
+
+                if (chargeHit == -1)
+                {
+                    scenario.CreateProbe(point, 0, 0);
+                }
             };
             this.MouseMove += (o, e) =>
             {

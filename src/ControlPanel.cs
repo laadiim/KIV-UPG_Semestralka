@@ -161,6 +161,23 @@ namespace UPG_SP_2024
             };
 
             this.Controls.Add(gridYSpinner);
+
+            Button graphButton = new Button
+            {
+                Location = new Point(10, 250),
+                Text = "Show graph"
+            };
+            this.Controls.Add(graphButton);
+            graphButton.Click += GraphButton_Click;
+        }
+
+        private void GraphButton_Click(object? sender, EventArgs e)
+        {
+            if (SettingsObject.graphForm != null) return;
+            GraphForm g = new GraphForm();
+            g.Show();
+            SettingsObject.graphForm = g;
+
         }
     }
 }

@@ -18,7 +18,6 @@ public class Scenario : IScenario
     public float worldHeight = 2;
     public PointF worldPosition = new PointF(0, 0);
     public float[] corners = new float[4]; 
-    public List<IProbe> probes = new List<IProbe>();
 
     public void EmptyCharges()
     { 
@@ -30,8 +29,7 @@ public class Scenario : IScenario
     public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
     {
         IProbe p = new Probe(center, radius, anglePerSecond);
-        this.probes.Add(p);
-        SettingsObject.graphPanel.ResetProbes();
+        SettingsObject.probes.Add(p);
         return p;
     }
 
@@ -379,11 +377,11 @@ public class Scenario : IScenario
         //Probe probe = new Probe(new PointF(0, 0));
         //probe.Draw(g, startTime, this.charges, scale, 0, 0);
 
-				foreach (IProbe probe in this.probes) 
-				{
-					probe.Calc(startTime, this.charges);
-					probe.Draw(g, startTime, this.charges, scale, 0);
-				}
+        foreach (IProbe probe in SettingsObject.probes) 
+        {
+            probe.Calc(startTime, this.charges);
+            probe.Draw(g, startTime, this.charges, scale, 0, false);
+        }
         
         return scale;
     }

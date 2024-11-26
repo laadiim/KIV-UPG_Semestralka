@@ -17,6 +17,7 @@ namespace UPG_SP_2024
         public static DrawingPanel drawingPanel;
         public static ControlPanel controlPanel;
         public static float[] corners;
-        public static GraphPanel graphPanel;
+        public static GraphForm graphForm;
+        public static List<IProbe> probes;
     }
 }

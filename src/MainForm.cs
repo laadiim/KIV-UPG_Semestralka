@@ -1,12 +1,14 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024
 {
     public partial class MainForm : Form
     {
         private int startTime;
+        private int ticks = 0;
 
         public MainForm(int scenario_num, int gridX, int gridY)
         {
@@ -18,6 +20,7 @@ namespace UPG_SP_2024
             SettingsObject.scenario = scenario_num;
             SettingsObject.gridShown = false;
             SettingsObject.corners = new float[4];
+            SettingsObject.probes = new List<IProbe>();
 
             // Configure the form
             this.ClientSize = new Size(800, 600);
@@ -42,16 +45,12 @@ namespace UPG_SP_2024
             // Create and configure panels
             var p = this.drawingPanel; // Instantiate directly instead of casting
             SettingsObject.drawingPanel = p;
-            var g = new GraphPanel();
-            SettingsObject.graphPanel = g;
-
 
             var c = new ControlPanel();
             SettingsObject.controlPanel = c;
 
             // Add controls to the form
             this.Controls.Add(c);
-            this.Controls.Add(g);
 
             // Configure the drawing panel and scenario
             p.SetScenario(scenario_num);
@@ -76,7 +75,13 @@ namespace UPG_SP_2024
 
         private void TimerTick(object sender, EventArgs e)
         {
+            ticks++;
             drawingPanel?.Invalidate(); // Ensure drawingPanel is not null
+            if (SettingsObject.graphForm != null && ticks % 20 == 0)
+            {
+                SettingsObject.graphForm.UpdateGraph();
+                ticks = 0;
+            }
         }
 
         private void controlPanel_Paint(object sender, PaintEventArgs e)
@@ -87,6 +92,11 @@ namespace UPG_SP_2024
         private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
         {
             // Placeholder for future use (if needed)
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
