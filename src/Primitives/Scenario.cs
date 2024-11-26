@@ -220,7 +220,7 @@ public class Scenario : IScenario
         int index = Array.BinarySearch(boundaries, intst);
         if (index < 0)
         {
-            index = ~index - 1; // Convert to the nearest lower boundary index
+            index = -index - 1; // Convert to the nearest lower boundary index
         }
 
         // Handle edge case where intst == 1.0
