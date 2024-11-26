@@ -76,6 +76,10 @@ namespace UPG_SP_2024
         private void TimerTick(object sender, EventArgs e)
         {
             ticks++;
+            foreach (IProbe probe in SettingsObject.probes)
+            {
+                probe.Tick();
+            }
             drawingPanel?.Invalidate(); // Ensure drawingPanel is not null
             if (SettingsObject.graphForm != null && ticks % 20 == 0)
             {

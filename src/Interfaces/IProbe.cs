@@ -19,5 +19,7 @@ public interface IProbe
 
     public void Calc(Vector2 start, INaboj[] charges);
     public void Calc(int startTime, INaboj[] charges);
+
+    public void Tick();
 }
 

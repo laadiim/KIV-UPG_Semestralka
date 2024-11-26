@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
@@ -18,14 +19,14 @@ namespace UPG_SP_2024
         private Probe probe;
         private int index;
         private ISeries[] series = new ISeries[]
-				{
-					new LineSeries<float>
-					{
-						Values = [],
-						GeometrySize = 0,
-						Fill = null,
-					}
-				};
+        {
+            new LineSeries<ObservablePoint>
+            {
+                Values = [],
+                GeometrySize = 0,
+                Fill = null,
+            }
+        };
         private CartesianChart chart;
 
         public GraphTab(IProbe probe, int index)
@@ -36,22 +37,19 @@ namespace UPG_SP_2024
             //UpdateChart();
         }
 
-				private void GetData()
-				{
-
-            int[] times = new int[probe.values.Count];
-            float[] values = new float[probe.values.Count];
+        private void GetData()
+        {
+            ObservablePoint[] values = new ObservablePoint[probe.values.Count];
             for (int i = 0; i < probe.values.Count; i++)
             {
-                times[i] = probe.values[i].Item1;
-								float v = probe.values[i].Item2 * 100;
-                values[i] = (float)Math.Round(v, 2);
+                float v = probe.values[i].Item2 * 100;
+                values[i] = new ObservablePoint(probe.values[i].Item1 ,Math.Round(v, 2));
             }
-						series[0].Values = values;
-				}
+            series[0].Values = values;
+        }
         private void InitializeChart()
         {
-						GetData();
+            GetData();
             this.chart = new CartesianChart
             {
                 Series = series,
@@ -62,19 +60,19 @@ namespace UPG_SP_2024
                     Padding = new LiveChartsCore.Drawing.Padding(15)
                 },
                 Dock = DockStyle.Fill,
-								YAxes = new Axis[]{
-								new Axis(){
-										Name = "Intenzita el. pole [10 GN/C]",
-										MinLimit = 0,
-										MinStep = 1,
-								}},
+                YAxes = new Axis[]{
+                new Axis(){
+                        Name = "Intenzita el. pole [10 GN/C]",
+                        MinLimit = 0,
+                        MinStep = 1,
+                }},
             };
             Controls.Add(chart);
         }
 
         public void UpdateChart()
         {
-						GetData();
+            GetData();
             chart.Series = this.series;
         }
     }

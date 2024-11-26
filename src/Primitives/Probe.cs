@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using System.Transactions;
 using UPG_SP_2024.Interfaces;
@@ -13,7 +14,8 @@ public class Probe : IProbe
     readonly private float radius;
     readonly private float anglePerSecond;
     private Vector2 v;
-    public List<Tuple<int, float>> values;
+    private long ticks = 0;
+    public List<Tuple<float, float>> values;
 
     public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
     {
@@ -21,7 +23,12 @@ public class Probe : IProbe
         this.radius = radius;
         this.anglePerSecond = anglePerSecond;
         this.v = Vector2.Zero;
-		this.values = new List<Tuple<int, float>>();
+		this.values = new List<Tuple<float, float>>();
+    }
+
+    public void Tick()
+    {
+        this.ticks++;
     }
 
     public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid)
@@ -187,10 +194,10 @@ public class Probe : IProbe
         sum *= k; // vektor intenzity el. pole (Newton/Coulomb)
         sum *= 10E-12f; // prevod na TN/C
         this.v = sum;
-				if (Math.Abs((Environment.TickCount - startTime) % 50) < 10) 
-				{
-					values.Add(new Tuple<int, float>(Environment.TickCount - startTime, (float)sum.Length()));
-					//System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
-				}
+        if (ticks % 2 == 0) 
+        {
+            values.Add(new Tuple<float, float>((float)ticks / 20 , (float)sum.Length()));
+            //System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
+        }
     }
 }
