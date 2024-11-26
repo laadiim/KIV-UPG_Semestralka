@@ -42,7 +42,7 @@ namespace UPG_SP_2024
             // Create and configure panels
             var p = this.drawingPanel; // Instantiate directly instead of casting
             SettingsObject.drawingPanel = p;
-            var g = new GraphPanel();
+            var g = graphPanel1;
             SettingsObject.graphPanel = g;
 
 
