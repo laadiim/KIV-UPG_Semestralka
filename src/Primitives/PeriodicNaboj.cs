@@ -164,8 +164,8 @@ public class PeriodicNaboj : INaboj
         }
 
         // napis - hodnota naboje
-        string label = $"{this.charge(t)} C";
-        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
+        string label = $"{this.charge(t):n1} C";
+        Font font = new Font("Arial", (float)Math.Sqrt(radius) / 5f, FontStyle.Bold);
         Brush brush = new SolidBrush(Color.FromArgb(230, Color.White));
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;

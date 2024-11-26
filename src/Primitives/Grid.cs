@@ -3,120 +3,120 @@ using System.Runtime.InteropServices;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives
-{ 
-
-//TODO: doplnit cely Grid
-public class Grid : IGrid
 {
-    readonly float panelWidth;
-    readonly float panelHeight;
 
-    readonly float xMin, xMax, yMin, yMax;
-
-    readonly int startTime;
-    readonly INaboj[] charges;
-    readonly float scale;
-
-    float spacingX;
-    float spacingY;
-
-    readonly int spacingXpixels;
-    readonly int spacingYpixels;
-
-    public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
+    //TODO: doplnit cely Grid
+    public class Grid : IGrid
     {
-        this.xMin = xMin;
-        this.xMax = xMax;
-        this.yMin = yMin;
-        this.yMax = yMax;
+        readonly float panelWidth;
+        readonly float panelHeight;
 
-        this.panelWidth = xMax - xMin;
-        this.panelHeight = yMax - yMin;
+        readonly float xMin, xMax, yMin, yMax;
 
-        this.startTime = startTime;
-        this.charges = charges;
-        this.scale = scale;
+        readonly int startTime;
+        readonly INaboj[] charges;
+        readonly float scale;
 
-        this.spacingXpixels = spacingXpixels;
-        this.spacingYpixels = spacingYpixels;
+        float spacingX;
+        float spacingY;
 
-        float countX = viewportWidth / spacingXpixels;
-        float countY = viewportHeight / spacingYpixels;
+        readonly int spacingXpixels;
+        readonly int spacingYpixels;
 
-
-        this.spacingX = panelWidth / countX;
-        this.spacingY = panelHeight / countY;
-    }
-
-    public int GetSpacingXinPixels()
-    {
-        return this.spacingXpixels;
-    }
-
-    public int GetSpacingYinPixels()
-    {
-        return this.spacingYpixels;
-    }
-
-    /// <summary>
-    /// vykresli sipky
-    /// </summary>
-    /// <param name="g">graficky kontext</param>
-    /// <param name="brush">predany stetec</param>
-    /// <param name="rightCenter">prostredek prave strany scenare</param>
-    /// <param name="topCenter">prostredek horni strany scenare</param>
-    /// <param name="tipLength">delka sipky</param>
-    private void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
-    {
-        var points = new PointF[3];
-        points[0] = new PointF(rightCenter.X, rightCenter.Y);
-        points[1] = new PointF(rightCenter.X - tipLength, rightCenter.Y + tipLength / 2);
-        points[2] = new PointF(rightCenter.X - tipLength, rightCenter.Y - tipLength / 2);
-
-        g.FillPolygon(brush, points);
-
-        points[0] = new PointF(topCenter.X, topCenter.Y);
-        points[1] = new PointF(topCenter.X - tipLength / 2, topCenter.Y + tipLength);
-        points[2] = new PointF(topCenter.X + tipLength / 2, topCenter.Y + tipLength);
-
-        g.FillPolygon(brush, points);
-    }
-
-    /// <summary>
-    /// nakresli mrizku
-    /// </summary>
-    /// <param name="g">graficky kontext</param>
-    /// <param name="penAxes">predane pero pro pro osy</param>
-    /// <param name="penGrid">predane pero pro mrizku</param>
-    /// <param name="brush">predany stetec</param>
-    /// <param name="brushStr">predany stetec pro string</param>
-    /// <param name="topLeft">horni levy roh</param>
-    /// <param name="bottomRight">dolni pravy roh</param>
-    /// <param name="tipLength">delka sipky</param>
-    /// <param name="scale">predany scale</param>
-    private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, PointF topLeft, PointF bottomRight, float tipLength, float scale)
-    {
-        PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
-        PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
-        PointF leftCenter = new PointF(topLeft.X, (topLeft.Y + bottomRight.Y) / 2);
-        PointF rightCenter = new PointF(bottomRight.X, (topLeft.Y + bottomRight.Y) / 2);
-
-        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
-        SizeF size = new SizeF(tipLength, 0);
-
-        g.DrawLine(penAxes, rightCenter - size, leftCenter);
-        g.DrawString("x", font, brushStr, rightCenter.X - 2 * tipLength, rightCenter.Y + tipLength);
-
-        g.DrawLine(penAxes, topCenter + new SizeF(0, tipLength), bottomCenter);
-        g.DrawString("y", font, brushStr, topCenter.X - 2 * tipLength, topCenter.Y + tipLength);
-
-        DrawArrows(g, brush, rightCenter, topCenter, tipLength);
-
-        if (SettingsObject.gridShown)
+        public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
         {
-            DrawGrid(g, penGrid);
+            this.xMin = xMin;
+            this.xMax = xMax;
+            this.yMin = yMin;
+            this.yMax = yMax;
+
+            this.panelWidth = xMax - xMin;
+            this.panelHeight = yMax - yMin;
+
+            this.startTime = startTime;
+            this.charges = charges;
+            this.scale = scale;
+
+            this.spacingXpixels = spacingXpixels;
+            this.spacingYpixels = spacingYpixels;
+
+            float countX = viewportWidth / spacingXpixels;
+            float countY = viewportHeight / spacingYpixels;
+
+
+            this.spacingX = panelWidth / countX;
+            this.spacingY = panelHeight / countY;
         }
-    }
+
+        public int GetSpacingXinPixels()
+        {
+            return this.spacingXpixels;
+        }
+
+        public int GetSpacingYinPixels()
+        {
+            return this.spacingYpixels;
+        }
+
+        /// <summary>
+        /// vykresli sipky
+        /// </summary>
+        /// <param name="g">graficky kontext</param>
+        /// <param name="brush">predany stetec</param>
+        /// <param name="rightCenter">prostredek prave strany scenare</param>
+        /// <param name="topCenter">prostredek horni strany scenare</param>
+        /// <param name="tipLength">delka sipky</param>
+        private static void DrawArrows(Graphics g, Brush brush, PointF rightCenter, PointF topCenter, float tipLength)
+        {
+            var points = new PointF[3];
+            points[0] = new PointF(rightCenter.X, rightCenter.Y);
+            points[1] = new PointF(rightCenter.X - tipLength, rightCenter.Y + tipLength / 2);
+            points[2] = new PointF(rightCenter.X - tipLength, rightCenter.Y - tipLength / 2);
+
+            g.FillPolygon(brush, points);
+
+            points[0] = new PointF(topCenter.X, topCenter.Y);
+            points[1] = new PointF(topCenter.X - tipLength / 2, topCenter.Y + tipLength);
+            points[2] = new PointF(topCenter.X + tipLength / 2, topCenter.Y + tipLength);
+
+            g.FillPolygon(brush, points);
+        }
+
+        /// <summary>
+        /// nakresli mrizku
+        /// </summary>
+        /// <param name="g">graficky kontext</param>
+        /// <param name="penAxes">predane pero pro pro osy</param>
+        /// <param name="penGrid">predane pero pro mrizku</param>
+        /// <param name="brush">predany stetec</param>
+        /// <param name="brushStr">predany stetec pro string</param>
+        /// <param name="topLeft">horni levy roh</param>
+        /// <param name="bottomRight">dolni pravy roh</param>
+        /// <param name="tipLength">delka sipky</param>
+        /// <param name="scale">predany scale</param>
+        private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, PointF topLeft, PointF bottomRight, float scale)
+        {
+            PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
+            PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
+            PointF leftCenter = new PointF(topLeft.X, (topLeft.Y + bottomRight.Y) / 2);
+            PointF rightCenter = new PointF(bottomRight.X, (topLeft.Y + bottomRight.Y) / 2);
+
+            Font font = new Font("Arial", 15f / scale, FontStyle.Bold);
+
+            float len = 20f / scale;
+            g.DrawLine(penAxes, rightCenter - new SizeF(len, 0), leftCenter);
+            g.DrawString("x", font, brushStr, rightCenter.X - len * 1.2f, (rightCenter.Y + len / 1.8f));
+
+            g.DrawLine(penAxes, topCenter + new SizeF(0, len), bottomCenter);
+            g.DrawString("y", font, brushStr, topCenter.X - len, topCenter.Y + len);
+
+            DrawArrows(g, brush, rightCenter, topCenter, len);
+
+            if (SettingsObject.gridShown)
+            {
+                DrawGrid(g, penGrid);
+            }
+        }
         private void DrawGrid(Graphics g, Pen pen)
         {
             float width_half = this.panelWidth / 2;
@@ -229,7 +229,7 @@ public class Grid : IGrid
             Brush brushStr = new SolidBrush(Color.White);
 
             tipLength = 1f / (float)Math.Sqrt(scale);
-            DrawAxes(g, penAxes, penGrid, brush, brushStr, topLeft, bottomRight, tipLength, scale);
+            DrawAxes(g, penAxes, penGrid, brush, brushStr, topLeft, bottomRight, scale);
         }
     }
 }

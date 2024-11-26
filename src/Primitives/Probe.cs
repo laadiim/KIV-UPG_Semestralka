@@ -10,8 +10,8 @@ namespace UPG_SP_2024.Primitives;
 public class Probe : IProbe
 {
     private PointF center;
-    private float radius;
-    private float anglePerSecond;
+    readonly private float radius;
+    readonly private float anglePerSecond;
     private Vector2 v;
 	private List<Tuple<int, float>> values;
 
@@ -43,9 +43,11 @@ public class Probe : IProbe
 
         Vector2 end = start + this.v;
 
-        PointF[] points = new PointF[2];
-        points[0] = new PointF(start.X, start.Y); // bod zacatku sipky
-        points[1] = new PointF(end.X, end.Y); // bod konce sipky
+        PointF[] points =
+        [
+            new PointF(start.X, start.Y), // bod zacatku sipky
+            new PointF(end.X, end.Y)  // bod konce sipky
+        ];
 
         Color color = Color.FromArgb(120, Color.White);
         Brush brush = new SolidBrush(Color.White);
@@ -70,7 +72,8 @@ public class Probe : IProbe
         {
             float len = this.v.Length() * 100;
             string label = $"{len.ToString("n2")}E-2 TN/C";
-            Font font = new Font("Arial", l / 22f, FontStyle.Bold);
+
+            Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
 
             g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
 

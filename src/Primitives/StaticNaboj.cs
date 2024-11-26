@@ -139,8 +139,10 @@ public class StaticNaboj : INaboj
 
         // napis - hodnota naboje
         string label = $"{this.charge} C";
-        Font font = new Font("Arial", 1f / (float)Math.Sqrt(scale), FontStyle.Bold);
+
+        Font font = new Font("Arial", (float)Math.Sqrt(radius) / 5f, FontStyle.Bold);
         Brush brush = new SolidBrush(Color.FromArgb(230, Color.White));
+
         float width = g.MeasureString(label, font).Width;
         float height = g.MeasureString(label, font).Height;
         

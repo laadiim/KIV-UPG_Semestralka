@@ -22,21 +22,18 @@ public class Scenario : IScenario
     public float[] corners = new float[4];
 	private List<IProbe> probes = new List<IProbe>();
 
-    /* kacka - doplneni pocitani bitmapy */
     private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
     private readonly int[,] colors = {
-            { 80, 50, 30 },    // fifth
-            { 70, 40, 80 }, // fourth
-            { 60, 60, 90 }, // third 
-            { 120, 120, 140 },   // second
-            { 240, 150, 150  }  // first
-        
+            { 80, 50, 30 },      // fifth
+            { 70, 40, 80 },      // fourth
+            { 100, 60, 140 },    // third 
+            { 140, 120, 190 },   // second
+            { 210, 190, 220 }   // first  
     };
 
     private readonly double[] boundaryDiffs;
     private readonly int[,] colorDiffs;
-    /* --------------------------------- */
 
     public Scenario()
     {
@@ -246,53 +243,6 @@ public class Scenario : IScenario
         b = Math.Max(0, Math.Min(255, b));
 
         return Color.FromArgb(r, g, b);
-
-        /* jine reseni pro testovani 
-        
-        // Define colors for the transition
-        int darkBlueR = 120, darkBlueG = 80, darkBlueB = 90;      // Dark blue
-        int blueR = 200, blueG = 200, blueB = 240;                 // Blue
-        int lightBlueR = 150, lightBlueG = 110, lightBlueB = 180; // Light blue
-        int whiteR = 100, whiteG = 70, whiteB = 110;              // White
-        int orangeR = 90, orangeG = 60, orangeB = 50;            // Orange
-
-        int r, g, b;
-
-        if (intst < 0.25)
-        {
-            // Transition from dark blue to blue
-            double factor = intst / 0.25;
-            r = (int)(darkBlueR + factor * (blueR - darkBlueR));
-            g = (int)(darkBlueG + factor * (blueG - darkBlueG));
-            b = (int)(darkBlueB + factor * (blueB - darkBlueB));
-        }
-        else if (intst < 0.5)
-        {
-            // Transition from blue to light blue
-            double factor = (intst - 0.25) / 0.25;
-            r = (int)(blueR + factor * (lightBlueR - blueR));
-            g = (int)(blueG + factor * (lightBlueG - blueG));
-            b = (int)(blueB + factor * (lightBlueB - blueB));
-        }
-        else if (intst < 0.75)
-        {
-            // Transition from light blue to white
-            double factor = (intst - 0.5) / 0.25;
-            r = (int)(lightBlueR + factor * (whiteR - lightBlueR));
-            g = (int)(lightBlueG + factor * (whiteG - lightBlueG));
-            b = (int)(lightBlueB + factor * (whiteB - lightBlueB));
-        }
-        else
-        {
-            // Transition from white to orange
-            double factor = (intst - 0.75) / 0.25;
-            r = (int)(whiteR + factor * (orangeR - whiteR));
-            g = (int)(whiteG + factor * (orangeG - whiteG));
-            b = (int)(whiteB + factor * (orangeB - whiteB));
-        }
-
-        return Color.FromArgb(r, g, b);
-        */
     }
     
     private double CalcIntensity(PointF point)
@@ -465,7 +415,7 @@ public class Scenario : IScenario
         
         IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, SettingsObject.gridX, SettingsObject.gridY, width, height);
         float tipLength = 10f; // nastaveni velikosti sipky
-        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax), tipLength / scale, scale);
+        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax),tipLength / scale, scale);
         
 
 
