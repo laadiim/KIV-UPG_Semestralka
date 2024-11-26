@@ -57,6 +57,8 @@ public class Scenario : IScenario
         chargesCount = 0;
         freeIndex = 0;
         charges = new INaboj[1];
+        SettingsObject.probes.Clear();
+        this.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
     }
 
     public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)

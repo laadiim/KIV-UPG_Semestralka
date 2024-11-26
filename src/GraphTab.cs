@@ -63,6 +63,7 @@ namespace UPG_SP_2024
                 YAxes = new Axis[]{
                 new Axis(){
                         Name = "Intenzita el. pole [10 GN/C]",
+                        MaxLimit = 1000,
                         MinLimit = 0,
                         MinStep = 1,
                 }},
