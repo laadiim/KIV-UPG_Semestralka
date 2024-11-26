@@ -17,7 +17,15 @@ namespace UPG_SP_2024
     {
         private Probe probe;
         private int index;
-        private ISeries[] series;
+        private ISeries[] series = new ISeries[]
+				{
+					new LineSeries<float>
+					{
+						Values = [],
+						GeometrySize = 0,
+						Fill = null,
+					}
+				};
         private CartesianChart chart;
 
         public GraphTab(IProbe probe, int index)
@@ -28,24 +36,22 @@ namespace UPG_SP_2024
             //UpdateChart();
         }
 
-        private void InitializeChart()
-        {
+				private void GetData()
+				{
+
             int[] times = new int[probe.values.Count];
             float[] values = new float[probe.values.Count];
             for (int i = 0; i < probe.values.Count; i++)
             {
                 times[i] = probe.values[i].Item1;
-                values[i] = probe.values[i].Item2;
+								float v = probe.values[i].Item2 * 100;
+                values[i] = (float)Math.Round(v, 2);
             }
-
-            series =
-            [
-                new LineSeries<float>
-                {
-                    Values = values,
-                }
-            ];
-
+						series[0].Values = values;
+				}
+        private void InitializeChart()
+        {
+						GetData();
             this.chart = new CartesianChart
             {
                 Series = series,
@@ -56,21 +62,19 @@ namespace UPG_SP_2024
                     Padding = new LiveChartsCore.Drawing.Padding(15)
                 },
                 Dock = DockStyle.Fill,
+								YAxes = new Axis[]{
+								new Axis(){
+										Name = "Intenzita el. pole [10 GN/C]",
+										MinLimit = 0,
+										MinStep = 1,
+								}},
             };
             Controls.Add(chart);
         }
 
         public void UpdateChart()
         {
-            int[] times = new int[probe.values.Count];
-            float[] values = new float[probe.values.Count];
-            for (int i = 0; i < probe.values.Count; i++)
-            {
-                times[i] = probe.values[i].Item1;
-                values[i] = probe.values[i].Item2;
-            }
-
-            series[0].Values = values;
+						GetData();
             chart.Series = this.series;
         }
     }

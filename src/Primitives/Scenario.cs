@@ -30,6 +30,7 @@ public class Scenario : IScenario
     {
         IProbe p = new Probe(center, radius, anglePerSecond);
         SettingsObject.probes.Add(p);
+				if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
         return p;
     }
 

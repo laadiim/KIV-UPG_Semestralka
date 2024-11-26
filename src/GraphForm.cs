@@ -16,6 +16,12 @@ namespace UPG_SP_2024
         public GraphForm()
         {
             InitializeComponent();
+						Populate();
+            this.FormClosing += (o, e) => SettingsObject.graphForm = null;
+        }
+
+				private void Populate()
+				{
             for (int i = 0; i < SettingsObject.probes.Count; i++)
             {
                 GraphTab p = new GraphTab(SettingsObject.probes[i], i); 
@@ -28,12 +34,17 @@ namespace UPG_SP_2024
                 p.Text = $"Probe {i}";
                 p.UseVisualStyleBackColor = true;
             }
-            this.FormClosing += (o, e) => SettingsObject.graphForm = null;
-        }
+				}
 
         public void UpdateGraph()
         {
             foreach (GraphTab tab in tabControl.Controls) tab.UpdateChart();
         }
+
+				public void Reset()
+				{
+					this.tabControl.Controls.Clear();
+					Populate();
+				}
     }
 }
