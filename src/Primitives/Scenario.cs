@@ -2,16 +2,14 @@ using System;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
-using System.Threading.Channels;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
 
 public class Scenario : IScenario
 {
-    INaboj?[] charges = new INaboj?[1];
+    INaboj[] charges = new INaboj[1];
     int freeIndex = 0;
     int chargesCount = 0;
     private float scale = 1;
@@ -63,19 +61,26 @@ public class Scenario : IScenario
     { 
         chargesCount = 0;
         freeIndex = 0;
-        charges = new INaboj?[1];
+        charges = new INaboj[1];
     }
 
-		public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
-		{
-			IProbe p = new Probe(center, radius, anglePerSecond);
-			this.probes.Add(p);
-			return p;
-		}
+	public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
+	{
+		IProbe p = new Probe(center, radius, anglePerSecond);
+		this.probes.Add(p);
+		return p;
+	}
 
     public INaboj?[] GetCharges()
     {
-        return charges;
+        if (charges != null)
+        {
+            return charges;
+        }
+        else
+        {
+            throw new Exception("scenario neobsahuje naboje");
+        }
     }
 
     public void AddCharge(INaboj naboj)
@@ -90,22 +95,31 @@ public class Scenario : IScenario
 
         INaboj[] newCharges = new INaboj[charges.Length*2];
 
-        for (int i = 0; i < charges.Length; i++)
+        if (charges != null)
         {
-            newCharges[i] = charges[i];
-        }
-        freeIndex = charges.Length;
+            for (int i = 0; i < charges.Length; i++)
+            {
+                newCharges[i] = charges[i];
+            }
+            freeIndex = charges.Length;
+        } 
         charges = newCharges;
     }
 
     public INaboj RemoveCharge(INaboj naboj)
     {
-        return RemoveCharge(naboj.GetID());   
+        if (charges != null)
+        {
+            return RemoveCharge(naboj.GetID());
+        }
+        else
+        {
+            throw new Exception("scenario neobsahuje naboje");
+        }
     }
 
     public INaboj RemoveCharge(int id)
     {
-
         for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null)
@@ -122,7 +136,6 @@ public class Scenario : IScenario
                     }
                     return charge;
                 }
-
             }
         }
         throw new Exception("naboj nebyl nalezen");
@@ -333,16 +346,20 @@ public class Scenario : IScenario
             // upravime polomer na zaklade velikosti naboje
             foreach (var charge in charges)
             {
-                if (charge != null & count_ch >= 2)
+                if (charge != null)
                 {
-                    float currentCharge = (float)Math.Sqrt(Math.Abs(charge.GetCharge()));
-                    
-                    float newRadius = (float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch);
-                    charge.SetRadius(newRadius); 
-                }
-                else if(charge != null & count_ch == 1)
-                {
-                    charge.SetRadius(0.7f);
+                    if (count_ch >= 2)
+                    {
+                        float currentCharge = (float)Math.Sqrt(Math.Abs(charge.GetCharge()));
+
+                        float newRadius = (float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch);
+                        charge.SetRadius(newRadius);
+                    }
+
+                    else if (count_ch == 1)
+                    {
+                        charge.SetRadius(0.7f);
+                    }
                 }
             }
         }
