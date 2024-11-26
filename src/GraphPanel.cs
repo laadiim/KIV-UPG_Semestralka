@@ -20,6 +20,7 @@ namespace UPG_SP_2024
             InitializeComponents();
         }
 
+        
         public void ResetProbes()
         {
             viewSelector.Items.Clear();
@@ -36,9 +37,25 @@ namespace UPG_SP_2024
             }
             else
             {
-                System.Console.WriteLine("No drawing panel");
+                System.Console.WriteLine("Line 40: No drawing panel");
             }
+
+            // Set default selected index if items exist
+            if (viewSelector.Items.Count > 0)
+            {
+                viewSelector.SelectedIndex = 0;
+                foreach (var VARIABLE in viewSelector.Items)
+                {
+                    Console.WriteLine(VARIABLE);
+                }
+            }
+            else
+            {
+                System.Console.WriteLine("Line 50: No items in viewSelector");
+            }
+            this.Invalidate();
         }
+
 
         private void InitializeComponents()
         {
@@ -61,7 +78,7 @@ namespace UPG_SP_2024
             }
             else
             {
-                System.Console.WriteLine("No drawing panel");
+                System.Console.WriteLine("Line 76: No drawing panel");
             }
 
             // Set up event to handle ComboBox selection change

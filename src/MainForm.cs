@@ -40,11 +40,11 @@ namespace UPG_SP_2024
             InitializeComponent();
 
             // Create and configure panels
+            var p = this.drawingPanel; // Instantiate directly instead of casting
+            SettingsObject.drawingPanel = p;
             var g = new GraphPanel();
             SettingsObject.graphPanel = g;
 
-            var p = this.drawingPanel; // Instantiate directly instead of casting
-            SettingsObject.drawingPanel = p;
 
             var c = new ControlPanel();
             SettingsObject.controlPanel = c;
@@ -58,7 +58,7 @@ namespace UPG_SP_2024
             p.scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
 
             // Reset probes in GraphPanel
-            g.ResetProbes();
+            //g.ResetProbes();
 
             // Set form properties
             this.Text = "A23B0149P + A23B0152P - Semestralni prace KIV/UPG 2024/2025";

@@ -167,7 +167,7 @@ public class Probe : IProbe
 				if (Math.Abs((Environment.TickCount - startTime) % 50) < 10) 
 				{
 					values.Add(new Tuple<int, float>(Environment.TickCount - startTime, (float)sum.Length()));
-					System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
+					//System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
 				}
     }
 }
