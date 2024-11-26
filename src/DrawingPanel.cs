@@ -11,7 +11,7 @@ namespace UPG_SP_2024
     public class DrawingPanel : Panel
     {
         public Scenario scenario;
-        private int startTime { get; set; }
+        private int StartTime { get; set; }
         private int chargeHit = -1;
         private float scale = 1;
         private PointF prevMouse = new PointF(0, 0);
@@ -23,17 +23,31 @@ namespace UPG_SP_2024
         {
             this.DoubleBuffered = true;
             this.ClientSize = new System.Drawing.Size(800, 600);
+
             scenario = new Scenario();
-						scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
+			scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
             
             this.MouseDown += (o, e) =>
             {
+                INaboj[] charges;
                 PointF point = new PointF(e.X , e.Y);
+
                 prevMouse = new PointF(point.X, point.Y);
+
                 point.X = (point.X - this.Width / 2) / scale;
                 point.Y = (point.Y - this.Height / 2) / scale;
-                INaboj[] charges = scenario.GetCharges();
+
+                try
+                {
+                    charges = scenario.GetCharges();
+                }
+                catch
+                {
+                    throw new Exception("scenario neobsahuje naboje");
+                }                
+                
                 if (charges.Length == 0) return;
+
                 for (int i = 0; i < charges.Length; i++)
                 {
                     if (charges[i] == null) continue;
@@ -42,24 +56,37 @@ namespace UPG_SP_2024
             };
             this.MouseMove += (o, e) =>
             {
+                INaboj charge;
+
                 if (chargeHit == -1) return;
+
                 PointF point = new PointF((e.X - this.Width/2)/scale , (e.Y - this.Height/2)/scale);
+
                 if (point.X < (scenario.corners[2]) || point.X >= (scenario.corners[0])|| point.Y < (scenario.corners[3]) || point.Y >= (scenario.corners[1]))
                 {
                     chargeHit = -1;
                     return;
                 }
-                INaboj charge = scenario.GetCharge(chargeHit);
+
+                try
+                {
+                    charge = scenario.GetCharge(chargeHit);
+                }
+                catch
+                {
+                    throw new Exception("naboj se nepodarilo ziskat");
+                }
+                
                 charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.corners);
                 prevMouse.X = e.X;
                 prevMouse.Y = e.Y;
             };
+
             this.MouseUp += (o, e) =>
             {
                 chargeHit = -1;
             };
         }
-
 
         public void SetScenario(int scenarioNum)
         {
@@ -93,18 +120,18 @@ namespace UPG_SP_2024
                     scenario.AddCharge(naboj8);
                     break;
                 case 4:
-                    INaboj naboj9 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return -1; }, (_) => { return 0; }, 0, startTime);
-                    INaboj naboj10 = new PeriodicNaboj((t) => { return (float)(1 - 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return 1; }, (_) => { return 0; }, 1, startTime);
+                    INaboj naboj9 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return -1; }, (_) => { return 0; }, 0, StartTime);
+                    INaboj naboj10 = new PeriodicNaboj((t) => { return (float)(1 - 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return 1; }, (_) => { return 0; }, 1, StartTime);
                     scenario.AddCharge(naboj10);
                     scenario.AddCharge(naboj9);
                     break;
                 case 5:
-                    INaboj naboj11 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
+                    INaboj naboj11 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, StartTime);
                     scenario.AddCharge(naboj11);
                     break;
                 case 6:
-                    INaboj naboj12 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return -1; }, 3, startTime);
-                    INaboj naboj13 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, startTime);
+                    INaboj naboj12 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return -1; }, 3, StartTime);
+                    INaboj naboj13 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, StartTime);
                     scenario.AddCharge(naboj12);
                     scenario.AddCharge(naboj13);
                     break;
@@ -123,7 +150,7 @@ namespace UPG_SP_2024
             float panelWidth = this.Width;
             g.TranslateTransform(panelWidth / 2, panelHeight / 2);
             
-            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.startTime, this.chargeHit);
+            this.scale = scenario.Draw(g, panelWidth, panelHeight, this.StartTime, this.chargeHit);
 
             // Calling the base class OnPaint
             base.OnPaint(e);

@@ -23,31 +23,29 @@ public class Scenario : IScenario
 	private List<IProbe> probes = new List<IProbe>();
 
     /* kacka - doplneni pocitani bitmapy */
-    // Define boundaries and colors as class-level fields
-    private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.8, 1.0 };
+    private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
+
     private readonly int[,] colors = {
             { 80, 50, 30 },    // fifth
-            { 240, 200, 230 }, // fourth
-            { 180, 130, 120 }, // third
-            { 130, 60, 80 },   // second
-            { 90, 60, 50 }      // first
-        };
+            { 70, 40, 80 }, // fourth
+            { 60, 60, 90 }, // third 
+            { 120, 120, 140 },   // second
+            { 240, 150, 150  }  // first
+        
+    };
 
-    // Precomputed differences
     private readonly double[] boundaryDiffs;
     private readonly int[,] colorDiffs;
     /* --------------------------------- */
 
     public Scenario()
     {
-        // Initialize boundaryDiffs
         boundaryDiffs = new double[boundaries.Length - 1];
         for (int i = 0; i < boundaries.Length - 1; i++)
         {
             boundaryDiffs[i] = boundaries[i + 1] - boundaries[i];
         }
 
-        // Initialize colorDiffs
         colorDiffs = new int[colors.GetLength(0) - 1, 3];
         for (int i = 0; i < colors.GetLength(0) - 1; i++)
         {
@@ -71,11 +69,15 @@ public class Scenario : IScenario
 		return p;
 	}
 
-    public INaboj?[] GetCharges()
+    public INaboj[] GetCharges()
     {
         if (charges != null)
         {
-            return charges;
+            if (charges.Length != 0)
+            {
+                return charges;
+            }
+            else throw new Exception("scenario neobsahuje naboje");
         }
         else
         {
@@ -212,7 +214,7 @@ public class Scenario : IScenario
     private Color GetColorFromIntensity(double intensity)
     { 
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(6, Math.Max(0, intensity)) / 6f;
+        double intst = Math.Min(8, Math.Max(0, intensity)) / 8f;
 
         // Use binary search to find the correct segment
         int index = Array.BinarySearch(boundaries, intst);
@@ -476,7 +478,7 @@ public class Scenario : IScenario
 
         // kresleni sondy s vektorem intenzity
         //Probe probe = new Probe(new PointF(0, 0));
-        //probe.Draw(g, startTime, this.charges, scale, 0, 0);
+        //probe.Draw(g, StartTime, this.charges, scale, 0, 0);
 
 				foreach (IProbe probe in this.probes) 
 				{

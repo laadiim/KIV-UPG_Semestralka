@@ -13,22 +13,34 @@ public class Probe : IProbe
     private float radius;
     private float anglePerSecond;
     private Vector2 v;
-		private List<Tuple<int, float>> values;
+	private List<Tuple<int, float>> values;
 
     public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
     {
         this.center = center;
         this.radius = radius;
         this.anglePerSecond = anglePerSecond;
-				this.values = new List<Tuple<int, float>>();
+        this.v = Vector2.Zero;
+		this.values = new List<Tuple<int, float>>();
     }
 
     public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing = 0)
     {
-        var curTr = g.Transform;
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
-        if (this.v.Length() == 0) this.Calc(start, charges);
+
+        if (this.v.Length() == 0)
+        {
+            if (charges == null || charges.Length == 0)
+            {
+                throw new ArgumentException("Scenario neobsahuje naboje");
+            }
+            else
+            {
+                this.Calc(start, charges);
+            }  
+        }
+
         Vector2 end = start + this.v;
 
         PointF[] points = new PointF[2];
@@ -40,11 +52,19 @@ public class Probe : IProbe
         float r = 0.3f / (float)Math.Sqrt(scale); 
 
         g.TranslateTransform(points[0].X, points[0].Y);
-        var transform = g.Transform;
 
-        float l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
+        float l;
+
+        if (SettingsObject.corners == null || SettingsObject.corners.Length < 4)
+        {
+            throw new InvalidOperationException("SettingsObject.corners is not properly initialized.");
+        }
+        else
+        {
+            l = Math.Min((SettingsObject.corners[0] - SettingsObject.corners[2]) / 2,
                 (SettingsObject.corners[1] - SettingsObject.corners[3]) / 2);
-				l = l != 0 ? l : 1;
+            l = l != 0 ? l : 1;
+        }  
 
         if (this.radius != 0 && this.anglePerSecond != 0)
         {
