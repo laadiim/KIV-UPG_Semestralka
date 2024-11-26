@@ -13,7 +13,7 @@ public class Probe : IProbe
     readonly private float radius;
     readonly private float anglePerSecond;
     private Vector2 v;
-	private List<Tuple<int, float>> values;
+    public List<Tuple<int, float>> values;
 
     public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
     {
@@ -24,7 +24,7 @@ public class Probe : IProbe
 		this.values = new List<Tuple<int, float>>();
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing = 0)
+    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid)
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
@@ -68,7 +68,7 @@ public class Probe : IProbe
             l = l != 0 ? l : 1;
         }  
 
-        if (this.radius != 0 && this.anglePerSecond != 0)
+        if (!grid)
         {
             float len = this.v.Length() * 100;
             string label = $"{len.ToString("n2")}E-2 TN/C";
@@ -85,14 +85,14 @@ public class Probe : IProbe
             this.v /= 10E6f;
         }
 
-        if (this.radius == 0 && this.anglePerSecond == 0)
+        if (grid)
         {
-            Color color_arr_grid = Color.FromArgb(150, 240, 220, 250);
-            DrawArrow(g, this.v, scale, color_arr_grid, spacing);
+            Color color_arr_grid = Color.FromArgb(255, 120, 180, 200);
+            DrawArrow(g, this.v, scale, color_arr_grid, spacing, grid);
         } 
         else
         {
-            DrawArrow(g, this.v, scale, color, l);
+            DrawArrow(g, this.v, scale, color, l, grid);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -105,7 +105,7 @@ public class Probe : IProbe
     /// <param name="sum">vysledny vektor</param>
     /// <param name="scale">predany scale</param>
     /// <param name="color">barva sipky</param>
-    private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color, float spacing)
+    private void DrawArrow(Graphics g, Vector2 sum, float scale, Color color, float spacing, bool grid)
     {
         float x = sum.X / 3f;
         float y = sum.Y / 3f;
@@ -119,7 +119,7 @@ public class Probe : IProbe
 
         PointF point;
 
-        if (this.anglePerSecond != 0 && this.radius != 0)
+        if (!grid)
         {
             // vektor u bude jednotkovy
             u_x = x * norma;
@@ -190,7 +190,7 @@ public class Probe : IProbe
 				if (Math.Abs((Environment.TickCount - startTime) % 50) < 10) 
 				{
 					values.Add(new Tuple<int, float>(Environment.TickCount - startTime, (float)sum.Length()));
-					System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
+					//System.Console.WriteLine($"{values.Last().Item1}: {values.Last().Item2}");
 				}
     }
 }

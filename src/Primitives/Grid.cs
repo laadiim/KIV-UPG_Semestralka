@@ -211,7 +211,7 @@ namespace UPG_SP_2024.Primitives
             {
                 for (int y = 0; y < intersectionsY.Length; y++)
                 {
-                    probes[x, y].Draw(g, startTime, charges, scale, spacing);
+                    probes[x, y].Draw(g, startTime, charges, scale, spacing, true);
                 }
             }
         }

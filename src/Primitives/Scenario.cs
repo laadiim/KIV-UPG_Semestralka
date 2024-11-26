@@ -59,12 +59,13 @@ public class Scenario : IScenario
         charges = new INaboj[1];
     }
 
-	public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
-	{
-		IProbe p = new Probe(center, radius, anglePerSecond);
-		this.probes.Add(p);
-		return p;
-	}
+    public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
+    {
+        IProbe p = new Probe(center, radius, anglePerSecond);
+        SettingsObject.probes.Add(p);
+		if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
+        return p;
+    }
 
     public INaboj[] GetCharges()
     {
@@ -430,11 +431,11 @@ public class Scenario : IScenario
         //Probe probe = new Probe(new PointF(0, 0));
         //probe.Draw(g, StartTime, this.charges, scale, 0, 0);
 
-				foreach (IProbe probe in this.probes) 
-				{
-					probe.Calc(startTime, this.charges);
-					probe.Draw(g, startTime, this.charges, scale, 0);
-				}
+        foreach (IProbe probe in SettingsObject.probes) 
+        {
+            probe.Calc(startTime, this.charges);
+            probe.Draw(g, startTime, this.charges, scale, 0, false);
+        }
         
         return scale;
     }

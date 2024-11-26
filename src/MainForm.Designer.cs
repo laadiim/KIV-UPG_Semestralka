@@ -29,11 +29,12 @@ namespace UPG_SP_2024
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
+
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
             drawingPanel = new DrawingPanel();
-            controlPanel = new ControlPanel();
+            controlPanel1 = new ControlPanel();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -52,9 +53,9 @@ namespace UPG_SP_2024
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(controlPanel);
-            splitContainer1.Size = new Size(1023, 626);
-            splitContainer1.SplitterDistance = 789;
+            splitContainer1.Panel2.Controls.Add(controlPanel1);
+            splitContainer1.Size = new Size(1085, 683);
+            splitContainer1.SplitterDistance = 836;
             splitContainer1.TabIndex = 0;
             // 
             // drawingPanel
@@ -62,23 +63,22 @@ namespace UPG_SP_2024
             drawingPanel.Dock = DockStyle.Fill;
             drawingPanel.Location = new Point(0, 0);
             drawingPanel.Name = "drawingPanel";
-            drawingPanel.Size = new Size(789, 626);
+            drawingPanel.Size = new Size(836, 683);
             drawingPanel.TabIndex = 0;
             // 
-            // controlPanel
+            // controlPanel1
             // 
-            controlPanel.BackColor = Color.LightBlue;
-            controlPanel.Dock = DockStyle.Fill;
-            controlPanel.Location = new Point(0, 0);
-            controlPanel.Name = "controlPanel";
-            controlPanel.Size = new Size(230, 626);
-            controlPanel.TabIndex = 0;
+            controlPanel1.Dock = DockStyle.Fill;
+            controlPanel1.Location = new Point(0, 0);
+            controlPanel1.Name = "controlPanel1";
+            controlPanel1.Size = new Size(245, 683);
+            controlPanel1.TabIndex = 0;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1023, 626);
+            ClientSize = new Size(1085, 683);
             Controls.Add(splitContainer1);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -90,10 +90,15 @@ namespace UPG_SP_2024
             ResumeLayout(false);
         }
 
+        private void graphPanel1_Paint(object sender, PaintEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
         #endregion
 
         private SplitContainer splitContainer1;
         private DrawingPanel drawingPanel;
-        private ControlPanel controlPanel;
+        private ControlPanel controlPanel1;
     }
 }

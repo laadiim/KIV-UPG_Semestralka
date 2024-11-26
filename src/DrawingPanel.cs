@@ -1,4 +1,4 @@
-﻿using UPG_SP_2024.Interfaces;
+using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
 
@@ -25,7 +25,6 @@ namespace UPG_SP_2024
             this.ClientSize = new System.Drawing.Size(800, 600);
 
             scenario = new Scenario();
-			scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
             
             this.MouseDown += (o, e) =>
             {
@@ -52,6 +51,11 @@ namespace UPG_SP_2024
                 {
                     if (charges[i] == null) continue;
                     chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
+                }
+
+                if (chargeHit == -1)
+                {
+                    scenario.CreateProbe(point, 0, 0);
                 }
             };
             this.MouseMove += (o, e) =>
