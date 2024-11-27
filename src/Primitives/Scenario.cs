@@ -288,6 +288,8 @@ public class Scenario : IScenario
         int count_ch = 0;
 
         // spocitame sumu hodnoty naboju a pocet jednotlivych naboju
+        if (charges == null) return 0;
+        
         foreach (var charge in charges)
         {
             if (charge != null)
