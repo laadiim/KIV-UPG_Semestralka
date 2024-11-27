@@ -212,7 +212,7 @@ public class Scenario : IScenario
     
     
     private Color GetColorFromIntensity(double intensity)
-    { 
+    {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
         double intst = Math.Min(8, Math.Max(0, intensity)) / 8f;
 
@@ -220,7 +220,8 @@ public class Scenario : IScenario
         int index = Array.BinarySearch(boundaries, intst);
         if (index < 0)
         {
-            index = -index - 1; // Convert to the nearest lower boundary index
+            // Adjust to the nearest lower boundary index for BinarySearch results
+            index = ~index - 1;
         }
 
         // Handle edge case where intst == 1.0
