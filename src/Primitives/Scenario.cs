@@ -181,6 +181,11 @@ public class Scenario : IScenario
 
     private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
+        int len = 10;
+        //	if (ColorMaps.BasicMap == null) return;
+        Color[] colors;
+        if (ColorMaps.basicMap == null || ColorMaps.basicMap.Length != len) colors = ColorMaps.BasicMap(len);
+        else colors = ColorMaps.basicMap;
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
 
         var bmp = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
@@ -191,23 +196,28 @@ public class Scenario : IScenario
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
         Marshal.Copy(bmp.Scan0, pixels, 0, pixels.Length);
 
-        Parallel.For(0, bmp.Height, y =>
+        for (int y = 0; y < bmp.Height; y++) 
+        //Parallel.For(0, bmp.Height, y =>
         {
             int offset = y * bmp.Stride;
             for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
             {
-                Color color = ColorMap(CalcIntensity(new PointF((x - width / 2) / scale, (y - height / 2) / scale)));
+                double intensity = CalcIntensity(new PointF((x - width / 2) / scale, (y - height / 2) / scale));
+                double m0 = Math.Max(0, intensity);
+                double m1 = Math.Min(len, m0);
+                double m3 = Math.Round(m1, 0);
+                int i = (int)m3;
+                Color color = colors[i];
                 pixels[index] = color.R;
                 pixels[index + 1] = color.G;
                 pixels[index + 2] = color.B;
             }
-        });
-
+            //});
+        }
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
         g.DrawImage(img, new RectangleF((-width / 2)/scale, (-height/2)/scale, width/scale, height/scale));
     }
-    
     
     private Color GetColorFromIntensity(double intensity)
     { 
