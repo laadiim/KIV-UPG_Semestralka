@@ -181,10 +181,10 @@ public class Scenario : IScenario
 
     private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
-        int len = 10;
+        int len = 200;
         //	if (ColorMaps.BasicMap == null) return;
         Color[] colors;
-        if (ColorMaps.basicMap == null || ColorMaps.basicMap.Length != len) colors = ColorMaps.BasicMap(len);
+        if (ColorMaps.basicMap == null || ColorMaps.basicMap.Length != len) colors = ColorMaps.BasicMap(len, 100);
         else colors = ColorMaps.basicMap;
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
 
@@ -203,8 +203,11 @@ public class Scenario : IScenario
             for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
             {
                 double intensity = CalcIntensity(new PointF((x - width / 2) / scale, (y - height / 2) / scale));
+                if (intensity > 40)
+                {
+                    int a = 5; }
                 double m0 = Math.Max(0, intensity);
-                double m1 = Math.Min(len, m0);
+                double m1 = Math.Min((len - 1), m0)/8;
                 double m3 = Math.Round(m1, 0);
                 int i = (int)m3;
                 Color color = colors[i];
@@ -431,10 +434,10 @@ public class Scenario : IScenario
 
 
         // kresleni naboju
-        for (int i = 0; i < charges.Length; i++)
+        /*for (int i = 0; i < charges.Length; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
-        }
+        }*/
         
 
         // kresleni sondy s vektorem intenzity
