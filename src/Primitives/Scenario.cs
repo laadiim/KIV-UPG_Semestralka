@@ -186,31 +186,51 @@ public class Scenario : IScenario
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
 
         var bmp = img.LockBits(new Rectangle(0, 0, img.Width, img.Height),
-                               ImageLockMode.WriteOnly,
-                               PixelFormat.Format24bppRgb
-                               );
-        
-        byte[] pixels = new byte[bmp.Stride * bmp.Height];
-        Marshal.Copy(bmp.Scan0, pixels, 0, pixels.Length);
+            ImageLockMode.WriteOnly,
+            PixelFormat.Format24bppRgb);
 
-        Parallel.For(0, bmp.Height, y =>
+        byte[] pixels = new byte[bmp.Stride * bmp.Height];
+        const int squareSize = 3; // Size of the squares
+        int widthInSquares = bmp.Width / squareSize;
+        int heightInSquares = bmp.Height / squareSize;
+
+        //Parallel.For(0, heightInSquares, squareY =>
+        for (int squareY = 0; squareY < heightInSquares; squareY++)
         {
-            int offset = y * bmp.Stride;
-            for (int x = 0, index = offset; x < bmp.Width; x++, index += 3)
+            for (int squareX = 0; squareX < widthInSquares; squareX++)
             {
-                Color color = ColorMap(CalcIntensity(new PointF((x - width / 2) / scale, (y - height / 2) / scale)));
-                pixels[index] = color.R;
-                pixels[index + 1] = color.G;
-                pixels[index + 2] = color.B;
+                // Center of the square
+                int centerX = squareX * squareSize + squareSize / 2;
+                int centerY = squareY * squareSize + squareSize / 2;
+
+                // Calculate intensity and map color for the center pixel
+                double intensity = CalcIntensity((centerX - width / 2) / scale, (centerY - height / 2) / scale, charges);
+                Color color = ColorMap(intensity);
+                byte red = color.B;
+                byte green = color.G;
+                byte blue = color.R;
+
+                // Fill the square block with the same color
+                for (int y = squareY * squareSize; y < (squareY + 1) * squareSize && y < bmp.Height; y++)
+                {
+                    int offset = y * bmp.Stride + squareX * squareSize * 3;
+                    for (int x = 0; x < squareSize && (x + squareX * squareSize) < bmp.Width; x++)
+                    {
+                        pixels[offset++] = blue; // Blue
+                        pixels[offset++] = green; // Green
+                        pixels[offset++] = red; // Red
+                    }
+                }
             }
-        });
+        }
 
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
-        g.DrawImage(img, new RectangleF((-width / 2)/scale, (-height/2)/scale, width/scale, height/scale));
+        g.DrawImage(img, new RectangleF((-width / 2) / scale, (-height / 2) / scale, width / scale, height / scale));
     }
-    
-    
+
+
+
     private Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
@@ -248,7 +268,7 @@ public class Scenario : IScenario
 
         return Color.FromArgb(r, g, b);
     }
-    
+
     private double CalcIntensity(PointF point)
     {
         Vector2 start = new Vector2(point.X, point.Y);
@@ -259,17 +279,30 @@ public class Scenario : IScenario
             if (charge == null) continue;
 
             PointF p = charge.GetPosition();
-            Vector2 vect = start - new Vector2(p.X, p.Y);
 
-            float lenSq = vect.LengthSquared();
-            float lenCubed = lenSq * (float)Math.Sqrt(lenSq); // Avoid recomputing length
+            // Compute vector from charge to the start point
+            float dx = start.X - p.X;
+            float dy = start.Y - p.Y;
 
-            float l = lenCubed > 0 ? 1 / lenCubed : 100f;
+            // Compute squared length
+            float lenSq = dx * dx + dy * dy;
 
-            sum += charge.GetCharge() * vect * l;
+            // Skip if length is zero
+            if (lenSq == 0) continue;
+
+            // Compute 1 / lenCubed directly
+            float invLen = 1.0f / MathF.Sqrt(lenSq);
+            float invLenCubed = invLen / lenSq;
+
+            // Accumulate force vector
+            float chargeValue = charge.GetCharge();
+            float scale = chargeValue * invLenCubed;
+            sum.X += dx * scale;
+            sum.Y += dy * scale;
         }
-        return sum.Length();
-        
+
+        // Compute final magnitude
+        return Math.Sqrt(sum.X * sum.X + sum.Y * sum.Y);
     }
 
     public void ZoomIn(float x, float y)
