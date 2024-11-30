@@ -190,10 +190,12 @@ public class Scenario : IScenario
             PixelFormat.Format24bppRgb);
 
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
-        const int squareSize = 3; // Size of the squares
+        const int subdivisions = 3;
+        int squareSize = (int)Math.Pow(subdivisions, 4); // Size of the squares
         int widthInSquares = bmp.Width / squareSize;
         int heightInSquares = bmp.Height / squareSize;
 
+        /*
         //Parallel.For(0, heightInSquares, squareY =>
         for (int squareY = 0; squareY < heightInSquares; squareY++)
         {
@@ -204,7 +206,8 @@ public class Scenario : IScenario
                 int centerY = squareY * squareSize + squareSize / 2;
 
                 // Calculate intensity and map color for the center pixel
-                double intensity = CalcIntensity((centerX - width / 2) / scale, (centerY - height / 2) / scale, charges);
+                double intensity =
+                    CalcIntensity(new PointF((centerX - width / 2) / scale, (centerY - height / 2) / scale));
                 Color color = ColorMap(intensity);
                 byte red = color.B;
                 byte green = color.G;
@@ -223,13 +226,48 @@ public class Scenario : IScenario
                 }
             }
         }
+        */
+        
+        
+        byte[,,] colors = new byte[3,bmp.Stride + squareSize, bmp.Height + squareSize];
+        Parallel.For(0, widthInSquares + 1, i =>
+        //for (int i = 0; i < widthInSquares + 1; i++)
+        {
+            Parallel.For(0, heightInSquares + 1, j =>
+            //for (int j = 0; j < heightInSquares + 1; j++)
+            { 
+                FastMap(squareSize, subdivisions, width, height, colors, i * squareSize, j * squareSize);
+            }
+            );
+
+        }
+        );
+
+
+        for (int j = 0; j < bmp.Height; j++) // Height
+        //Parallel.For(0, bmp.Height + squareSize, j =>
+            {
+                for (int i = 0; i < bmp.Width; i++) // Width
+                //Parallel.For(0, bmp.Width + squareSize, i =>
+                {
+                    // Calculate the index in the pixel array with respect to Stride (padding considered)
+                    int pixelIndex = (j * bmp.Stride) + (i * 3); // 3 for RGB channels (24bpp)
+                    if (pixelIndex + 3 < pixels.Length)
+                    {
+                        // Ensure you are accessing the correct color channels
+                        pixels[pixelIndex] = colors[2, i, j]; // Red
+                        pixels[pixelIndex + 1] = colors[1, i, j]; // Green
+                        pixels[pixelIndex + 2] = colors[0, i, j]; // Blue
+                    }
+                }
+                    //);
+            }
+        //);
 
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
         g.DrawImage(img, new RectangleF((-width / 2) / scale, (-height / 2) / scale, width / scale, height / scale));
     }
-
-
 
     private Color GetColorFromIntensity(double intensity)
     {
@@ -304,6 +342,94 @@ public class Scenario : IScenario
         // Compute final magnitude
         return Math.Sqrt(sum.X * sum.X + sum.Y * sum.Y);
     }
+
+    private void FastMap(int size, int subdivisions, float width, float height, byte[,,] colors, int startX, int startY)
+    {
+        // Base case: when size is 1, fill the pixel with color
+        if (size == 1)
+        {
+            // Convert the (startX, startY) to normalized coordinates
+            Color color =
+                GetColorFromIntensity(CalcIntensity(new PointF((startX - width / 2) / scale, (startY - height / 2) / scale)));
+            colors[0, startX, startY] = color.B;
+            colors[1, startX, startY] = color.G;
+            colors[2, startX, startY] = color.R;
+            return;
+        }
+
+        // Arrays to hold sub-region coordinates
+        int[] xArr = new int[subdivisions];
+        int[] yArr = new int[subdivisions];
+
+        // Divide the region into subdivisions, using the full size of the region
+        for (int i = 0; i < subdivisions; i++)
+        {
+            // Adjust the subdivisions to fit within the current region
+            xArr[i] = startX + (int)((i) * size / subdivisions);
+            yArr[i] = startY + (int)((i) * size / subdivisions);
+        }
+
+        // Variables for calculating intensity for the region
+        double max = 0;
+        double min = Double.PositiveInfinity;
+        double sum = 0;
+
+        // Temporary array to store intensities
+        double[] intst = new double[subdivisions * subdivisions];
+
+        // Loop over the subdivisions to calculate intensity for each region
+        for (int i = 0; i < subdivisions; i++)
+        {
+            for (int j = 0; j < subdivisions; j++)
+            {
+                double intensity = CalcIntensity(new PointF((xArr[i] - width / 2) / scale, (yArr[j] - height / 2) / scale));
+                max = Math.Max(max, intensity);
+                min = Math.Min(min, intensity);
+                sum += intensity;
+            }
+        }
+
+        // If the difference between max and min intensity is significant, subdivide further
+        if (max - min > 0.15)
+        {
+            for (int i = 0; i < subdivisions; i++)
+            {
+                for (int j = 0; j < subdivisions; j++)
+                {
+                    // Recursive call to further subdivide
+                    FastMap(size / subdivisions, subdivisions, width, height, colors, xArr[i], yArr[j]);
+                }
+            }
+        }
+        else
+        {
+            // If the difference is small, fill the region with the average color
+            Color color = GetColorFromIntensity(sum / (subdivisions * subdivisions));
+
+            // Fill the entire size x size region with the computed color
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    int colorX = startX + i;  // Adjust to current region's coordinates
+                    int colorY = startY + j;  // Adjust to current region's coordinates
+
+                    // Ensure we stay within bounds
+                    if (colorX < colors.GetLength(1) && colorY < colors.GetLength(2))
+                    {
+                        // Assign RGB values to the colors array
+                        colors[0, colorX, colorY] = color.B;
+                        colors[1, colorX, colorY] = color.G;
+                        colors[2, colorX, colorY] = color.R;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
 
     public void ZoomIn(float x, float y)
     { 
