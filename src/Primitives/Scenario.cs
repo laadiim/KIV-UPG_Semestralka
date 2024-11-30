@@ -181,7 +181,7 @@ public class Scenario : IScenario
 
     private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
-        int len = 200;
+        int len = 300;
         //	if (ColorMaps.BasicMap == null) return;
         Color[] colors;
         if (ColorMaps.basicMap == null || ColorMaps.basicMap.Length != len) colors = ColorMaps.BasicMap(len, 100);

@@ -14,7 +14,7 @@ namespace UPG_SP_2024
 
 		public static double[] boundaryDiffs;
 		public static int[,] colorDiffs;
-        public static Color[] basicMap;
+		public static Color[] basicMap;
 	
 
 		public static void Setup()
@@ -34,47 +34,47 @@ namespace UPG_SP_2024
 				}
 		}
 
-        public static Color[] BasicMap(int len, double maxIntensity)
-        {
-            Setup();
-            Color[] colorTable = new Color[len];
+		public static Color[] BasicMap(int len, double maxIntensity)
+		{
+				Setup();
+				Color[] colorTable = new Color[len];
 		    for (double i = 0; i < len; i++)
 		    {
-                // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-                double intst = i / len;
+						// Cap the intensity value to a maximum of 1.0 for a smoother transition.
+						double intst = -1 / Math.Log10(i / len);
 
-                // Use binary search to find the correct segment
-                int index = Array.BinarySearch(boundaries, intst);
-                if (index < 0)
-                {
-                    index = ~index - 1; // Convert to the nearest lower boundary index
-                }
+						// Use binary search to find the correct segment
+						int index = Array.BinarySearch(boundaries, intst);
+						if (index < 0)
+						{
+								index = ~index - 1; // Convert to the nearest lower boundary index
+						}
 
-                // Handle edge case where intst == 1.0
-                if (index >= boundaries.Length - 1)
-                {
-                    index = boundaries.Length - 2; // Assign to the last segment
-                }
+						// Handle edge case where intst == 1.0
+						if (index >= boundaries.Length - 1)
+						{
+								index = boundaries.Length - 2; // Assign to the last segment
+						}
 
-                // Calculate factor for interpolation
-                double factor = (intst - boundaries[index]) / boundaryDiffs[index];
+						// Calculate factor for interpolation
+						double factor = (intst - boundaries[index]) / boundaryDiffs[index];
 
-                // Ensure factor is within [0,1]
-                factor = Math.Max(0.0, Math.Min(1.0, factor));
+						// Ensure factor is within [0,1]
+						factor = Math.Max(0.0, Math.Min(1.0, factor));
 
-                // Interpolate colors
-                int r = (int)(colors[index, 0] + factor * colorDiffs[index, 0]);
-                int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
-                int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
+						// Interpolate colors
+						int r = (int)(colors[index, 0] + factor * colorDiffs[index, 0]);
+						int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
+						int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
 
-                // Clamp RGB values to [0,255]
-                r = Math.Max(0, Math.Min(255, r));
-                g = Math.Max(0, Math.Min(255, g));
-                b = Math.Max(0, Math.Min(255, b));
+						// Clamp RGB values to [0,255]
+						r = Math.Max(0, Math.Min(255, r));
+						g = Math.Max(0, Math.Min(255, g));
+						b = Math.Max(0, Math.Min(255, b));
 
-                colorTable[(int)i] = Color.FromArgb(r, g, b);
+						colorTable[(int)i] = Color.FromArgb(r, g, b);
 		    }
 		    return colorTable;
-        }
+		}
 	}
 }
