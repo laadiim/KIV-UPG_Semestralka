@@ -21,9 +21,6 @@ namespace UPG_SP_2024
             SettingsObject.gridShown = false;
             SettingsObject.corners = new float[4];
             SettingsObject.probes = new List<IProbe>();
-						SettingsObject.halfWidth = 2;
-						SettingsObject.halfHeight = 2;
-						SettingsObject.worldCenter = new PointF(0, 0);
 
             // Configure the form
             this.ClientSize = new Size(800, 600);
@@ -41,21 +38,21 @@ namespace UPG_SP_2024
                     drawingPanel?.scenario?.ZoomOut(2, 2);
                 }
 
-                if (e.KeyCode == Keys.W)
-                {
-                    drawingPanel?.scenario?.Move(0, -0.5f);
-                }
-                if (e.KeyCode == Keys.S)
+                if (e.KeyCode == Keys.Up)
                 {
                     drawingPanel?.scenario?.Move(0, 0.5f);
                 }
-                if (e.KeyCode == Keys.A)
+                if (e.KeyCode == Keys.Down)
                 {
-                    drawingPanel?.scenario?.Move(0.5f, 0);
+                    drawingPanel?.scenario?.Move(0, -0.5f);
                 }
-                if (e.KeyCode == Keys.D)
+                if (e.KeyCode == Keys.Left)
                 {
                     drawingPanel?.scenario?.Move(-0.5f, 0);
+                }
+                if (e.KeyCode == Keys.Right)
+                {
+                    drawingPanel?.scenario?.Move(0.5f, 0);
                 }
             };
 
