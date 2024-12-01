@@ -191,7 +191,7 @@ public class Scenario : IScenario
 
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
         const int subdivisions = 3;
-        int squareSize = (int)Math.Pow(subdivisions, 3); // Size of the squares
+        int squareSize = (int)Math.Pow(subdivisions, 4); // Size of the squares
         int widthInSquares = bmp.Width / squareSize;
         int heightInSquares = bmp.Height / squareSize;
 
@@ -233,12 +233,12 @@ public class Scenario : IScenario
         Parallel.For(0, widthInSquares + 1, i =>
         //for (int i = 0; i < widthInSquares + 1; i++)
         {
-            //Parallel.For(0, heightInSquares + 1, j =>
-            for (int j = 0; j < heightInSquares + 1; j++)
+            Parallel.For(0, heightInSquares + 1, j =>
+            //for (int j = 0; j < heightInSquares + 1; j++)
             { 
                 FastMap(squareSize, subdivisions, width, height, colors, i * squareSize, j * squareSize);
             }
-            //);
+            );
 
         }
         );
@@ -269,10 +269,10 @@ public class Scenario : IScenario
         g.DrawImage(img, new RectangleF((-width / 2) / scale, (-height / 2) / scale, width / scale, height / scale));
     }
 
-    public Color GetColorFromIntensity(double intensity)
+    private Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(10, Math.Max(0, intensity)) / 10f;
+        double intst = Math.Min(8, Math.Max(0, intensity)) / 8f;
 
         // Use binary search to find the correct segment
         int index = Array.BinarySearch(boundaries, intst);
@@ -382,8 +382,7 @@ public class Scenario : IScenario
         {
             for (int j = 0; j < subdivisions; j++)
             {
-                double intensity =
-                    CalcIntensity(new PointF((xArr[i] - width / 2) / scale, (yArr[j] - height / 2) / scale));
+                double intensity = CalcIntensity(new PointF((xArr[i] - width / 2) / scale, (yArr[j] - height / 2) / scale));
                 max = Math.Max(max, intensity);
                 min = Math.Min(min, intensity);
                 sum += intensity;
@@ -430,11 +429,7 @@ public class Scenario : IScenario
 
 
 
-    public void Move(float x, float y)
-    {
-        this.worldCenterPosition.X += x;
-        this.worldCenterPosition.Y += y;
-    }
+
 
     public void ZoomIn(float x, float y)
     { 

@@ -37,23 +37,6 @@ namespace UPG_SP_2024
                 {
                     drawingPanel?.scenario?.ZoomOut(2, 2);
                 }
-
-                if (e.KeyCode == Keys.Up)
-                {
-                    drawingPanel?.scenario?.Move(0, 0.5f);
-                }
-                if (e.KeyCode == Keys.Down)
-                {
-                    drawingPanel?.scenario?.Move(0, -0.5f);
-                }
-                if (e.KeyCode == Keys.Left)
-                {
-                    drawingPanel?.scenario?.Move(-0.5f, 0);
-                }
-                if (e.KeyCode == Keys.Right)
-                {
-                    drawingPanel?.scenario?.Move(0.5f, 0);
-                }
             };
 
             // Initialize UI components

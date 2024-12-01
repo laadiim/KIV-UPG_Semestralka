@@ -75,6 +75,4 @@ public interface IScenario
 		/// <param name="anglePerSecond"/> uhlova rychlost obehu
 		/// <returns> instance sondy </returns>
 		IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
-
-        void Move(float x, float y);
 }
