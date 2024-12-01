@@ -16,14 +16,21 @@ public class Probe : IProbe
     private Vector2 v;
     private long ticks = 0;
     public List<Tuple<float, float>> values;
+    public int id;
 
-    public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
+    public Probe(PointF center, float radius, float anglePerSecond, int id)
     {
         this.center = center;
         this.radius = radius;
         this.anglePerSecond = anglePerSecond;
         this.v = Vector2.Zero;
 		this.values = new List<Tuple<float, float>>();
+        this.id = id;
+    }
+
+    public string Save()
+    {
+        return $"sonda:{this.center.X};{this.center.Y};{this.radius};{this.anglePerSecond}";
     }
 
     public void Tick()

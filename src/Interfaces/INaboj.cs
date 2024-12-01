@@ -1,3 +1,5 @@
+using UPG_SP_2024.Primitives;
+
 namespace UPG_SP_2024.Interfaces;
 
 /// <summary>
@@ -21,7 +23,7 @@ public interface INaboj
     /// nastavi novou hodnotu naboje
     /// </summary>
     /// <param name="charge">novy naboj</param>
-    void SetCharge(Func<float, float> charge);
+    void SetCharge(string charge);
     
     /// <summary>
     /// vrati pozici stredu naboje
@@ -33,7 +35,7 @@ public interface INaboj
     /// nastavi novy stred
     /// </summary>
     /// <param name="point">novy stred</param>
-    void SetPosition(Func<float, float> X, Func<float, float> Y);
+    void SetPosition(string X, string Y);
     
     /// <summary>
     /// vykresli naboj
@@ -64,4 +66,11 @@ public interface INaboj
     /// </summary>
     /// <param name="point">pozice</param>
     void Drag(PointF point, float[] corners);
+
+    string Save();
+
+    public static Naboj Load(string[] args, int id, float startTime)
+    {
+        return new Naboj(args[0], args[1], args[2], id, startTime);
+    }
 }

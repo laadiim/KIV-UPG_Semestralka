@@ -92,54 +92,48 @@ namespace UPG_SP_2024
             };
         }
 
-        public void SetScenario(int scenarioNum)
+        public void LoadScenario(string filename)
         {
             scenario.EmptyCharges();
-            switch(scenarioNum)
+            float startTime = SettingsObject.startTime = Environment.TickCount;
+            StreamReader sr = new StreamReader(filename);
+            List<string> lines = new List<string>();
+            string line = sr.ReadLine();
+            //Continue to read until you reach end of file
+            while (line != null)
             {
-                case 0:
-                    INaboj naboj = new StaticNaboj(1, new PointF(0, 0), 0);
-                    scenario.AddCharge(naboj);
-                    break;
-                case 1:
-                    INaboj naboj1 = new StaticNaboj(1, new PointF(-1, 0), 0);
-                    INaboj naboj2 = new StaticNaboj(1, new PointF(1, 0), 1);
-                    scenario.AddCharge(naboj1);
-                    scenario.AddCharge(naboj2);
-                    break;
-                case 2:
-                    INaboj naboj3 = new StaticNaboj(-1, new PointF(-1, 0), 0);
-                    INaboj naboj4 = new StaticNaboj(2,  new PointF(1, 0), 1);
-                    scenario.AddCharge(naboj3);
-                    scenario.AddCharge(naboj4);
-                    break;
-                case 3:
-                    INaboj naboj5 = new StaticNaboj(1, new PointF(-1, -1), 0);
-                    INaboj naboj6 = new StaticNaboj( 2, new PointF(1, -1), 1);
-                    INaboj naboj7 = new StaticNaboj(-3, new PointF(1, 1), 2);
-                    INaboj naboj8 = new StaticNaboj(-4, new PointF(-1, 1), 3);;
-                    scenario.AddCharge(naboj5);
-                    scenario.AddCharge(naboj6);
-                    scenario.AddCharge(naboj7);
-                    scenario.AddCharge(naboj8);
-                    break;
-                case 4:
-                    INaboj naboj9 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return -1; }, (_) => { return 0; }, 0, StartTime);
-                    INaboj naboj10 = new PeriodicNaboj((t) => { return (float)(1 - 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (_) => { return 1; }, (_) => { return 0; }, 1, StartTime);
-                    scenario.AddCharge(naboj10);
-                    scenario.AddCharge(naboj9);
-                    break;
-                case 5:
-                    INaboj naboj11 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, StartTime);
-                    scenario.AddCharge(naboj11);
-                    break;
-                case 6:
-                    INaboj naboj12 = new PeriodicNaboj((_) => { return -4; }, (_) => { return -1; }, (_) => { return -1; }, 3, StartTime);
-                    INaboj naboj13 = new PeriodicNaboj((t) => { return (float)(1 + 0.5 * MathF.Sin(t * MathF.PI / 2)); }, (t) => { return MathF.Sin(t); }, (t) => { return MathF.Cos(t); }, 0, StartTime);
-                    scenario.AddCharge(naboj12);
-                    scenario.AddCharge(naboj13);
-                    break;
+                //write the line to console window
+                lines.Add(line);
+                //Read the next line
+                line = sr.ReadLine();
             }
+            sr.Close();
+            scenario.Load(lines.ToArray(), startTime);
+            SettingsObject.openFile = filename;
+        }
+
+        public void SaveScenario(string filename)
+        {
+            StreamWriter sw = new StreamWriter(filename);
+            string s = scenario.Save();
+            sw.Write(s);
+            sw.Close();
+        }
+
+        public void SetScenario(int scenarioNum)
+        {
+            string[] files =
+            {   
+                "scen0.upg",
+                "scen1.upg",
+                "scen2.upg",
+                "scen3.upg",
+                "scen4.upg",
+                "scen5.upg",
+            };
+            scenario.EmptyCharges();
+
+            LoadScenario(files[scenarioNum]);
         }
 
         /// <summary>TODO: Custom visualization code comes into this method</summary>

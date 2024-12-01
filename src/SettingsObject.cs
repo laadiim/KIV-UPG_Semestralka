@@ -19,8 +19,11 @@ namespace UPG_SP_2024
         public static float[] corners;
         public static GraphForm graphForm;
         public static List<IProbe> probes;
-				public static float halfWidth;
-				public static float halfHeight;
-				public static PointF worldCenter;
+		public static float halfWidth;
+		public static float halfHeight;
+		public static PointF worldCenter;
+        public static int tickLen;
+        public static float startTime;
+        public static string openFile;
     }
 }

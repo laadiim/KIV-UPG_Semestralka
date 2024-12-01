@@ -15,7 +15,7 @@ public interface IScenario
     /// prida naboj do sceny
     /// </summary>
     /// <param name="naboj">naboj k pridani</param>
-    void AddCharge(INaboj naboj);
+    void AddCharge(string[] args, float startTime);
     
     /// <summary>
     /// odstrani naboj ze sceny

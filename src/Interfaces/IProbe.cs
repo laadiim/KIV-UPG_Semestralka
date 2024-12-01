@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using UPG_SP_2024.Primitives;
 
 namespace UPG_SP_2024.Interfaces;
 
@@ -21,5 +22,12 @@ public interface IProbe
     public void Calc(int startTime, INaboj[] charges);
 
     public void Tick();
+
+    string Save();
+
+    public static Probe Load(float[] args, int id)
+    {
+        return new Probe(new PointF(args[0], args[1]), args[2], args[3], id);
+    }
 }
 

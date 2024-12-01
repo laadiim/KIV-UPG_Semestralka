@@ -96,10 +96,10 @@ namespace UPG_SP_2024.Primitives
         /// <param name="scale">predany scale</param>
         private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, float scale)
         {
-            PointF topCenter = new PointF((this.xMin + this.xMax) / 2, this.yMin);
-            PointF bottomCenter = new PointF((this.xMax + this.xMin) / 2, this.yMax);
-            PointF leftCenter = new PointF(this.xMin, (this.yMin + this.yMax) / 2);
-            PointF rightCenter = new PointF(this.xMax, (this.yMax + this.yMin) / 2);
+            PointF bottomCenter = new PointF(SettingsObject.worldCenter.X, this.yMin - SettingsObject.worldCenter.Y);
+            PointF topCenter = new PointF(SettingsObject.worldCenter.X, this.yMax - SettingsObject.worldCenter.Y);
+            PointF leftCenter = new PointF(this.xMin - SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
+            PointF rightCenter = new PointF(this.xMax - SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
             Font font = new Font("Arial", 15f / scale, FontStyle.Bold);
 
@@ -107,10 +107,10 @@ namespace UPG_SP_2024.Primitives
             g.DrawLine(penAxes, rightCenter - new SizeF(len, 0), leftCenter);
             g.DrawString("x", font, brushStr, rightCenter.X - len * 1.2f, (rightCenter.Y + len / 1.8f));
 
-            g.DrawLine(penAxes, topCenter + new SizeF(0, len), bottomCenter);
-            g.DrawString("y", font, brushStr, topCenter.X - len, topCenter.Y + len);
+            g.DrawLine(penAxes, bottomCenter + new SizeF(0, len), topCenter);
+            g.DrawString("y", font, brushStr, bottomCenter.X - len, bottomCenter.Y + len);
 
-            DrawArrows(g, brush, rightCenter, topCenter, len);
+            DrawArrows(g, brush, rightCenter, bottomCenter, len);
 
             if (SettingsObject.gridShown)
             {
@@ -119,101 +119,56 @@ namespace UPG_SP_2024.Primitives
         }
         private void DrawGrid(Graphics g, Pen pen)
         {
-            float width_half = this.panelWidth / 2;
-            float height_half = this.panelHeight / 2;
-            int nX, nY, n2x, n2y;
+            float top = this.yMax - SettingsObject.worldCenter.Y;
+            float bottom = this.yMin - SettingsObject.worldCenter.Y;
+            float left = this.xMin - SettingsObject.worldCenter.X;
+            float right = this.xMax - SettingsObject.worldCenter.X;
 
-            nX = (int)(width_half / this.spacingX);
-            nY = (int)(height_half / this.spacingY);
+            float dx1 = left - SettingsObject.worldCenter.X;
+            float dx2 = right - SettingsObject.worldCenter.X;
+            float dy1 = bottom - SettingsObject.worldCenter.Y;
+            float dy2 = top - SettingsObject.worldCenter.Y;
 
-            n2x = 2 * nX + 1;
-            n2y = 2 * nY + 1;
+            float nx1 = dx1 / spacingX;
+            float nx2 = dx2 / spacingX;
+            float ny1 = dy1 / spacingY;
+            float ny2 = dy2 / spacingY;
 
-            float[] intersectionsX = new float[n2x + 1];
-            float[] intersectionsY = new float[n2y + 1];
+            List<float> xFloats = new List<float>();
+            List<float> yFloats = new List<float>();
 
-            float x_minus = this.xMin + width_half - this.spacingX;
-            float x_plus = this.xMax - width_half + this.spacingX;
-            float y_minus = this.yMin + height_half - this.spacingY;
-            float y_plus = this.yMax - height_half + this.spacingY;
-
-            int i = 0;
-            int j = 0;
-
-            while (x_minus >= this.xMin)
+            for (int i = 0; i > nx1; i--)
             {
-                g.DrawLine(pen, x_minus, this.yMin, x_minus, this.yMax);
-                intersectionsX[i] = x_minus;
-
-                x_minus -= this.spacingX;
-
-                i++;
+                g.DrawLine(pen, SettingsObject.worldCenter.X + i * this.spacingX, bottom, SettingsObject.worldCenter.X + i * this.spacingX, top);
+                xFloats.Add(SettingsObject.worldCenter.X + i * this.spacingX - this.spacingX/2);
+            }
+            for (int i = 0; i <= nx2; i++)
+            {
+                g.DrawLine(pen, SettingsObject.worldCenter.X + i * this.spacingX, bottom, SettingsObject.worldCenter.X + i * this.spacingX, top);
+                xFloats.Add(SettingsObject.worldCenter.X + i * this.spacingX + this.spacingX/2);
+            }
+            for (int i = 0; i > ny1; i--)
+            {
+                g.DrawLine(pen, left, SettingsObject.worldCenter.Y + i * this.spacingY, right, SettingsObject.worldCenter.Y + i * this.spacingY);
+                yFloats.Add(SettingsObject.worldCenter.Y + i * this.spacingY - this.spacingY/2);
+            }
+            for (int i = 0; i <= ny2; i++)
+            { 
+                g.DrawLine(pen, left, SettingsObject.worldCenter.Y + i * this.spacingY, right, SettingsObject.worldCenter.Y + i * this.spacingY);
+                yFloats.Add(SettingsObject.worldCenter.Y + i * this.spacingY + this.spacingY / 2);
             }
 
-            intersectionsX[i] = xMin + width_half;
-
-            while (x_plus <= this.xMax)
+            List<IProbe> probes = new List<IProbe>();
+            for (int i = 0; i < xFloats.Count; i++)
             {
-                g.DrawLine(pen, x_plus, this.yMin, x_plus, this.yMax);
-                intersectionsX[i] = x_plus;
-
-                x_plus += this.spacingX;
-                i++;
-            }
-
-            if (intersectionsX.Length == (i + 2))
-            {
-                intersectionsX[i + 1] = x_plus;
-            }
-
-            while (y_minus >= this.yMin)
-            {
-                g.DrawLine(pen, this.xMin, y_minus, this.xMax, y_minus);
-                intersectionsY[j] = y_minus;
-
-                y_minus -= this.spacingY;
-                j++;
-            }
-
-            intersectionsY[j] = yMin + height_half;
-
-            while (y_plus <= this.yMax)
-            {
-                g.DrawLine(pen, this.xMin, y_plus, this.xMax, y_plus);
-                intersectionsY[j] = y_plus;
-
-                y_plus += this.spacingY;
-                j++;
-            }
-
-            if (intersectionsY.Length == (j + 2))
-            {
-                intersectionsY[j + 1] = y_plus;
-            }
-
-            IProbe[,] probes = new IProbe[intersectionsX.Length, intersectionsY.Length];
-            PointF point = new PointF(0, 0);
-            for (int x = 0; x < intersectionsX.Length; x++)
-            {
-                for (int y = 0; y < intersectionsY.Length; y++)
+                for (int j = 0; j < yFloats.Count; j++)
                 {
-                    point.X = intersectionsX[x] - spacingX / 2f;
-                    point.Y = intersectionsY[y] - spacingY / 2f;
-
-                    IProbe probe = new Probe(point, 0, 0);
-                    probes[x, y] = probe;
-                    probe.Calc(this.startTime, this.charges);
+                    IProbe p = new Probe(new PointF(xFloats[i], yFloats[j]), 0, 0, -1);
+                    p.Calc(this.startTime, this.charges);
+                    p.Draw(g, startTime, charges, scale, Math.Min(spacingX, spacingY), true);
                 }
             }
 
-            float spacing = Math.Min(spacingX, spacingY);
-            for (int x = 0; x < intersectionsX.Length; x++)
-            {
-                for (int y = 0; y < intersectionsY.Length; y++)
-                {
-                    probes[x, y].Draw(g, startTime, charges, scale, spacing, true);
-                }
-            }
         }
 
         public void Draw(Graphics g, float tipLength, float scale)
@@ -233,3 +188,101 @@ namespace UPG_SP_2024.Primitives
         }
     }
 }
+
+/*
+   float width_half = this.panelWidth / 2;
+   float height_half = this.panelHeight / 2;
+   int nX, nY, n2x, n2y;
+   
+   nX = (int)(width_half / this.spacingX);
+   nY = (int)(height_half / this.spacingY);
+   
+   n2x = 2 * nX + 1;
+   n2y = 2 * nY + 1;
+   
+   float[] intersectionsX = new float[n2x + 1];
+   float[] intersectionsY = new float[n2y + 1];
+   
+   float x_minus = this.xMin + width_half - this.spacingX;
+   float x_plus = this.xMax - width_half + this.spacingX;
+   float y_minus = this.yMin + height_half - this.spacingY;
+   float y_plus = this.yMax - height_half + this.spacingY;
+   
+   int i = 0;
+   int j = 0;
+   
+   while (x_minus >= this.xMin)
+   {
+       g.DrawLine(pen, x_minus, this.yMin, x_minus, this.yMax);
+       intersectionsX[i] = x_minus;
+   
+       x_minus -= this.spacingX;
+   
+       i++;
+   }
+   
+   intersectionsX[i] = xMin + width_half;
+   
+   while (x_plus <= this.xMax)
+   {
+       g.DrawLine(pen, x_plus, this.yMin, x_plus, this.yMax);
+       intersectionsX[i] = x_plus;
+   
+       x_plus += this.spacingX;
+       i++;
+   }
+   
+   if (intersectionsX.Length == (i + 2))
+   {
+       intersectionsX[i + 1] = x_plus;
+   }
+   
+   while (y_minus >= this.yMin)
+   {
+       g.DrawLine(pen, this.xMin, y_minus, this.xMax, y_minus);
+       intersectionsY[j] = y_minus;
+   
+       y_minus -= this.spacingY;
+       j++;
+   }
+   
+   intersectionsY[j] = yMin + height_half;
+   
+   while (y_plus <= this.yMax)
+   {
+       g.DrawLine(pen, this.xMin, y_plus, this.xMax, y_plus);
+       intersectionsY[j] = y_plus;
+   
+       y_plus += this.spacingY;
+       j++;
+   }
+   
+   if (intersectionsY.Length == (j + 2))
+   {
+       intersectionsY[j + 1] = y_plus;
+   }
+   
+   IProbe[,] probes = new IProbe[intersectionsX.Length, intersectionsY.Length];
+   PointF point = new PointF(0, 0);
+   for (int x = 0; x < intersectionsX.Length; x++)
+   {
+       for (int y = 0; y < intersectionsY.Length; y++)
+       {
+           point.X = intersectionsX[x] - spacingX / 2f;
+           point.Y = intersectionsY[y] - spacingY / 2f;
+   
+           IProbe probe = new Probe(point, 0, 0);
+           probes[x, y] = probe;
+           probe.Calc(this.startTime, this.charges);
+       }
+   }
+   
+   float spacing = Math.Min(spacingX, spacingY);
+   for (int x = 0; x < intersectionsX.Length; x++)
+   {
+       for (int y = 0; y < intersectionsY.Length; y++)
+       {
+           probes[x, y].Draw(g, startTime, charges, scale, spacing, true);
+       }
+   }
+*/

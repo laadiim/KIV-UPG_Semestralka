@@ -4,7 +4,7 @@ using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
 
-public class StaticNaboj : INaboj
+public class StaticNaboj //: INaboj
 {
     private float charge;
     private float radius;

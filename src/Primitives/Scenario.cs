@@ -3,16 +3,19 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using NCalc;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
 
 public class Scenario : IScenario
 {
-    INaboj[] charges = new INaboj[1];
-    int freeIndex = 0;
+    List<INaboj> charges = new List<INaboj>();
     int chargesCount = 0;
     private float scale = 1;
+
+    private int chargeID = 0;
+    private int probeID = 0;
 
     /* xMax, yMax, xMin, yMin*/
     public float[] corners = new float[4];
@@ -48,20 +51,47 @@ public class Scenario : IScenario
         }
     }
 
+    public string Save()
+    {
+        List<string> s = new List<string>();
+        foreach (INaboj charge in charges)
+        {
+            s.Add(charge.Save());
+        }
+
+        foreach (IProbe probe in SettingsObject.probes)
+        {
+            s.Add(probe.Save());
+        }
+
+        return String.Join("\n", s);
+    }
+
     public void EmptyCharges()
     { 
         chargesCount = 0;
-        freeIndex = 0;
-        charges = new INaboj[1];
+        charges.Clear();
         SettingsObject.probes.Clear();
-        this.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
+        //this.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
     }
 
     public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
     {
-        IProbe p = new Probe(center, radius, anglePerSecond);
+        IProbe p = new Probe(center, radius, anglePerSecond ,this.probeID);
+        probeID++;
         SettingsObject.probes.Add(p);
 		if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
+        return p;
+    }
+
+    public IProbe CreateProbe(PointF center, float radius, string anglePerSecond)
+    {
+        var e = new Expression(anglePerSecond);
+        float a = Convert.ToSingle(e.Evaluate());
+        IProbe p = new Probe(center, radius, a, this.probeID);
+        probeID++;
+        SettingsObject.probes.Add(p);
+        if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
         return p;
     }
 
@@ -69,9 +99,9 @@ public class Scenario : IScenario
     {
         if (charges != null)
         {
-            if (charges.Length != 0)
+            if (charges.Count != 0)
             {
-                return charges;
+                return charges.ToArray();
             }
             else throw new Exception("scenario neobsahuje naboje");
         }
@@ -81,27 +111,30 @@ public class Scenario : IScenario
         }
     }
 
-    public void AddCharge(INaboj naboj)
+    public void Load(string[] lines, float startTime)
     {
-        charges[freeIndex] = naboj;
-        chargesCount++;
-            
-        for (; freeIndex < charges.Length; freeIndex++)
+        foreach (string l in lines)
         {
-            if (charges[freeIndex] == null) return;
-        }
-
-        INaboj[] newCharges = new INaboj[charges.Length*2];
-
-        if (charges != null)
-        {
-            for (int i = 0; i < charges.Length; i++)
+            string[] arr = l.Split(':');
+            if (arr[0] == "naboj")
             {
-                newCharges[i] = charges[i];
+                string[] args = arr[1].Split(";");
+                AddCharge(args, startTime);
             }
-            freeIndex = charges.Length;
-        } 
-        charges = newCharges;
+            else
+            {
+                string[] args = arr[1].Split(";");
+                CreateProbe(new PointF(Convert.ToSingle(args[0]), Convert.ToSingle(args[1])), Convert.ToSingle(args[2]), args[3]);
+            }
+        }
+    }
+
+    public void AddCharge(string[] args, float startTime)
+    {
+        INaboj naboj = INaboj.Load(args, chargeID, startTime);
+        chargeID++;
+        charges.Add(naboj);
+        chargesCount++;
     }
 
     public INaboj RemoveCharge(INaboj naboj)
@@ -118,36 +151,26 @@ public class Scenario : IScenario
 
     public INaboj RemoveCharge(int id)
     {
-        for (int i = 0; i < charges.Length; i++)
+        for (int i = 0; i < charges.Count; i++)
         {
-            if (charges[i] != null)
+            if (charges[i].GetID() == id)
             {
-                if (charges[i].GetID() == id)
-                {
-                    INaboj charge = charges[i];
-                    charges[i] = null;
-                    chargesCount--;
+                INaboj charge = charges[i];
+                charges[i] = null;
+                chargesCount--;
 
-                    if (i < freeIndex)
-                    {
-                        freeIndex = i;
-                    }
-                    return charge;
-                }
+                return charge;
             }
         }
         throw new Exception("naboj nebyl nalezen");
     }
     public INaboj GetCharge(int id)
     {
-        for (int i = 0; i < charges.Length; i++)
+        for (int i = 0; i < charges.Count; i++)
         {
-            if (charges[i] != null)
+            if (charges[i].GetID() == id)
             {
-                if (charges[i].GetID() == id)
-                {
-                    return charges[i];
-                }
+                return charges[i];
             }
         }
         throw new Exception("naboj nebyl nalezen");
@@ -162,17 +185,14 @@ public class Scenario : IScenario
         int j = 0;
         float[] positionsX = new float[chargesCount * 2];
         float[] positionsY = new float[chargesCount * 2];
-        for (int i = 0; i < charges.Length;i++)
+        for (int i = 0; i < charges.Count;i++)
         {
-            if (charges[i] != null)
-            {
-                positionsX[j] = Math.Abs(charges[i].GetPosition().X - charges[i].GetRadius());
-                positionsY[j] = Math.Abs(charges[i].GetPosition().Y - charges[i].GetRadius());
-                j++;
-                positionsX[j] = Math.Abs(charges[i].GetPosition().X + charges[i].GetRadius());
-                positionsY[j] = Math.Abs(charges[i].GetPosition().Y + charges[i].GetRadius());
-                j++;
-            }
+            positionsX[j] = Math.Abs(charges[i].GetPosition().X - charges[i].GetRadius());
+            positionsY[j] = Math.Abs(charges[i].GetPosition().Y - charges[i].GetRadius());
+            j++;
+            positionsX[j] = Math.Abs(charges[i].GetPosition().X + charges[i].GetRadius());
+            positionsY[j] = Math.Abs(charges[i].GetPosition().Y + charges[i].GetRadius());
+            j++;
         }
         return Tuple.Create(positionsX, positionsY);
     }
@@ -186,55 +206,56 @@ public class Scenario : IScenario
             PixelFormat.Format24bppRgb);
 
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
-        const int subdivisions = 3;
-        int squareSize = (int)Math.Pow(subdivisions, 3); // Size of the squares
+        const int squareSize = 3;
+        //const int subdivisions = 3;
+        //int squareSize = (int)Math.Pow(subdivisions, 3); // Size of the squares
         int widthInSquares = bmp.Width / squareSize;
         int heightInSquares = bmp.Height / squareSize;
 
-        /*
+        
         //Parallel.For(0, heightInSquares, squareY =>
         for (int squareY = 0; squareY < heightInSquares; squareY++)
-        {
-            for (int squareX = 0; squareX < widthInSquares; squareX++)
             {
-                // Center of the square
-                int centerX = squareX * squareSize + squareSize / 2;
-                int centerY = squareY * squareSize + squareSize / 2;
-
-                // Calculate intensity and map color for the center pixel
-                double intensity =
-                    CalcIntensity(new PointF((centerX - width / 2) / scale, (centerY - height / 2) / scale));
-                Color color = ColorMap(intensity);
-                byte red = color.B;
-                byte green = color.G;
-                byte blue = color.R;
-
-                // Fill the square block with the same color
-                for (int y = squareY * squareSize; y < (squareY + 1) * squareSize && y < bmp.Height; y++)
+                for (int squareX = 0; squareX < widthInSquares; squareX++)
                 {
-                    int offset = y * bmp.Stride + squareX * squareSize * 3;
-                    for (int x = 0; x < squareSize && (x + squareX * squareSize) < bmp.Width; x++)
+                    // Center of the square
+                    int centerX = squareX * squareSize + squareSize / 2;
+                    int centerY = squareY * squareSize + squareSize / 2;
+
+                    // Calculate intensity and map color for the center pixel
+                    double intensity =
+                        CalcIntensity(new PointF((centerX - width / 2) / scale, (centerY - height / 2) / scale));
+                    Color color = ColorMap(intensity);
+                    byte red = color.B;
+                    byte green = color.G;
+                    byte blue = color.R;
+
+                    // Fill the square block with the same color
+                    for (int y = squareY * squareSize; y < (squareY + 1) * squareSize && y < bmp.Height; y++)
                     {
-                        pixels[offset++] = blue; // Blue
-                        pixels[offset++] = green; // Green
-                        pixels[offset++] = red; // Red
+                        int offset = y * bmp.Stride + squareX * squareSize * 3;
+                        for (int x = 0; x < squareSize && (x + squareX * squareSize) < bmp.Width; x++)
+                        {
+                            pixels[offset++] = blue; // Blue
+                            pixels[offset++] = green; // Green
+                            pixels[offset++] = red; // Red
+                        }
                     }
                 }
             }
-        }
-        */
+        //);
         
-        
+        /*
         byte[,,] colors = new byte[3,bmp.Stride + squareSize, bmp.Height + squareSize];
         Parallel.For(0, widthInSquares + 1, i =>
         //for (int i = 0; i < widthInSquares + 1; i++)
         {
-            //Parallel.For(0, heightInSquares + 1, j =>
-            for (int j = 0; j < heightInSquares + 1; j++)
+            Parallel.For(0, heightInSquares + 1, j =>
+            //for (int j = 0; j < heightInSquares + 1; j++)
             { 
                 FastMap(squareSize, subdivisions, width, height, colors, i * squareSize, j * squareSize);
             }
-            //);
+            );
 
         }
         );
@@ -258,7 +279,7 @@ public class Scenario : IScenario
                 }
                     //);
             }
-        //);
+        //);*/
 
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
@@ -310,8 +331,6 @@ public class Scenario : IScenario
 
         foreach (var charge in charges)
         {
-            if (charge == null) continue;
-
             PointF p = charge.GetPosition();
 
             // Compute vector from charge to the start point
@@ -423,8 +442,6 @@ public class Scenario : IScenario
             }
         }
     }
-
-
 
     public void Move(float x, float y)
     {
@@ -549,9 +566,8 @@ public class Scenario : IScenario
         this.corners[1] = yMax;
         this.corners[2] = xMin;
         this.corners[3] = yMin;
-        
+
         g.ScaleTransform(scale, scale);
-        g.TranslateTransform(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
@@ -562,7 +578,6 @@ public class Scenario : IScenario
         }
         else
         {
-            g.TranslateTransform(-SettingsObject.worldCenter.X, -SettingsObject.worldCenter.Y);
             g.ScaleTransform(1/scale, 1/scale);
             // kresleni pozadi pro scenar
             LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(-width/2, -height/2), new PointF(width/2, height / 2),
@@ -578,20 +593,19 @@ public class Scenario : IScenario
             };
             g.FillRectangle(brush_scen, -width / 2, -height / 2, width, height);
             g.ScaleTransform(scale, scale);
-            g.TranslateTransform(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
         }
 
 
         // kresleni mrizky
         
-        IGrid grid = new Grid(this.corners, startTime, this.charges, scale, SettingsObject.gridX, SettingsObject.gridY, width, height);
+        IGrid grid = new Grid(this.corners, startTime, this.charges.ToArray(), scale, SettingsObject.gridX, SettingsObject.gridY, width, height);
         float tipLength = 10f; // nastaveni velikosti sipky
         grid.Draw(g, tipLength / scale, scale);
         
 
 
         // kresleni naboju
-        for (int i = 0; i < charges.Length; i++)
+        for (int i = 0; i < charges.Count; i++)
         {
             if (charges[i] != null) charges[i].Draw(g, center, scale);
         }
@@ -603,8 +617,8 @@ public class Scenario : IScenario
 
         foreach (IProbe probe in SettingsObject.probes) 
         {
-            probe.Calc(startTime, this.charges);
-            probe.Draw(g, startTime, this.charges, scale, 0, false);
+            probe.Calc(startTime, this.charges.ToArray());
+            probe.Draw(g, startTime, this.charges.ToArray(), scale, 0, false);
         }
         
         return scale;
