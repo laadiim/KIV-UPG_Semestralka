@@ -14,10 +14,6 @@ public class Scenario : IScenario
     int chargesCount = 0;
     private float scale = 1;
 
-    public float worldWidthHalf = 2;
-    public float worldHeightHalf = 2;
-    public PointF worldCenterPosition = new PointF(0, 0);
-
     /* xMax, yMax, xMin, yMin*/
     public float[] corners = new float[4];
 	private List<IProbe> probes = new List<IProbe>();
@@ -432,18 +428,18 @@ public class Scenario : IScenario
 
     public void Move(float x, float y)
     {
-        this.worldCenterPosition.X += x;
-        this.worldCenterPosition.Y += y;
+        SettingsObject.worldCenter.X += x;
+        SettingsObject.worldCenter.Y += y;
     }
 
     public void ZoomIn(float x, float y)
     { 
-        worldWidthHalf /= x; worldHeightHalf /= y;
+        SettingsObject.halfWidth /= x; SettingsObject.halfHeight /= y;
     }
 
     public void ZoomOut(float x, float y)
     { 
-        worldWidthHalf *= x; worldHeightHalf *= y;
+        SettingsObject.halfWidth *= x; SettingsObject.halfHeight *= y;
     }
 
     public float Draw(Graphics g, float width, float height, int startTime, int chargeHit)
@@ -521,10 +517,10 @@ public class Scenario : IScenario
             yMax += viewportHeight / 9f;
         }*/
 
-        float xMin = worldCenterPosition.X - worldWidthHalf;
-        float xMax = worldCenterPosition.X + worldWidthHalf;
-        float yMin = worldCenterPosition.Y - worldHeightHalf;
-        float yMax = worldCenterPosition.Y + worldHeightHalf;
+        float xMin = SettingsObject.worldCenter.X - SettingsObject.halfWidth;
+        float xMax = SettingsObject.worldCenter.X + SettingsObject.halfWidth;
+        float yMin = SettingsObject.worldCenter.Y - SettingsObject.halfHeight;
+        float yMax = SettingsObject.worldCenter.Y + SettingsObject.halfHeight;
 
         float scaleX = width / (xMax - xMin);
         float scaleY = height / (yMax - yMin);
@@ -555,6 +551,7 @@ public class Scenario : IScenario
         this.corners[3] = yMin;
         
         g.ScaleTransform(scale, scale);
+        g.TranslateTransform(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
         
         PointF center = new PointF((xMax + xMin) / 2f, (yMax + yMin) / 2f);
@@ -565,8 +562,10 @@ public class Scenario : IScenario
         }
         else
         {
+            g.TranslateTransform(-SettingsObject.worldCenter.X, -SettingsObject.worldCenter.Y);
+            g.ScaleTransform(1/scale, 1/scale);
             // kresleni pozadi pro scenar
-            LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(xMin, yMin), new PointF(xMax, yMax),
+            LinearGradientBrush brush_scen = new LinearGradientBrush(new PointF(-width/2, -height/2), new PointF(width/2, height / 2),
                                                                      Color.DarkBlue, Color.DarkCyan);
             brush_scen.InterpolationColors = new ColorBlend()
             {
@@ -577,15 +576,17 @@ public class Scenario : IScenario
                     },
                 Positions = new float[] { 0f, 0.4f, 1f }
             };
-            g.FillRectangle(brush_scen, xMin, yMin, xMax - xMin, yMax - yMin);
+            g.FillRectangle(brush_scen, -width / 2, -height / 2, width, height);
+            g.ScaleTransform(scale, scale);
+            g.TranslateTransform(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
         }
 
 
         // kresleni mrizky
         
-        IGrid grid = new Grid(xMin, xMax, yMin, yMax, startTime, this.charges, scale, SettingsObject.gridX, SettingsObject.gridY, width, height);
+        IGrid grid = new Grid(this.corners, startTime, this.charges, scale, SettingsObject.gridX, SettingsObject.gridY, width, height);
         float tipLength = 10f; // nastaveni velikosti sipky
-        grid.Draw(g, new PointF(xMin, yMin), new PointF(xMax, yMax),tipLength / scale, scale);
+        grid.Draw(g, tipLength / scale, scale);
         
 
 

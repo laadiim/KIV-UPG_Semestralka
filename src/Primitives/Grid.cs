@@ -23,12 +23,12 @@ namespace UPG_SP_2024.Primitives
         readonly int spacingXpixels;
         readonly int spacingYpixels;
 
-        public Grid(float xMin, float xMax, float yMin, float yMax, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
+        public Grid(float[] corners, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
         {
-            this.xMin = xMin;
-            this.xMax = xMax;
-            this.yMin = yMin;
-            this.yMax = yMax;
+            this.xMin = corners[2];
+            this.xMax = corners[0];
+            this.yMin = corners[3];
+            this.yMax = corners[1];
 
             this.panelWidth = xMax - xMin;
             this.panelHeight = yMax - yMin;
@@ -94,12 +94,12 @@ namespace UPG_SP_2024.Primitives
         /// <param name="bottomRight">dolni pravy roh</param>
         /// <param name="tipLength">delka sipky</param>
         /// <param name="scale">predany scale</param>
-        private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, PointF topLeft, PointF bottomRight, float scale)
+        private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, float scale)
         {
-            PointF topCenter = new PointF((topLeft.X + bottomRight.X) / 2, topLeft.Y);
-            PointF bottomCenter = new PointF((topLeft.X + bottomRight.X) / 2, bottomRight.Y);
-            PointF leftCenter = new PointF(topLeft.X, (topLeft.Y + bottomRight.Y) / 2);
-            PointF rightCenter = new PointF(bottomRight.X, (topLeft.Y + bottomRight.Y) / 2);
+            PointF topCenter = new PointF((this.xMin + this.xMax) / 2, this.yMin);
+            PointF bottomCenter = new PointF((this.xMax + this.xMin) / 2, this.yMax);
+            PointF leftCenter = new PointF(this.xMin, (this.yMin + this.yMax) / 2);
+            PointF rightCenter = new PointF(this.xMax, (this.yMax + this.yMin) / 2);
 
             Font font = new Font("Arial", 15f / scale, FontStyle.Bold);
 
@@ -216,7 +216,7 @@ namespace UPG_SP_2024.Primitives
             }
         }
 
-        public void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale)
+        public void Draw(Graphics g, float tipLength, float scale)
         {
             Color colorAxes = Color.FromArgb(80, Color.White);
             Color colorGrid = Color.FromArgb(40, Color.White);
@@ -229,7 +229,7 @@ namespace UPG_SP_2024.Primitives
             Brush brushStr = new SolidBrush(Color.White);
 
             tipLength = 1f / (float)Math.Sqrt(scale);
-            DrawAxes(g, penAxes, penGrid, brush, brushStr, topLeft, bottomRight, scale);
+            DrawAxes(g, penAxes, penGrid, brush, brushStr, scale);
         }
     }
 }
