@@ -19,9 +19,12 @@ public interface IProbe
     void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid);
 
     public void Calc(Vector2 start, INaboj[] charges);
+
     public void Calc(int startTime, INaboj[] charges);
 
     public void Tick();
+
+    public int GetID();
 
     string Save();
 

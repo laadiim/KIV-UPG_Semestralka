@@ -15,11 +15,13 @@ public class Scenario : IScenario
     private float scale = 1;
 
     private int chargeID = 0;
-    private int probeID = 0;
+    private int probesCount = 0;
 
     /* xMax, yMax, xMin, yMin*/
     public float[] corners = new float[4];
 	private List<IProbe> probes = new List<IProbe>();
+
+    private Queue<int> emptyProbesID = new Queue<int>();
 
     private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
@@ -36,6 +38,10 @@ public class Scenario : IScenario
 
     public Scenario()
     {
+        for (int i = 0; i < SettingsObject.maxProbes; i++)
+        {
+            this.emptyProbesID.Enqueue(i);
+        }
         boundaryDiffs = new double[boundaries.Length - 1];
         for (int i = 0; i < boundaries.Length - 1; i++)
         {
@@ -77,21 +83,39 @@ public class Scenario : IScenario
 
     public IProbe CreateProbe(PointF center, float radius, float anglePerSecond)
     {
-        IProbe p = new Probe(center, radius, anglePerSecond ,this.probeID);
-        probeID++;
+        if (this.emptyProbesID.Count == 0)
+        {
+            return null;
+        }
+
+        IProbe p = new Probe(center, radius, anglePerSecond, this.emptyProbesID.Dequeue());
+
         SettingsObject.probes.Add(p);
-		if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
+
+        if (SettingsObject.graphForm != null)
+        {
+            SettingsObject.graphForm.Reset();
+        }
         return p;
     }
 
     public IProbe CreateProbe(PointF center, float radius, string anglePerSecond)
     {
+        if (this.emptyProbesID.Count == 0)
+        {
+            return null;
+        }
+
         var e = new Expression(anglePerSecond);
         float a = Convert.ToSingle(e.Evaluate());
-        IProbe p = new Probe(center, radius, a, this.probeID);
-        probeID++;
+        IProbe p = new Probe(center, radius, a, this.emptyProbesID.Dequeue());
+
         SettingsObject.probes.Add(p);
-        if (SettingsObject.graphForm != null) SettingsObject.graphForm.Reset();
+
+        if (SettingsObject.graphForm != null)
+        {
+            SettingsObject.graphForm.Reset();
+        }
         return p;
     }
 
@@ -164,6 +188,21 @@ public class Scenario : IScenario
         }
         throw new Exception("naboj nebyl nalezen");
     }
+
+    public void RemoveProbe(int id)
+    {
+        probes = SettingsObject.probes;
+
+        for (int i = 0; i < probes.Count; i++)
+        {
+            if (probes[i].GetID() == id)
+            {
+                emptyProbesID.Enqueue(probes[i].GetID());
+                probes[i] = null;
+            }
+        }
+    }
+
     public INaboj GetCharge(int id)
     {
         for (int i = 0; i < charges.Count; i++)

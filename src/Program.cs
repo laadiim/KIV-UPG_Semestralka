@@ -57,7 +57,7 @@ namespace UPG_SP_2024
             sw.Write(s);
             sw.Close();
             sw = new StreamWriter("scen5.upg");
-            s = "sonda:0;0;1;3.14159 / 6\nnaboj:-4;-1;1\nnaboj:Sin(3.14159 * [t]);Sin(3.14159 * [t] * 0.05);Cos(3.14159 * [t])";
+            s = "sonda:0;0;1;3.14159 / 6\nnaboj:-4;-1;1\nnaboj:Sin(3.14159 * [t]);Sin(3.14159 * [t] * 0.05);Cos(3.14159 * [t] * 0.1)";
             sw.Write(s);
             sw.Close();
         }

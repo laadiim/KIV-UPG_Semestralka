@@ -28,6 +28,17 @@ public class Probe : IProbe
         this.id = id;
     }
 
+    public int GetID()
+    {
+        return this.id;
+    }
+
+    /* ----------- TODO ------------ */
+    public bool IsHit(PointF point)
+    {
+        return false;
+    }
+    /* ----------------------------- */
     public string Save()
     {
         return $"sonda:{this.center.X};{this.center.Y};{this.radius};{this.anglePerSecond}";
@@ -42,6 +53,7 @@ public class Probe : IProbe
     {
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        if (!grid) start += new Vector2(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
         if (this.v.Length() == 0)
         {
@@ -65,7 +77,7 @@ public class Probe : IProbe
 
         Color color = Color.FromArgb(120, Color.White);
         Brush brush = new SolidBrush(Color.White);
-        float r = 0.3f / (float)Math.Sqrt(scale); 
+        float r = 14f / scale; 
 
         g.TranslateTransform(points[0].X, points[0].Y);
 
@@ -82,17 +94,6 @@ public class Probe : IProbe
             l = l != 0 ? l : 1;
         }  
 
-        if (!grid)
-        {
-            float len = this.v.Length() * 100;
-            string label = $"{len.ToString("n2")}E-2 TN/C";
-
-            Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
-
-            g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
-
-            g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
-        }
 
         if (this.v.X > 2E9 || this.v.Y > 2E9)
         {
@@ -107,6 +108,22 @@ public class Probe : IProbe
         else
         {
             DrawArrow(g, this.v, scale, color, l, grid);
+        }
+
+        if (!grid)
+        {
+            float len = this.v.Length() * 100;
+            string label = $"{len.ToString("n2")}E-2 TN/C";
+
+            Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
+            Font font_id = new Font("Arial", 18 * l / scale, FontStyle.Bold);
+
+            g.DrawString(label, font, brush, r * 1.1f, -2 * r);
+
+            g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
+
+            string id = this.id.ToString();
+            g.DrawString(id, font_id, new SolidBrush(Color.MidnightBlue), -g.MeasureString(id, font_id).Width / 2f, -g.MeasureString(id, font_id).Height / 2f);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -187,7 +204,7 @@ public class Probe : IProbe
         Vector2 sum = Vector2.Zero;
         const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
         float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
-        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle) + SettingsObject.worldCenter.X, center.Y - radius * MathF.Cos(angle) + SettingsObject.worldCenter.Y);
 
         for (int i = 0; i < charges.Length; i++)
         {

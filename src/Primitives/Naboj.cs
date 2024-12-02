@@ -41,13 +41,13 @@ public class Naboj : INaboj
     public float GetX(float t)
     {
         X.Parameters["t"] = t;
-        return _xOffset + Convert.ToSingle(X.Evaluate());
+        return _xOffset + Convert.ToSingle(X.Evaluate()) + SettingsObject.worldCenter.X;
     }
 
     public float GetY(float t)
     {
         Y.Parameters["t"] = t;
-        return -_yOffset - Convert.ToSingle(Y.Evaluate());
+        return -_yOffset - Convert.ToSingle(Y.Evaluate()) + SettingsObject.worldCenter.Y;
     }
 
     public bool IsHit(PointF point)
@@ -60,13 +60,13 @@ public class Naboj : INaboj
     public void Drag(PointF point, float[] corners)
     {
         float t = (Environment.TickCount - startTime) / 1000;
+
         // Calculate current and new positions
         float currentX = GetX(t);
         float currentY = GetY(t);
 
-        float newX = MathF.Max(MathF.Min(currentX + point.X, corners[0]), corners[2]);
-        float newY = MathF.Max(MathF.Min(currentY + point.Y, corners[1]), corners[3]);
-
+        float newX = currentX + point.X;
+        float newY = currentY + point.Y;
 
         // Update offsets
         _xOffset += newX - currentX;

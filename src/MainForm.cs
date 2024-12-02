@@ -25,6 +25,7 @@ namespace UPG_SP_2024
 			SettingsObject.halfHeight = 2;
 			SettingsObject.worldCenter = new PointF(0, 0);
             SettingsObject.tickLen = 50;
+            SettingsObject.maxProbes = 7;
 
             // Configure the form
             this.ClientSize = new Size(800, 600);
@@ -42,19 +43,19 @@ namespace UPG_SP_2024
                     drawingPanel?.scenario?.ZoomOut(2, 2);
                 }
 
-                if (e.KeyCode == Keys.W)
+                if (e.KeyCode == Keys.S)
                 {
                     drawingPanel?.scenario?.Move(0, -0.5f);
                 }
-                if (e.KeyCode == Keys.S)
+                if (e.KeyCode == Keys.W)
                 {
                     drawingPanel?.scenario?.Move(0, 0.5f);
                 }
-                if (e.KeyCode == Keys.A)
+                if (e.KeyCode == Keys.D)
                 {
                     drawingPanel?.scenario?.Move(-0.5f, 0);
                 }
-                if (e.KeyCode == Keys.D)
+                if (e.KeyCode == Keys.A)
                 {
                     drawingPanel?.scenario?.Move(0.5f, 0);
                 }

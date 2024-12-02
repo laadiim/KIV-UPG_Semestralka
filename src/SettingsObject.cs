@@ -25,5 +25,6 @@ namespace UPG_SP_2024
         public static int tickLen;
         public static float startTime;
         public static string openFile;
+        public static int maxProbes;
     }
 }

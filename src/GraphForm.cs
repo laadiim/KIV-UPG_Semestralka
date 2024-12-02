@@ -20,11 +20,21 @@ namespace UPG_SP_2024
             this.FormClosing += (o, e) => SettingsObject.graphForm = null;
         }
 
-				private void Populate()
-				{
+		private void Populate()
+        {
+            GraphTab p;
+            p = new GraphTab(SettingsObject.probes);
+            this.tabControl.Controls.Add(p);
+            p.Location = new Point(4, 24);
+            p.Name = "All probes";
+            p.Padding = new Padding(3);
+            p.Dock = DockStyle.Fill;
+            p.TabIndex = 0;
+            p.Text = $"All probes";
+            p.UseVisualStyleBackColor = true;
             for (int i = 0; i < SettingsObject.probes.Count; i++)
             {
-                GraphTab p = new GraphTab(SettingsObject.probes[i], i); 
+                p = new GraphTab(SettingsObject.probes[i]); 
                 this.tabControl.Controls.Add(p);
                 p.Location = new Point(4, 24);
                 p.Name = $"Probe {i}";
@@ -34,17 +44,17 @@ namespace UPG_SP_2024
                 p.Text = $"Probe {i}";
                 p.UseVisualStyleBackColor = true;
             }
-				}
+		}
 
         public void UpdateGraph()
         {
             foreach (GraphTab tab in tabControl.Controls) tab.UpdateChart();
         }
 
-				public void Reset()
-				{
-					this.tabControl.Controls.Clear();
-					Populate();
-				}
+		public void Reset()
+		{
+			this.tabControl.Controls.Clear();
+			Populate();
+		}
     }
 }

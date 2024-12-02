@@ -112,6 +112,14 @@ namespace UPG_SP_2024
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
 
+            scenarioDropdown.KeyDown += (sender, e) =>
+            {
+                if (e.KeyCode != Keys.Up && e.KeyCode != Keys.Down && e.KeyCode != Keys.Escape)
+                {
+                    e.SuppressKeyPress = true; 
+                }
+            };
+
             for (int i = 0; i <= 5; i++)
             {
                 scenarioDropdown.Items.Add($"Scenario {i}");
@@ -259,6 +267,7 @@ namespace UPG_SP_2024
 
                     // Write content to the selected file
                     MessageBox.Show("File saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SettingsObject.openFile = filePath;
                 }
                 catch (Exception ex)
                 {

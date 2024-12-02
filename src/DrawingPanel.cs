@@ -1,3 +1,4 @@
+using System.Drawing;
 using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
@@ -14,6 +15,7 @@ namespace UPG_SP_2024
         private int StartTime { get; set; }
         private int chargeHit = -1;
         private float scale = 1;
+        private bool rightDown = false;
         private PointF prevMouse = new PointF(0, 0);
         /// <summary>
         /// konstruktor DrawingPanel
@@ -28,67 +30,88 @@ namespace UPG_SP_2024
             
             this.MouseDown += (o, e) =>
             {
-                INaboj[] charges;
-                PointF point = new PointF(e.X , e.Y);
-
-                prevMouse = new PointF(point.X, point.Y);
-
-                point.X = (point.X - this.Width / 2) / scale;
-                point.Y = (point.Y - this.Height / 2) / scale;
-
-                try
+                if (e.Button == MouseButtons.Left)
                 {
-                    charges = scenario.GetCharges();
+                    INaboj[] charges;
+                    PointF point = new PointF(e.X, e.Y);
+
+                    prevMouse = new PointF(point.X, point.Y);
+
+                    point.X = (point.X - this.Width / 2) / scale;
+                    point.Y = (point.Y - this.Height / 2) / scale;
+
+                    try
+                    {
+                        charges = scenario.GetCharges();
+                    }
+                    catch
+                    {
+                        throw new Exception("scenario neobsahuje naboje");
+                    }
+
+                    if (charges.Length == 0) return;
+
+                    for (int i = 0; i < charges.Length; i++)
+                    {
+                        if (charges[i] == null) continue;
+                        chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
+                    }
+
+                    if (chargeHit == -1)
+                    {
+                        PointF p = new PointF(point.X - SettingsObject.worldCenter.X,
+                            point.Y - SettingsObject.worldCenter.Y);
+                        scenario.CreateProbe(p, 0, 0);
+                    }
                 }
-                catch
-                {
-                    throw new Exception("scenario neobsahuje naboje");
-                }                
-                
-                if (charges.Length == 0) return;
 
-                for (int i = 0; i < charges.Length; i++)
+                if (e.Button == MouseButtons.Right)
                 {
-                    if (charges[i] == null) continue;
-                    chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
-                }
-
-                if (chargeHit == -1)
-                {
-                    scenario.CreateProbe(point, 0, 0);
+                    this.rightDown = true;
                 }
             };
+
             this.MouseMove += (o, e) =>
             {
                 INaboj charge;
 
-                if (chargeHit == -1) return;
-
-                PointF point = new PointF((e.X - this.Width/2)/scale , (e.Y - this.Height/2)/scale);
-
-                if (point.X < (scenario.corners[2]) || point.X >= (scenario.corners[0])|| point.Y < (scenario.corners[3]) || point.Y >= (scenario.corners[1]))
+                PointF point = new PointF((e.X - this.Width / 2) / scale, (e.Y - this.Height / 2) / scale);
+                if (chargeHit != -1)
                 {
-                    chargeHit = -1;
-                    return;
+                    //if (point.X < (scenario.corners[2]) || point.X >= (scenario.corners[0]) || point.Y < (scenario.corners[3]) || point.Y >= (scenario.corners[1]))
+                    //{
+                    //    chargeHit = -1;
+                    //    return;
+                    //}
+
+                    try
+                    {
+                        charge = scenario.GetCharge(chargeHit);
+                    }
+                    catch
+                    {
+                        throw new Exception("naboj se nepodarilo ziskat");
+                    }
+
+                    charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.corners);
                 }
 
-                try
+                if (rightDown)
                 {
-                    charge = scenario.GetCharge(chargeHit);
+                    //if (point.X < (scenario.corners[2]) || point.X >= (scenario.corners[0]) || point.Y < (scenario.corners[3]) || point.Y >= (scenario.corners[1]))
+                    //{
+                    //    rightDown = false;
+                    //    return;
+                    //}
+                    scenario.Move((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale);
                 }
-                catch
-                {
-                    throw new Exception("naboj se nepodarilo ziskat");
-                }
-                
-                charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.corners);
                 prevMouse.X = e.X;
                 prevMouse.Y = e.Y;
             };
-
             this.MouseUp += (o, e) =>
             {
                 chargeHit = -1;
+                rightDown = false;
             };
         }
 
