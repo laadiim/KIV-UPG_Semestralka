@@ -35,7 +35,7 @@ public interface INaboj
     /// nastavi novy stred
     /// </summary>
     /// <param name="point">novy stred</param>
-    void SetPosition(string X, string Y);
+    void SetPosition(float X, float Y);
     
     /// <summary>
     /// vykresli naboj
@@ -65,12 +65,12 @@ public interface INaboj
     /// posune naboj na novou pozici
     /// </summary>
     /// <param name="point">pozice</param>
-    void Drag(PointF point, float[] corners);
+    void Drag(PointF point);
 
     string Save();
 
     public static Naboj Load(string[] args, int id, float startTime)
     {
-        return new Naboj(args[0], args[1], args[2], id, startTime);
+        return new Naboj(args[0], Convert.ToSingle(args[1]), Convert.ToSingle(args[2]), id, startTime);
     }
 }

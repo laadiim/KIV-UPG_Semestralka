@@ -120,7 +120,7 @@ namespace UPG_SP_2024
                 }
             };
 
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 4; i++)
             {
                 scenarioDropdown.Items.Add($"Scenario {i}");
             }
@@ -286,8 +286,6 @@ namespace UPG_SP_2024
                 "scen2.upg",
                 "scen3.upg",
                 "scen4.upg",
-                "scen5.upg",
-                "scen6.upg"
             };
             if (files.Contains(SettingsObject.openFile))
             {

@@ -27,7 +27,11 @@ namespace UPG_SP_2024
             this.ClientSize = new System.Drawing.Size(800, 600);
 
             scenario = new Scenario();
-            
+            this.MouseWheel += (o, e) =>
+            {
+                if (e.Delta > 0) scenario.ZoomIn(e.Delta / 90f, e.Delta / 90f);
+                else scenario.ZoomOut(-e.Delta / 90f, -e.Delta / 90f);
+            };
             this.MouseDown += (o, e) =>
             {
                 if (e.Button == MouseButtons.Left)
@@ -93,7 +97,7 @@ namespace UPG_SP_2024
                         throw new Exception("naboj se nepodarilo ziskat");
                     }
 
-                    charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale), scenario.corners);
+                    charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
                 }
 
                 if (rightDown)

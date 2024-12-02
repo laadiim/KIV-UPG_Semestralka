@@ -11,23 +11,17 @@ public class Naboj : INaboj
     private Expression charge;
     private string chargeStr;
     private float radius;
-    private Expression X;
-    private string xStr;
-    private Expression Y;
-    private string yStr;
+    private float X;
+    private float Y;
     private int id;
     private float startTime;
-    private float _xOffset;
-    private float _yOffset;
 
-    public Naboj(string charge, string X, string Y, int id, float startTime)
+    public Naboj(string charge, float X, float Y, int id, float startTime)
     {
         this.charge = new Expression(charge);
         this.chargeStr = charge;
-        this.xStr = X;
-        this.yStr = Y;
-        this.X = new Expression(X);
-        this.Y = new Expression(Y);
+        this.X = X;
+        this.Y = Y;
         this.id = id;
         this.radius = 1f;
         this.startTime = startTime;
@@ -35,42 +29,29 @@ public class Naboj : INaboj
 
     public string Save()
     {
-        return $"naboj:[t] - [t] + {this.chargeStr};[t] - [t] + {this._xOffset} + {this.xStr};[t] - [t] + {this._yOffset} + {this.yStr}";
+        return $"naboj:[t] - [t] + {this.chargeStr};{this.X};{this.Y}";
     }
 
-    public float GetX(float t)
+    public float GetX()
     {
-        X.Parameters["t"] = t;
-        return _xOffset + Convert.ToSingle(X.Evaluate()) + SettingsObject.worldCenter.X;
+        return X + SettingsObject.worldCenter.X;
     }
 
-    public float GetY(float t)
+    public float GetY()
     {
-        Y.Parameters["t"] = t;
-        return -_yOffset - Convert.ToSingle(Y.Evaluate()) + SettingsObject.worldCenter.Y;
+        return Y + SettingsObject.worldCenter.Y;
     }
 
     public bool IsHit(PointF point)
     {
-        float t = (Environment.TickCount - startTime) / 1000;
-        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(GetX(t), GetY(t)));
+        float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(GetX(), GetY()));
         return distance <= radius;
     }
 
-    public void Drag(PointF point, float[] corners)
+    public void Drag(PointF point)
     {
-        float t = (Environment.TickCount - startTime) / 1000;
-
-        // Calculate current and new positions
-        float currentX = GetX(t);
-        float currentY = GetY(t);
-
-        float newX = currentX + point.X;
-        float newY = currentY + point.Y;
-
-        // Update offsets
-        _xOffset += newX - currentX;
-        _yOffset -= newY - currentY;
+			this.X += point.X;
+			this.Y += point.Y;
     }
 
     public float GetCharge()
@@ -86,13 +67,13 @@ public class Naboj : INaboj
 
     public PointF GetPosition()
     {
-        return new PointF(GetX((Environment.TickCount - startTime) / 1000), GetY((Environment.TickCount - startTime) / 1000));
+        return new PointF(GetX(), GetY());
     }
 
-    public void SetPosition(string X, string Y)
+    public void SetPosition(float X, float Y)
     {
-        this.X = new Expression(X);
-        this.Y = new Expression(Y);
+        this.X = X;
+        this.Y = Y;
     }
     public float GetRadius()
     {
@@ -113,9 +94,8 @@ public class Naboj : INaboj
     {
         float t = Environment.TickCount - startTime;
         t /= 1000;
-        g.TranslateTransform(GetX(t) - radius, GetY(t) - radius);
+        g.TranslateTransform(GetX() - radius, GetY() - radius);
         float charge = GetCharge();
-
         // nastaveni barvy pro naboje
         using (var ellipsePath = new GraphicsPath())
         {
@@ -188,7 +168,7 @@ public class Naboj : INaboj
 
         g.DrawString(label, font, brush, radius - width / 2, radius - height / 2);
 
-        g.TranslateTransform(radius - GetX(t), radius - GetY(t));
+        g.TranslateTransform(radius - GetX(), radius - GetY());
     }
 
 }
