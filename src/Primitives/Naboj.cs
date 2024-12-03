@@ -21,10 +21,21 @@ public class Naboj : INaboj
         this.charge = new Expression(charge);
         this.chargeStr = charge;
         this.X = X;
-        this.Y = Y;
+        this.Y = -Y;
         this.id = id;
         this.radius = 1f;
         this.startTime = startTime;
+    }
+
+    public void SetChargeStr(string chargeStr)
+    {
+        this.chargeStr = chargeStr != "" ? chargeStr : "0";
+        this.charge = new Expression(this.chargeStr);
+    }
+
+    public string GetChargeStr()
+    {
+        return chargeStr;
     }
 
     public string Save()

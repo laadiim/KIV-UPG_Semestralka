@@ -218,10 +218,18 @@ namespace UPG_SP_2024
             this.Controls.Add(saveAsButton);
             saveAsButton.Click += SaveAsButton_Click;
 
+            Button chargeButton = new Button
+            {
+                Location = new Point(10, 300),
+                Text = "Show charges"
+            };
+            this.Controls.Add(chargeButton);
+            chargeButton.Click += ChargeButton_Click;
+
             // Add colormap legend
             Panel legendPanel = new Panel
             {
-                Location = new Point(10, 330),
+                Location = new Point(10, 350),
                 Size = new Size(180, 160),
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.White
@@ -323,6 +331,14 @@ namespace UPG_SP_2024
             GraphForm g = new GraphForm();
             g.Show();
             SettingsObject.graphForm = g;
+        }
+
+        private void ChargeButton_Click(object? sender, EventArgs e)
+        {
+            if (SettingsObject.chargeForm != null) return;
+            ChargeTable g = new ChargeTable();
+            g.Show();
+            SettingsObject.chargeForm = g;
 
         }
 

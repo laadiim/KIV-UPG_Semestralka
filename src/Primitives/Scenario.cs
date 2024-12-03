@@ -203,6 +203,19 @@ public class Scenario : IScenario
         }
     }
 
+    public void EmptyProbes()
+    {
+        foreach (IProbe probe in SettingsObject.probes)
+        {
+            RemoveProbe(probe.GetID());
+        }
+        emptyProbesID.Clear();
+        for (int i = 0; i < SettingsObject.maxProbes; i++)
+        {
+            this.emptyProbesID.Enqueue(i);
+        }
+    }
+
     public INaboj GetCharge(int id)
     {
         for (int i = 0; i < charges.Count; i++)
@@ -210,6 +223,18 @@ public class Scenario : IScenario
             if (charges[i].GetID() == id)
             {
                 return charges[i];
+            }
+        }
+        throw new Exception("naboj nebyl nalezen");
+    }
+
+    public IProbe GetProbe(int id)
+    {
+        for (int i = 0; i < SettingsObject.probes.Count; i++)
+        {
+            if (SettingsObject.probes[i].GetID() == id)
+            {
+                return SettingsObject.probes[i];
             }
         }
         throw new Exception("naboj nebyl nalezen");
@@ -601,6 +626,7 @@ public class Scenario : IScenario
         }
 
         this.scale = scale;
+        SettingsObject.scale = scale;
         this.corners[0] = xMax;
         this.corners[1] = yMax;
         this.corners[2] = xMin;
@@ -657,7 +683,7 @@ public class Scenario : IScenario
         foreach (IProbe probe in SettingsObject.probes) 
         {
             probe.Calc(startTime, this.charges.ToArray());
-            probe.Draw(g, startTime, this.charges.ToArray(), scale, 0, false);
+            probe.Draw(g, this.charges.ToArray(), scale, 0, false);
         }
         
         return scale;

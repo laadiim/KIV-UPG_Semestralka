@@ -17,6 +17,8 @@ public class Probe : IProbe
     private long ticks = 0;
     public List<Tuple<float, float>> values;
     public int id;
+    private float r;
+    private float timeHeld = 0;
 
     public Probe(PointF center, float radius, float anglePerSecond, int id)
     {
@@ -26,6 +28,12 @@ public class Probe : IProbe
         this.v = Vector2.Zero;
 		this.values = new List<Tuple<float, float>>();
         this.id = id;
+        this.r = 14;
+    }
+
+    public void AddTimeHeld(float t)
+    {
+        timeHeld += t;
     }
 
     public int GetID()
@@ -33,12 +41,27 @@ public class Probe : IProbe
         return this.id;
     }
 
-    /* ----------- TODO ------------ */
     public bool IsHit(PointF point)
     {
-        return false;
+        if (radius == 0)
+        {
+            float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(center.X, center.Y));
+            return distance <= r / SettingsObject.scale;
+        }
+        else
+        {
+            float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
+            Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+            float distance = Vector2.Distance(new Vector2(point.X, point.Y), start);
+            return distance <= r / SettingsObject.scale;
+        }
     }
-    /* ----------------------------- */
+
+    public void Drag(PointF point)
+    {
+        this.center.X += point.X;
+        this.center.Y += point.Y;
+    }
     public string Save()
     {
         return $"sonda:{this.center.X};{this.center.Y};{this.radius};{this.anglePerSecond}";
@@ -49,9 +72,9 @@ public class Probe : IProbe
         this.ticks++;
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid)
+    public void Draw(Graphics g, INaboj[] charges, float scale, float spacing, bool grid)
     {
-        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
         if (!grid) start += new Vector2(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
@@ -77,7 +100,6 @@ public class Probe : IProbe
 
         Color color = Color.FromArgb(120, Color.White);
         Brush brush = new SolidBrush(Color.White);
-        float r = 14f / scale; 
 
         g.TranslateTransform(points[0].X, points[0].Y);
 
@@ -118,9 +140,9 @@ public class Probe : IProbe
             Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
             Font font_id = new Font("Arial", 18 * l / scale, FontStyle.Bold);
 
-            g.DrawString(label, font, brush, r * 1.1f, -2 * r);
+            g.DrawString(label, font, brush, this.r/SettingsObject.scale * 1.1f, -2 * this.r / SettingsObject.scale);
 
-            g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
+            g.FillEllipse(brush, -this.r / SettingsObject.scale, -this.r / SettingsObject.scale, 2 * this.r / SettingsObject.scale, 2 * this.r / SettingsObject.scale);
 
             string id = this.id.ToString();
             g.DrawString(id, font_id, new SolidBrush(Color.MidnightBlue), -g.MeasureString(id, font_id).Width / 2f, -g.MeasureString(id, font_id).Height / 2f);
@@ -203,7 +225,7 @@ public class Probe : IProbe
     {
         Vector2 sum = Vector2.Zero;
         const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
-        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle) + SettingsObject.worldCenter.X, center.Y - radius * MathF.Cos(angle) + SettingsObject.worldCenter.Y);
 
         for (int i = 0; i < charges.Length; i++)

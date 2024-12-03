@@ -165,7 +165,7 @@ namespace UPG_SP_2024.Primitives
                 {
                     IProbe p = new Probe(new PointF(xFloats[i], yFloats[j]), 0, 0, -1);
                     p.Calc(this.startTime, this.charges);
-                    p.Draw(g, startTime, charges, scale, Math.Min(spacingX, spacingY), true);
+                    p.Draw(g, charges, scale, Math.Min(spacingX, spacingY), true);
                 }
             }
 

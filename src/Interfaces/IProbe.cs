@@ -16,17 +16,22 @@ public interface IProbe
     /// <param name="charges">seznam naboju</param>
     /// <param name="scale">scale</param>
     /// <param name="spacing">minimum z romeru obdelniku mrizky</param>
-    void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid);
+    void Draw(Graphics g, INaboj[] charges, float scale, float spacing, bool grid);
 
     public void Calc(Vector2 start, INaboj[] charges);
 
     public void Calc(int startTime, INaboj[] charges);
 
     public void Tick();
+    public bool IsHit(PointF point);
+
+    public void Drag(PointF point);
 
     public int GetID();
 
     string Save();
+
+    public void AddTimeHeld(float t);
 
     public static Probe Load(float[] args, int id)
     {

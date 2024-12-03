@@ -77,4 +77,6 @@ public interface IScenario
 		IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
 
         void Move(float x, float y);
+
+        public IProbe GetProbe(int id);
 }

@@ -69,6 +69,10 @@ public interface INaboj
 
     string Save();
 
+    public string GetChargeStr();
+
+    public void SetChargeStr(string chargeStr);
+
     public static Naboj Load(string[] args, int id, float startTime)
     {
         return new Naboj(args[0], Convert.ToSingle(args[1]), Convert.ToSingle(args[2]), id, startTime);

@@ -14,9 +14,11 @@ namespace UPG_SP_2024
         public Scenario scenario;
         private int StartTime { get; set; }
         private int chargeHit = -1;
+        public int probeHit = -1;
         private float scale = 1;
         private bool rightDown = false;
         private PointF prevMouse = new PointF(0, 0);
+        public float timeProbeCaught = 0;
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
@@ -60,8 +62,13 @@ namespace UPG_SP_2024
                         if (charges[i] == null) continue;
                         chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
                     }
-
-                    if (chargeHit == -1)
+                    for (int i = 0; i < SettingsObject.probes.Count; i++)
+                    {
+                        if (SettingsObject.probes[i] == null) continue;
+                        probeHit = SettingsObject.probes[i].IsHit(point) ? SettingsObject.probes[i].GetID() : probeHit;
+                        timeProbeCaught = Environment.TickCount; 
+                    }
+                    if (chargeHit == -1 && probeHit == -1)
                     {
                         PointF p = new PointF(point.X - SettingsObject.worldCenter.X,
                             point.Y - SettingsObject.worldCenter.Y);
@@ -78,6 +85,7 @@ namespace UPG_SP_2024
             this.MouseMove += (o, e) =>
             {
                 INaboj charge;
+                IProbe probe;
 
                 PointF point = new PointF((e.X - this.Width / 2) / scale, (e.Y - this.Height / 2) / scale);
                 if (chargeHit != -1)
@@ -99,6 +107,19 @@ namespace UPG_SP_2024
 
                     charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
                 }
+                if (probeHit != -1)
+                {
+                    try
+                    {
+                        probe = scenario.GetProbe(probeHit);
+                    }
+                    catch
+                    {
+                        throw new Exception("sondu se nepodarilo ziskat");
+                    }
+                    
+                    probe.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
+                }
 
                 if (rightDown)
                 {
@@ -115,6 +136,8 @@ namespace UPG_SP_2024
             this.MouseUp += (o, e) =>
             {
                 chargeHit = -1;
+
+                probeHit = -1;
                 rightDown = false;
             };
         }
@@ -122,6 +145,7 @@ namespace UPG_SP_2024
         public void LoadScenario(string filename)
         {
             scenario.EmptyCharges();
+            scenario.EmptyProbes();
             float startTime = SettingsObject.startTime = Environment.TickCount;
             StreamReader sr = new StreamReader(filename);
             List<string> lines = new List<string>();
@@ -158,7 +182,6 @@ namespace UPG_SP_2024
                 "scen4.upg",
                 "scen5.upg",
             };
-            scenario.EmptyCharges();
 
             LoadScenario(files[scenarioNum]);
         }

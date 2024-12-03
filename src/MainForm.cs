@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using UPG_SP_2024.Interfaces;
+using UPG_SP_2024.Primitives;
 
 namespace UPG_SP_2024
 {
@@ -100,6 +101,12 @@ namespace UPG_SP_2024
         private void TimerTick(object sender, EventArgs e)
         {
             ticks++;
+            if (SettingsObject.drawingPanel.probeHit != -1)
+            {
+                SettingsObject.drawingPanel.scenario.GetProbe(SettingsObject.drawingPanel.probeHit).AddTimeHeld(Environment.TickCount - SettingsObject.drawingPanel.timeProbeCaught);
+            }
+
+            SettingsObject.drawingPanel.timeProbeCaught = Environment.TickCount;
             foreach (IProbe probe in SettingsObject.probes)
             {
                 probe.Tick();
