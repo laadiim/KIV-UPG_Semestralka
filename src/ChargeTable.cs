@@ -7,13 +7,14 @@ namespace UPG_SP_2024
     public partial class ChargeTable : Form
     {
         private DataGridView chargesGridView;
+				private Button addChargeButton;
 
-        private List<Tuple<int, string, float, float>> data = new List<Tuple<int, string, float, float> > ();
 
         public ChargeTable()
         {
             InitializeComponent();
             InitializeDataGridView();
+						InitializeAddChargeButton();
             LoadData();
             this.FormClosing += (o, e) => SettingsObject.chargeForm = null;
         }
@@ -68,6 +69,25 @@ namespace UPG_SP_2024
             Controls.Add(chargesGridView);
         }
 
+				private void InitializeAddChargeButton()
+        {
+            addChargeButton = new Button
+            {
+                Text = "Add Charge",
+                Dock = DockStyle.Bottom,
+                Height = 40
+            };
+
+            addChargeButton.Click += AddChargeButton_Click;
+
+            Controls.Add(addChargeButton);
+        }
+
+				private void AddChargeButton_Click(object sender, EventArgs e)
+				{
+					INaboj c = SettingsObject.drawingPanel.scenario.AddCharge(new string[]{"1", "0", "0"}, SettingsObject.startTime);
+					DataAdd(c.GetID(), c.GetChargeStr(), c.GetPosition().X, c.GetPosition().Y);
+				}
 
         private void ChargesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -88,7 +108,6 @@ namespace UPG_SP_2024
                 {
                     return;
                 }
-                data[e.RowIndex] = new Tuple<int, string, float, float>(id, charge, x, y);
                 c.SetChargeStr(charge);
                 c.SetPosition(x, y);
             }
@@ -97,7 +116,34 @@ namespace UPG_SP_2024
         public void DataAdd(int id, string charge, float x, float y)
         {
             chargesGridView.Rows.Add(id, charge, x, y);
-            data.Add(new Tuple<int, string, float, float>(id, charge, x, y));
+        }
+
+        public void DataEmpty()
+        {
+            chargesGridView.Rows.Clear();
+        }
+
+        public void Reload()
+        {
+            DataEmpty();
+            LoadData();
+        }
+
+        public void Refresh(int id)
+        {
+            INaboj c = SettingsObject.drawingPanel.scenario.GetCharge(id);
+            foreach (DataGridViewRow row in chargesGridView.Rows)
+            {
+                if (row.Cells["Id"].Value != null && (int)row.Cells["Id"].Value == id)
+                {
+                    // Update the values in the row
+                    row.Cells["Charge"].Value = c.GetChargeStr();
+                    row.Cells["X"].Value = c.GetPosition().X;
+                    row.Cells["Y"].Value = c.GetPosition().Y;
+
+                    return; // Exit after finding and updating the row
+                }
+            }
         }
 
         public void LoadData()
@@ -114,9 +160,8 @@ namespace UPG_SP_2024
             // Handle Delete button click
             if (e.RowIndex >= 0 && e.ColumnIndex == chargesGridView.Columns["DeleteButton"].Index)
             {
+                SettingsObject.drawingPanel.scenario.RemoveCharge((int)(chargesGridView.Rows[e.RowIndex].Cells["Id"].Value));
                 chargesGridView.Rows.RemoveAt(e.RowIndex);
-                SettingsObject.drawingPanel.scenario.RemoveCharge((int)(data[e.RowIndex].Item1));
-                data.RemoveAt(e.RowIndex);
             }
         }
     }

@@ -153,12 +153,13 @@ public class Scenario : IScenario
         }
     }
 
-    public void AddCharge(string[] args, float startTime)
+    public INaboj AddCharge(string[] args, float startTime)
     {
         INaboj naboj = INaboj.Load(args, chargeID, startTime);
         chargeID++;
         charges.Add(naboj);
         chargesCount++;
+				return naboj;
     }
 
     public INaboj RemoveCharge(INaboj naboj)
@@ -551,7 +552,7 @@ public class Scenario : IScenario
                     {
                         float currentCharge = (float)Math.Sqrt(Math.Abs(charge.GetCharge()));
 
-                        float newRadius = (float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch);
+                        float newRadius = Math.Max((float)Math.Sqrt(charge.GetRadius() * 1.5f * currentCharge / sum_ch), 0.01f);
                         charge.SetRadius(newRadius);
                     }
 

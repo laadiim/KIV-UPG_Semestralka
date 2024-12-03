@@ -62,7 +62,8 @@ public class Naboj : INaboj
     public void Drag(PointF point)
     {
 			this.X += point.X;
-			this.Y += point.Y;
+            this.Y += point.Y;
+            if (SettingsObject.graphForm != null)SettingsObject.chargeForm.Refresh(this.id);
     }
 
     public float GetCharge()
@@ -108,67 +109,66 @@ public class Naboj : INaboj
         g.TranslateTransform(GetX() - radius, GetY() - radius);
         float charge = GetCharge();
         // nastaveni barvy pro naboje
+        if (radius <= 0 || radius > 1000) // Example threshold
+        {
+            throw new ArgumentException("Radius must be greater than 0 and less than a reasonable upper limit.");
+        }
         using (var ellipsePath = new GraphicsPath())
         {
-
             ellipsePath.AddEllipse(0, 0, radius * 2, radius * 2);
 
-            using (var brushEll = new PathGradientBrush(ellipsePath))
+            // First part
+            using (var brushEll1 = new PathGradientBrush(ellipsePath))
             {
-                // prvni cast
-                brushEll.CenterPoint = new PointF(radius / 1.7f, radius / 1.7f);
-
-                // nastaveni jine barvy pro zapornou hodnotu naboje
                 if (charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(255, 70, 240, 240);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 100, 50, 90) };
+                    brushEll1.CenterColor = Color.FromArgb(255, 70, 240, 240);
+                    brushEll1.SurroundColors = new[] { Color.FromArgb(255, 100, 50, 90) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(255, 240, 220, 220);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(255, 100, 20, 100) };
+                    brushEll1.CenterColor = Color.FromArgb(255, 240, 220, 220);
+                    brushEll1.SurroundColors = new[] { Color.FromArgb(255, 100, 20, 100) };
                 }
-                brushEll.FocusScales = new PointF(0f, 0f);
+                brushEll1.FocusScales = new PointF(0f, 0f);
+                g.FillEllipse(brushEll1, 0, 0, radius * 2, radius * 2);
+            }
 
-                // vybarvi naboj
-                g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
-
-
-                // druha cast
-                brushEll.CenterPoint = new PointF(radius / 2.2f, radius / 2.2f);
-
-                // nastaveni jine barvy pro zapornou hodnotu naboje
+            // Second part
+            using (var brushEll2 = new PathGradientBrush(ellipsePath))
+            {
                 if (charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(220, 160, 150, 190) };
+                    brushEll2.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll2.SurroundColors = new[] { Color.FromArgb(220, 160, 150, 190) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(210, 140, 190, 200) };
+                    brushEll2.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll2.SurroundColors = new[] { Color.FromArgb(210, 140, 190, 200) };
                 }
-                brushEll.FocusScales = new PointF(0.7f, 0.7f);
+                brushEll2.FocusScales = new PointF(0.7f, 0.7f);
+                g.FillEllipse(brushEll2, 0, 0, radius * 2, radius * 2);
+            }
 
-                // vybarvi pres naboj gradient pro zjemneni okraju
-                g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
-
+            // Third part
+            using (var brushEll3 = new PathGradientBrush(ellipsePath))
+            {
                 if (charge < 0)
                 {
-                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(150, 240, 170, 190) };
+                    brushEll3.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll3.SurroundColors = new[] { Color.FromArgb(150, 240, 170, 190) };
                 }
                 else
                 {
-                    brushEll.CenterColor = Color.FromArgb(0, 0, 0, 0);
-                    brushEll.SurroundColors = new[] { Color.FromArgb(150, 240, 140, 190) };
+                    brushEll3.CenterColor = Color.FromArgb(0, 0, 0, 0);
+                    brushEll3.SurroundColors = new[] { Color.FromArgb(150, 240, 140, 190) };
                 }
-                brushEll.FocusScales = new PointF(0.9f, 0.9f);
-
-                g.FillEllipse(brushEll, 0, 0, radius * 2, radius * 2);
+                brushEll3.FocusScales = new PointF(0.9f, 0.9f);
+                g.FillEllipse(brushEll3, 0, 0, radius * 2, radius * 2);
             }
         }
+
 
         // napis - hodnota naboje
         string label = $"{charge:n1} C";
