@@ -15,7 +15,7 @@ public interface IScenario
     /// prida naboj do sceny
     /// </summary>
     /// <param name="naboj">naboj k pridani</param>
-    void AddCharge(INaboj naboj);
+    INaboj AddCharge(string[] args, float startTime);
     
     /// <summary>
     /// odstrani naboj ze sceny
@@ -75,4 +75,8 @@ public interface IScenario
 		/// <param name="anglePerSecond"/> uhlova rychlost obehu
 		/// <returns> instance sondy </returns>
 		IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
+
+        void Move(float x, float y);
+
+        public IProbe GetProbe(int id);
 }

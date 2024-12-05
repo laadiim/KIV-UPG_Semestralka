@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.SKCharts;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.SkiaSharpView.WinForms;
 using LiveChartsCore.VisualElements;
@@ -16,39 +17,56 @@ namespace UPG_SP_2024
 {
     internal class GraphTab : TabPage
     {
-        private Probe probe;
-        private int index;
-        private ISeries[] series = new ISeries[]
-        {
-            new LineSeries<ObservablePoint>
-            {
-                Values = [],
-                GeometrySize = 0,
-                Fill = null,
-            }
-        };
+        private List<IProbe> probes;
+        private List<ISeries> series = new List<ISeries>();
         private CartesianChart chart;
 
-        public GraphTab(IProbe probe, int index)
+        public GraphTab(IProbe probe)
         {
-            this.probe = (Probe)probe ?? throw new ArgumentNullException(nameof(probe));
-            this.index = index;
+            this.probes = new List<IProbe>();
+            this.probes.Add(probe);
+            InitializeChart();
+            //UpdateChart();
+        }
+
+        public GraphTab(List<IProbe> probes)
+        {
+            this.probes = probes;
             InitializeChart();
             //UpdateChart();
         }
 
         private void GetData()
         {
-            ObservablePoint[] values = new ObservablePoint[probe.values.Count];
-            for (int i = 0; i < probe.values.Count; i++)
+            for (int j = 0; j < this.probes.Count; j++)
             {
-                float v = probe.values[i].Item2 * 100;
-                values[i] = new ObservablePoint(probe.values[i].Item1 ,Math.Round(v, 2));
+                Probe probe = (Probe)this.probes[j];
+                ObservablePoint[] values = new ObservablePoint[probe.values.Count];
+                for (int i = 0; i < probe.values.Count; i++)
+                {
+                    float v = probe.values[i].Item2 * 100;
+                    values[i] = new ObservablePoint(probe.values[i].Item1, Math.Round(v, 2));
+                }
+                this.series[j].Values = values;
             }
-            series[0].Values = values;
+            
         }
         private void InitializeChart()
         {
+            for (int j = 0; j < this.probes.Count; j++)
+            {
+                Probe probe = (Probe)this.probes[j];
+                LineSeries<ObservablePoint> s = new LineSeries<ObservablePoint>
+                {
+                    Values = [],
+                    GeometrySize = 0,
+                    Fill = null,
+                    Name = $"Probe {probe.id}"
+                };
+
+                this.series.Add(s);
+            }
+
             GetData();
             this.chart = new CartesianChart
             {
@@ -67,6 +85,7 @@ namespace UPG_SP_2024
                         MinLimit = 0,
                         MinStep = 1,
                 }},
+                LegendPosition = LiveChartsCore.Measure.LegendPosition.Bottom,
             };
             Controls.Add(chart);
         }

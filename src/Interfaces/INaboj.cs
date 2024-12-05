@@ -1,3 +1,6 @@
+using System.Numerics;
+using UPG_SP_2024.Primitives;
+
 namespace UPG_SP_2024.Interfaces;
 
 /// <summary>
@@ -21,7 +24,7 @@ public interface INaboj
     /// nastavi novou hodnotu naboje
     /// </summary>
     /// <param name="charge">novy naboj</param>
-    void SetCharge(Func<float, float> charge);
+    void SetCharge(string charge);
     
     /// <summary>
     /// vrati pozici stredu naboje
@@ -33,7 +36,7 @@ public interface INaboj
     /// nastavi novy stred
     /// </summary>
     /// <param name="point">novy stred</param>
-    void SetPosition(Func<float, float> X, Func<float, float> Y);
+    void SetPosition(float X, float Y);
     
     /// <summary>
     /// vykresli naboj
@@ -60,8 +63,39 @@ public interface INaboj
     void SetRadius(float radius);
     
     /// <summary>
-    /// posune naboj na novou pozici
+    /// posune naboj o vektor
     /// </summary>
-    /// <param name="point">pozice</param>
-    void Drag(PointF point, float[] corners);
+    /// <param name="v">vektor posunu</param>
+    void Drag(Vector2 v);
+
+    /// <summary>
+    /// vytvori retezec k ulozeni naboje ve tvaru
+    /// "naboj:{vzorec pro vypocet naboje};{pozice x};{pozice y}"
+    /// </summary>
+    /// <returns>retezec k ulozeni</returns>
+    string Save();
+
+    /// <summary>
+    /// getter pro retezec vypoctu naboje
+    /// </summary>
+    /// <returns>retezec pro vypocet naboje</returns>
+    public string GetChargeStr();
+
+    /// <summary>
+    /// setter pro retezec vypoctu naboje
+    /// </summary>
+    /// <param name="chargeStr">novy retezec</param>
+    public void SetChargeStr(string chargeStr);
+
+    /// <summary>
+    /// vytvori instanci naboje podle predanych parametru
+    /// </summary>
+    /// <param name="args">parametry naboje [retezec pro naboj, x, y]</param>
+    /// <param name="id">id pro naboj</param>
+    /// <param name="startTime">zacatek simulace</param>
+    /// <returns></returns>
+    public static INaboj Load(string[] args, int id, float startTime)
+    {
+        return new Naboj(args[0], Convert.ToSingle(args[1]), Convert.ToSingle(args[2]), id, startTime);
+    }
 }

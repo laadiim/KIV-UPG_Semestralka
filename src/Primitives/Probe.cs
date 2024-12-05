@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using System.Transactions;
+using NCalc;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -11,19 +12,97 @@ namespace UPG_SP_2024.Primitives;
 public class Probe : IProbe
 {
     private PointF center;
-    readonly private float radius;
-    readonly private float anglePerSecond;
+    private float radius;
+    private float anglePerSecond;
     private Vector2 v;
     private long ticks = 0;
     public List<Tuple<float, float>> values;
+    public int id;
+    private float r;
+    private float timeHeld = 0;
 
-    public Probe(PointF center, float radius = 1f, float anglePerSecond = MathF.PI / 6)
+    public Probe(PointF center, float radius, float anglePerSecond, int id)
     {
         this.center = center;
         this.radius = radius;
         this.anglePerSecond = anglePerSecond;
         this.v = Vector2.Zero;
 		this.values = new List<Tuple<float, float>>();
+        this.id = id;
+        this.r = 14;
+    }
+
+    public float GetRadius()
+    {
+        return this.radius;
+    }
+
+    public void SetRadius(float newRadius)
+    {
+        this.radius = newRadius;
+    }
+
+    public PointF GetCenter()
+    {
+        return this.center;
+    }
+
+    public void SetCenter(PointF newCenter)
+    {
+        this.center = newCenter;
+    }
+
+    public float GetAnglePerSecond()
+    {
+        return this.anglePerSecond;
+    }
+
+    public void SetAnglePerSecond(float newAngle)
+    {
+        this.anglePerSecond = newAngle;
+    }
+
+    public void SetAnglePerSecond(string newAngle)
+    {
+        Expression e = new Expression(newAngle);
+        this.anglePerSecond = Convert.ToSingle(e.Evaluate());
+    }
+
+    public void AddTimeHeld(float t)
+    {
+        timeHeld += t;
+    }
+
+    public int GetID()
+    {
+        return this.id;
+    }
+
+    public bool IsHit(PointF point)
+    {
+        if (radius == 0)
+        {
+            float distance = Vector2.Distance(new Vector2(point.X, point.Y), new Vector2(center.X, center.Y));
+            return distance <= r / SettingsObject.scale;
+        }
+        else
+        {
+            float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
+            Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+            float distance = Vector2.Distance(new Vector2(point.X, point.Y), start);
+            return distance <= r / SettingsObject.scale;
+        }
+    }
+
+    public void Drag(PointF point)
+    {
+        this.center.X += point.X;
+        this.center.Y += point.Y;
+        SettingsObject.probeForm.Refresh(this.id);
+    }
+    public string Save()
+    {
+        return $"sonda:{this.center.X};{this.center.Y};{this.radius};{this.anglePerSecond}";
     }
 
     public void Tick()
@@ -31,14 +110,15 @@ public class Probe : IProbe
         this.ticks++;
     }
 
-    public void Draw(Graphics g, int startTime, INaboj[] charges, float scale, float spacing, bool grid)
+    public void Draw(Graphics g, INaboj[] charges, float scale, float spacing, bool grid)
     {
-        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
+        float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
         Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        if (!grid) start += new Vector2(SettingsObject.worldCenter.X, SettingsObject.worldCenter.Y);
 
         if (this.v.Length() == 0)
         {
-            if (charges == null || charges.Length == 0)
+            if (charges == null)
             {
                 throw new ArgumentException("Scenario neobsahuje naboje");
             }
@@ -58,7 +138,6 @@ public class Probe : IProbe
 
         Color color = Color.FromArgb(120, Color.White);
         Brush brush = new SolidBrush(Color.White);
-        float r = 0.3f / (float)Math.Sqrt(scale); 
 
         g.TranslateTransform(points[0].X, points[0].Y);
 
@@ -75,17 +154,6 @@ public class Probe : IProbe
             l = l != 0 ? l : 1;
         }  
 
-        if (!grid)
-        {
-            float len = this.v.Length() * 100;
-            string label = $"{len.ToString("n2")}E-2 TN/C";
-
-            Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
-
-            g.DrawString(label, font, brush, 3 / 2 * r, -6 * r);
-
-            g.FillEllipse(brush, -r, -r, 2 * r, 2 * r);
-        }
 
         if (this.v.X > 2E9 || this.v.Y > 2E9)
         {
@@ -100,6 +168,22 @@ public class Probe : IProbe
         else
         {
             DrawArrow(g, this.v, scale, color, l, grid);
+        }
+
+        if (!grid)
+        {
+            float len = this.v.Length() * 100;
+            string label = $"{len.ToString("n2")}E-2 TN/C";
+
+            Font font = new Font("Arial", 12 * l / scale, FontStyle.Bold);
+            Font font_id = new Font("Arial", 18 * l / scale, FontStyle.Bold);
+
+            g.DrawString(label, font, brush, this.r/SettingsObject.scale * 1.1f, -2 * this.r / SettingsObject.scale);
+
+            g.FillEllipse(brush, -this.r / SettingsObject.scale, -this.r / SettingsObject.scale, 2 * this.r / SettingsObject.scale, 2 * this.r / SettingsObject.scale);
+
+            string id = this.id.ToString();
+            g.DrawString(id, font_id, new SolidBrush(Color.MidnightBlue), -g.MeasureString(id, font_id).Width / 2f, -g.MeasureString(id, font_id).Height / 2f);
         }
 
         g.TranslateTransform(-points[0].X, -points[0].Y);
@@ -179,8 +263,8 @@ public class Probe : IProbe
     {
         Vector2 sum = Vector2.Zero;
         const float k = 8.9875517923E9f; // konstanta - 1/4PI*e0
-        float angle = anglePerSecond * (Environment.TickCount - startTime) / 1000;
-        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle), center.Y - radius * MathF.Cos(angle));
+        float angle = anglePerSecond * (Environment.TickCount - SettingsObject.startTime - timeHeld) / 1000;
+        Vector2 start = new Vector2(center.X - radius * MathF.Sin(angle) + SettingsObject.worldCenter.X, center.Y - radius * MathF.Cos(angle) + SettingsObject.worldCenter.Y);
 
         for (int i = 0; i < charges.Length; i++)
         {

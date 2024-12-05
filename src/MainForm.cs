@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using UPG_SP_2024.Interfaces;
+using UPG_SP_2024.Primitives;
 
 namespace UPG_SP_2024
 {
@@ -21,6 +22,11 @@ namespace UPG_SP_2024
             SettingsObject.gridShown = false;
             SettingsObject.corners = new float[4];
             SettingsObject.probes = new List<IProbe>();
+			SettingsObject.halfWidth = 2;
+			SettingsObject.halfHeight = 2;
+			SettingsObject.worldCenter = new PointF(0, 0);
+            SettingsObject.tickLen = 30;
+            SettingsObject.maxProbes = 7;
 
             // Configure the form
             this.ClientSize = new Size(800, 600);
@@ -36,6 +42,23 @@ namespace UPG_SP_2024
                 if (e.KeyCode == Keys.O)
                 {
                     drawingPanel?.scenario?.ZoomOut(2, 2);
+                }
+
+                if (e.KeyCode == Keys.S)
+                {
+                    drawingPanel?.scenario?.Move(0, -0.5f);
+                }
+                if (e.KeyCode == Keys.W)
+                {
+                    drawingPanel?.scenario?.Move(0, 0.5f);
+                }
+                if (e.KeyCode == Keys.D)
+                {
+                    drawingPanel?.scenario?.Move(-0.5f, 0);
+                }
+                if (e.KeyCode == Keys.A)
+                {
+                    drawingPanel?.scenario?.Move(0.5f, 0);
                 }
             };
 
@@ -53,8 +76,8 @@ namespace UPG_SP_2024
             this.Controls.Add(c);
 
             // Configure the drawing panel and scenario
-            p.SetScenario(scenario_num);
-            p.scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
+            //p.SetScenario(scenario_num);
+            //p.scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
 
             // Reset probes in GraphPanel
             //g.ResetProbes();
@@ -65,17 +88,25 @@ namespace UPG_SP_2024
             // Set up timer for refreshing the drawing panel
             var timer = new System.Windows.Forms.Timer
             {
-                Interval = 50 // Milliseconds
+                Interval = SettingsObject.tickLen // Milliseconds
             };
             timer.Tick += TimerTick;
 
             startTime = Environment.TickCount;
+            SettingsObject.startTime = startTime;
             timer.Start();
+            p.SetScenario(scenario_num);
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
             ticks++;
+            if (SettingsObject.drawingPanel.probeHit != -1)
+            {
+                SettingsObject.drawingPanel.scenario.GetProbe(SettingsObject.drawingPanel.probeHit).AddTimeHeld(Environment.TickCount - SettingsObject.drawingPanel.timeProbeCaught);
+            }
+
+            SettingsObject.drawingPanel.timeProbeCaught = Environment.TickCount;
             foreach (IProbe probe in SettingsObject.probes)
             {
                 probe.Tick();
