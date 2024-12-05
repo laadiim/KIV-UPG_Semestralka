@@ -9,5 +9,5 @@ public interface IGrid
 
     int GetSpacingYinPixels();
 
-    void Draw(Graphics g, PointF topLeft, PointF bottomRight, float tipLength, float scale);
+    public void Draw(Graphics g, float tipLength, float scale);
 }
