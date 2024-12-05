@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using System.Transactions;
+using NCalc;
 using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024.Primitives;
@@ -11,8 +12,8 @@ namespace UPG_SP_2024.Primitives;
 public class Probe : IProbe
 {
     private PointF center;
-    readonly private float radius;
-    readonly private float anglePerSecond;
+    private float radius;
+    private float anglePerSecond;
     private Vector2 v;
     private long ticks = 0;
     public List<Tuple<float, float>> values;
@@ -29,6 +30,42 @@ public class Probe : IProbe
 		this.values = new List<Tuple<float, float>>();
         this.id = id;
         this.r = 14;
+    }
+
+    public float GetRadius()
+    {
+        return this.radius;
+    }
+
+    public void SetRadius(float newRadius)
+    {
+        this.radius = newRadius;
+    }
+
+    public PointF GetCenter()
+    {
+        return this.center;
+    }
+
+    public void SetCenter(PointF newCenter)
+    {
+        this.center = newCenter;
+    }
+
+    public float GetAnglePerSecond()
+    {
+        return this.anglePerSecond;
+    }
+
+    public void SetAnglePerSecond(float newAngle)
+    {
+        this.anglePerSecond = newAngle;
+    }
+
+    public void SetAnglePerSecond(string newAngle)
+    {
+        Expression e = new Expression(newAngle);
+        this.anglePerSecond = Convert.ToSingle(e.Evaluate());
     }
 
     public void AddTimeHeld(float t)
@@ -61,6 +98,7 @@ public class Probe : IProbe
     {
         this.center.X += point.X;
         this.center.Y += point.Y;
+        SettingsObject.probeForm.Refresh(this.id);
     }
     public string Save()
     {
@@ -80,7 +118,7 @@ public class Probe : IProbe
 
         if (this.v.Length() == 0)
         {
-            if (charges == null || charges.Length == 0)
+            if (charges == null)
             {
                 throw new ArgumentException("Scenario neobsahuje naboje");
             }

@@ -33,6 +33,19 @@ public interface IProbe
 
     public void AddTimeHeld(float t);
 
+    public void SetCenter(PointF newCenter);
+
+    public PointF GetCenter();
+
+    public void SetRadius(float newRadius);
+
+    public float GetRadius();
+
+    public void SetAnglePerSecond(float newAngle);
+    public void SetAnglePerSecond(string newAngle);
+
+    public float GetAnglePerSecond();
+
     public static Probe Load(float[] args, int id)
     {
         return new Probe(new PointF(args[0], args[1]), args[2], args[3], id);

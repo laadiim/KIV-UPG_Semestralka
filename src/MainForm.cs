@@ -25,7 +25,7 @@ namespace UPG_SP_2024
 			SettingsObject.halfWidth = 2;
 			SettingsObject.halfHeight = 2;
 			SettingsObject.worldCenter = new PointF(0, 0);
-            SettingsObject.tickLen = 50;
+            SettingsObject.tickLen = 30;
             SettingsObject.maxProbes = 7;
 
             // Configure the form

@@ -93,7 +93,5 @@
 
         private Panel panel1;
         private TabControl tabControl;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
     }
 }

@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Numerics;
 using UPG_SP_2024.Interfaces;
 using UPG_SP_2024.Primitives;
 
@@ -46,6 +47,15 @@ namespace UPG_SP_2024
                     point.X = (point.X - this.Width / 2) / scale;
                     point.Y = (point.Y - this.Height / 2) / scale;
 
+                    for (int i = 0; i < SettingsObject.probes.Count; i++)
+                    {
+                        if (SettingsObject.probes[i] == null) continue;
+                        probeHit = SettingsObject.probes[i].IsHit(point) ? SettingsObject.probes[i].GetID() : probeHit;
+                        timeProbeCaught = Environment.TickCount;
+                    }
+
+                    if (probeHit != -1) return;
+
                     try
                     {
                         charges = scenario.GetCharges();
@@ -62,12 +72,7 @@ namespace UPG_SP_2024
                         if (charges[i] == null) continue;
                         chargeHit = charges[i].IsHit(point) ? charges[i].GetID() : chargeHit;
                     }
-                    for (int i = 0; i < SettingsObject.probes.Count; i++)
-                    {
-                        if (SettingsObject.probes[i] == null) continue;
-                        probeHit = SettingsObject.probes[i].IsHit(point) ? SettingsObject.probes[i].GetID() : probeHit;
-                        timeProbeCaught = Environment.TickCount; 
-                    }
+                    
                     if (chargeHit == -1 && probeHit == -1)
                     {
                         PointF p = new PointF(point.X - SettingsObject.worldCenter.X,
@@ -105,7 +110,7 @@ namespace UPG_SP_2024
                         throw new Exception("naboj se nepodarilo ziskat");
                     }
 
-                    charge.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
+                    charge.Drag(new Vector2((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
                 }
                 if (probeHit != -1)
                 {
@@ -161,6 +166,9 @@ namespace UPG_SP_2024
             sr.Close();
             scenario.Load(lines.ToArray(), startTime);
             SettingsObject.openFile = filename;
+            
+            if (SettingsObject.probeForm != null) SettingsObject.probeForm.Reload();
+            if (SettingsObject.chargeForm != null) SettingsObject.chargeForm.Reload();
         }
 
         public void SaveScenario(string filename)

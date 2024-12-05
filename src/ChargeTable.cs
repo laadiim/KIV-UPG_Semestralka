@@ -4,12 +4,18 @@ using UPG_SP_2024.Interfaces;
 
 namespace UPG_SP_2024
 {
+    /// <summary>
+    /// trida okna s tabulkou naboju
+    /// </summary>
     public partial class ChargeTable : Form
     {
         private DataGridView chargesGridView;
 				private Button addChargeButton;
 
 
+        /// <summary>
+        /// konstruktor
+        /// </summary>
         public ChargeTable()
         {
             InitializeComponent();
@@ -19,6 +25,9 @@ namespace UPG_SP_2024
             this.FormClosing += (o, e) => SettingsObject.chargeForm = null;
         }
 
+        /// <summary>
+        /// inicializace tabulky
+        /// </summary>
         private void InitializeDataGridView()
         {
             chargesGridView = new DataGridView
@@ -69,7 +78,10 @@ namespace UPG_SP_2024
             Controls.Add(chargesGridView);
         }
 
-				private void InitializeAddChargeButton()
+        /// <summary>
+        /// inicializace tlacitka pro pridani naboje
+        /// </summary>
+	    private void InitializeAddChargeButton()
         {
             addChargeButton = new Button
             {
@@ -83,12 +95,24 @@ namespace UPG_SP_2024
             Controls.Add(addChargeButton);
         }
 
-				private void AddChargeButton_Click(object sender, EventArgs e)
-				{
-					INaboj c = SettingsObject.drawingPanel.scenario.AddCharge(new string[]{"1", "0", "0"}, SettingsObject.startTime);
-					DataAdd(c.GetID(), c.GetChargeStr(), c.GetPosition().X, c.GetPosition().Y);
-				}
+        /// <summary>
+        /// obsluha udalosti kliknuti na AddChargeButton
+        /// prida do scenare a tabulky naboj
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+		private void AddChargeButton_Click(object sender, EventArgs e)
+		{
+			INaboj c = SettingsObject.drawingPanel.scenario.AddCharge(new string[]{"1", "0", "0"}, SettingsObject.startTime);
+			DataAdd(c.GetID(), c.GetChargeStr(), c.GetPosition().X, c.GetPosition().Y);
+		}
 
+        /// <summary>
+        /// obsluha udalosti ukonceni upravy pole v tabulce
+        /// upravi parametry sondy ve scenari
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChargesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
@@ -113,22 +137,39 @@ namespace UPG_SP_2024
             }
         }
 
+        /// <summary>
+        /// prida radek dat o naboji do tabulky
+        /// </summary>
+        /// <param name="id">id naboje</param>
+        /// <param name="charge">retezec se vzorcem pro vypocet hodnoty naboje</param>
+        /// <param name="x">souradnice x stredu naboje</param>
+        /// <param name="y">souradnice y stredu naboje</param>
         public void DataAdd(int id, string charge, float x, float y)
         {
             chargesGridView.Rows.Add(id, charge, x, y);
         }
 
+        /// <summary>
+        /// vyprazdni tabulku
+        /// </summary>
         public void DataEmpty()
         {
             chargesGridView.Rows.Clear();
         }
 
+        /// <summary>
+        /// vyprazdni tabulku a nacte nova data
+        /// </summary>
         public void Reload()
         {
             DataEmpty();
             LoadData();
         }
 
+        /// <summary>
+        /// aktualizuje data o naboji se zadanym id
+        /// </summary>
+        /// <param name="id">id naboje</param>
         public void Refresh(int id)
         {
             INaboj c = SettingsObject.drawingPanel.scenario.GetCharge(id);
@@ -146,6 +187,9 @@ namespace UPG_SP_2024
             }
         }
 
+        /// <summary>
+        /// nacte data ze scenare do tabulky
+        /// </summary>
         public void LoadData()
         {
             INaboj[] charges = SettingsObject.drawingPanel.scenario.GetCharges();
@@ -155,6 +199,12 @@ namespace UPG_SP_2024
             }
         }
 
+        /// <summary>
+        /// obsluha udalosti kliknuti na pole v tabulce
+        /// kliknuti na sloupec delete - smaze naboj ze scenare
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChargesGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Handle Delete button click

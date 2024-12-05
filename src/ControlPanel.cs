@@ -5,6 +5,9 @@ using System.Windows.Forms;
 
 namespace UPG_SP_2024
 {
+    /// <summary>
+    /// trida ovladaciho panelu
+    /// </summary>
     public class ControlPanel : Panel
     {
         private CheckBox colormapCheckBox;
@@ -15,6 +18,8 @@ namespace UPG_SP_2024
         private Button openButton;
         private Button saveButton;
         private Button saveAsButton;
+
+        private int legendEntries = 1;
 
         private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
@@ -29,6 +34,9 @@ namespace UPG_SP_2024
         private readonly double[] boundaryDiffs;
         private readonly int[,] colorDiffs;
 
+        /// <summary>
+        /// konstruktor ovladaciho panelu
+        /// </summary>
         public ControlPanel()
         {
             boundaryDiffs = new double[boundaries.Length - 1];
@@ -51,17 +59,27 @@ namespace UPG_SP_2024
             InitializeControls();
         }
         
+        /// <summary>
+        /// zjisti jestli je aktivni designMode - pro designer
+        /// </summary>
+        /// <returns>bool: je aktivni design mode? </returns>
         private bool IsInDesignMode()
         {
             return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
         }
 
+        /// <summary>
+        /// zajisti nastaveni potrebnych parametru, pokud uz nejsou
+        /// </summary>
         private void EnsureSettingsDefaults()
         {
             SettingsObject.gridX = Math.Max(1, SettingsObject.gridX);
             SettingsObject.gridY = Math.Max(1, SettingsObject.gridY);
         }
 
+        /// <summary>
+        /// inicializace ovladacich prvku panelu
+        /// </summary>
         private void InitializeControls()
         {
             Label label = new Label
@@ -226,6 +244,14 @@ namespace UPG_SP_2024
             this.Controls.Add(chargeButton);
             chargeButton.Click += ChargeButton_Click;
 
+            Button probeButton = new Button
+            {
+                Location = new Point(50, 300),
+                Text = "Show probes"
+            };
+            this.Controls.Add(probeButton);
+            probeButton.Click += ProbeButton_Click;
+
             // Add colormap legend
             Panel legendPanel = new Panel
             {
@@ -244,17 +270,22 @@ namespace UPG_SP_2024
             legendPanel.Controls.Add(legendTitle);
 
             // Example color entries
-            AddLegendEntry(legendPanel, "0 TN/C", this.GetColorFromIntensity(0), 25);
-            AddLegendEntry(legendPanel, "25E-2 TN/C", this.GetColorFromIntensity(2.5), 50);
-            AddLegendEntry(legendPanel, "50E-2 TN/C", this.GetColorFromIntensity(5), 75);
-            AddLegendEntry(legendPanel, "75E-2 TN/C", this.GetColorFromIntensity(7.5), 100);
-            AddLegendEntry(legendPanel, ">100E-2 TN/C", this.GetColorFromIntensity(10), 125);
+            AddLegendEntry(legendPanel, "0 TN/C", this.GetColorFromIntensity(0));
+            AddLegendEntry(legendPanel, "25E-2 TN/C", this.GetColorFromIntensity(2.5));
+            AddLegendEntry(legendPanel, "50E-2 TN/C", this.GetColorFromIntensity(5));
+            AddLegendEntry(legendPanel, "75E-2 TN/C", this.GetColorFromIntensity(7.5));
+            AddLegendEntry(legendPanel, ">100E-2 TN/C", this.GetColorFromIntensity(10));
 
             this.Controls.Add(legendPanel);
 
 
         }
 
+        /// <summary>
+        /// metoda zajistujici funkcionalitu "Ulozit jako"
+        /// </summary>
+        /// <param name="sender">odesilajici objekt</param>
+        /// <param name="e">parametry udalosti</param>
         private void SaveAsButton_Click(object? sender, EventArgs e)
         {
             // Create a SaveFileDialog to allow the user to save a file
@@ -285,6 +316,12 @@ namespace UPG_SP_2024
             }
         }
 
+        /// <summary>
+        /// metoda zajistujici funkcionalitu "Ulozit"
+        /// v pripade ze je otevreny nektery z defalutnich souboru, zavola se "Ulozit jako"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveButton_Click(object? sender, EventArgs e)
         {
             string[] files =
@@ -305,11 +342,17 @@ namespace UPG_SP_2024
             }
         }
 
-        private void AddLegendEntry(Panel panel, string text, Color color, int yOffset)
+        /// <summary>
+        /// prida radek legendy do panelu
+        /// </summary>
+        /// <param name="panel">panel pro umisteni</param>
+        /// <param name="text">popisek legendy</param>
+        /// <param name="color">barva v legende</param>
+        private void AddLegendEntry(Panel panel, string text, Color color)
         {
             Panel colorBox = new Panel
             {
-                Location = new Point(10, yOffset),
+                Location = new Point(10, this.legendEntries * 25),
                 Size = new Size(20, 20),
                 BackColor = color
             };
@@ -318,13 +361,19 @@ namespace UPG_SP_2024
             Label legendLabel = new Label
             {
                 Text = text,
-                Location = new Point(40, yOffset + 2),
+                Location = new Point(40, this.legendEntries * 25 + 2),
                 AutoSize = true
             };
             panel.Controls.Add(legendLabel);
+            this.legendEntries++;
         }
 
-
+        /// <summary>
+        /// obsluha udalosti kliknuti na GraphButton
+        /// otevre okno s grafy
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GraphButton_Click(object? sender, EventArgs e)
         {
             if (SettingsObject.graphForm != null) return;
@@ -333,6 +382,12 @@ namespace UPG_SP_2024
             SettingsObject.graphForm = g;
         }
 
+        /// <summary>
+        /// obsluha udalosti kliknuti na ChargeButton
+        /// otevre okno s tabulkou naboju
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChargeButton_Click(object? sender, EventArgs e)
         {
             if (SettingsObject.chargeForm != null) return;
@@ -342,10 +397,52 @@ namespace UPG_SP_2024
 
         }
 
+        /// <summary>
+        /// obsluha udalosti kliknuti na ProbeButton
+        /// otevre okno s tabulkou sond
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProbeButton_Click(object? sender, EventArgs e)
+        {
+            if (SettingsObject.probeForm != null) return;
+            ProbeTable g = new ProbeTable();
+            g.Show();
+            SettingsObject.probeForm = g;
+
+        }
+
+        /// <summary>
+        /// obsluha udalosti kliknuti na OpenButton
+        /// zajistuje funkcionalitu otevreni souboru *.upg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenButton_Click(object sender, EventArgs e)
+        {
+            // Create and configure the OpenFileDialog
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "UPG Files (*.upg)|*.upg|All Files (*.*)|*.*";  // Filter for .upg files
+            openFileDialog.Title = "Open UPG File";
+
+            // Show the dialog and check if the user selected a file
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // If the user selects a file, display the path in the TextBox
+                SettingsObject.drawingPanel.LoadScenario(openFileDialog.FileName);
+                // You can also process the file here as needed
+            }
+        }
+
+        /// <summary>
+        /// vypocita barvu ze zadane intenzity
+        /// </summary>
+        /// <param name="intensity">intenzita</param>
+        /// <returns>barva</returns>
         public Color GetColorFromIntensity(double intensity)
         {
             // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-            double intst = Math.Min(10, Math.Max(0, intensity)) / 10f;
+            double intst = Math.Pow(Math.Min(10, Math.Max(0, intensity)) / 10f, 0.6);
 
             // Use binary search to find the correct segment
             int index = Array.BinarySearch(boundaries, intst);
@@ -373,27 +470,11 @@ namespace UPG_SP_2024
             int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
 
             // Clamp RGB values to [0,255]
-            r = Math.Max(0, Math.Min(255, r));
+            r = Math.Max(0, Math.Min(255, b));
             g = Math.Max(0, Math.Min(255, g));
-            b = Math.Max(0, Math.Min(255, b));
+            b = Math.Max(0, Math.Min(255, r));
 
-            return Color.FromArgb(b, g, r);
-        }
-
-        private void OpenButton_Click(object sender, EventArgs e)
-        {
-            // Create and configure the OpenFileDialog
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "UPG Files (*.upg)|*.upg|All Files (*.*)|*.*";  // Filter for .upg files
-            openFileDialog.Title = "Open UPG File";
-
-            // Show the dialog and check if the user selected a file
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                // If the user selects a file, display the path in the TextBox
-                SettingsObject.drawingPanel.LoadScenario(openFileDialog.FileName);
-                // You can also process the file here as needed
-            }
+            return Color.FromArgb(r, g, b);
         }
     }
 }

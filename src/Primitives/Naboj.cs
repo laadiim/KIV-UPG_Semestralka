@@ -40,7 +40,7 @@ public class Naboj : INaboj
 
     public string Save()
     {
-        return $"naboj:[t] - [t] + {this.chargeStr};{this.X};{this.Y}";
+        return $"naboj:{this.chargeStr};{this.X};{this.Y}";
     }
 
     public float GetX()
@@ -59,11 +59,11 @@ public class Naboj : INaboj
         return distance <= radius;
     }
 
-    public void Drag(PointF point)
+    public void Drag(Vector2 v)
     {
-			this.X += point.X;
-            this.Y += point.Y;
-            if (SettingsObject.graphForm != null)SettingsObject.chargeForm.Refresh(this.id);
+		this.X += v.X;
+        this.Y += v.Y;
+        if (SettingsObject.graphForm != null)SettingsObject.chargeForm.Refresh(this.id);
     }
 
     public float GetCharge()
@@ -79,13 +79,13 @@ public class Naboj : INaboj
 
     public PointF GetPosition()
     {
-        return new PointF(GetX(), GetY());
+        return new PointF(GetX(), -GetY());
     }
 
     public void SetPosition(float X, float Y)
     {
         this.X = X;
-        this.Y = Y;
+        this.Y = -Y;
     }
     public float GetRadius()
     {

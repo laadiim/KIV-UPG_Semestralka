@@ -15,7 +15,6 @@ public class Scenario : IScenario
     private float scale = 1;
 
     private int chargeID = 0;
-    private int probesCount = 0;
 
     /* xMax, yMax, xMin, yMin*/
     public float[] corners = new float[4];
@@ -181,7 +180,7 @@ public class Scenario : IScenario
             if (charges[i].GetID() == id)
             {
                 INaboj charge = charges[i];
-                charges[i] = null;
+                charges.RemoveAt(i);
                 chargesCount--;
 
                 return charge;
@@ -271,7 +270,7 @@ public class Scenario : IScenario
             PixelFormat.Format24bppRgb);
 
         byte[] pixels = new byte[bmp.Stride * bmp.Height];
-        const int squareSize = 3;
+        int squareSize = Math.Min(bmp.Width, bmp.Height) / 300;
         //const int subdivisions = 3;
         //int squareSize = (int)Math.Pow(subdivisions, 3); // Size of the squares
         int widthInSquares = bmp.Width / squareSize;
@@ -354,7 +353,7 @@ public class Scenario : IScenario
     public Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
-        double intst = Math.Min(10, Math.Max(0, intensity)) / 10f;
+        double intst = Math.Pow(Math.Min(10, Math.Max(0, intensity)) / 10f, 0.6);
 
         // Use binary search to find the correct segment
         int index = Array.BinarySearch(boundaries, intst);
