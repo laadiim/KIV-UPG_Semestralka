@@ -12,29 +12,46 @@ namespace UPG_SP_2024
     /// </summary>
     public class DrawingPanel : Panel
     {
+        /// <summary>
+        /// instance scenare
+        /// </summary>
         public Scenario scenario;
+
         private int StartTime { get; set; }
         private int chargeHit = -1;
+
+        /// <summary>
+        /// nakliknuta sondy
+        /// </summary>
         public int probeHit = -1;
+
         private float scale = 1;
         private bool rightDown = false;
         private PointF prevMouse = new PointF(0, 0);
+
+        /// <summary>
+        /// cas zachyceni sondy
+        /// </summary>
         public float timeProbeCaught = 0;
+        
         /// <summary>
         /// konstruktor DrawingPanel
         /// </summary>
-        /// <param name="scenarioNum">ocislovani scenaria od 0 do 3</param>
         public DrawingPanel()
         {
             this.DoubleBuffered = true;
             this.ClientSize = new System.Drawing.Size(800, 600);
 
             scenario = new Scenario();
+
+            // obsluha scrollu kolecka mysi
             this.MouseWheel += (o, e) =>
             {
                 if (e.Delta > 0) scenario.ZoomIn(e.Delta / 90f, e.Delta / 90f);
                 else scenario.ZoomOut(-e.Delta / 90f, -e.Delta / 90f);
             };
+
+            // obsluha stisknuti tlacitka mysi
             this.MouseDown += (o, e) =>
             {
                 if (e.Button == MouseButtons.Left)
@@ -87,6 +104,7 @@ namespace UPG_SP_2024
                 }
             };
 
+            // obsluha pohybu mysi
             this.MouseMove += (o, e) =>
             {
                 INaboj charge;
@@ -138,6 +156,8 @@ namespace UPG_SP_2024
                 prevMouse.X = e.X;
                 prevMouse.Y = e.Y;
             };
+
+            // obsluha pusteni tlacitka mysi
             this.MouseUp += (o, e) =>
             {
                 chargeHit = -1;
@@ -147,6 +167,11 @@ namespace UPG_SP_2024
             };
         }
 
+
+        /// <summary>
+        /// nacte scenar ze souboru
+        /// </summary>
+        /// <param name="filename">cesta k souboru</param>
         public void LoadScenario(string filename)
         {
             scenario.EmptyCharges();
@@ -171,6 +196,11 @@ namespace UPG_SP_2024
             if (SettingsObject.chargeForm != null) SettingsObject.chargeForm.Reload();
         }
 
+
+        /// <summary>
+        /// ulozi scenar do souboru
+        /// </summary>
+        /// <param name="filename">cesta k souboru</param>
         public void SaveScenario(string filename)
         {
             StreamWriter sw = new StreamWriter(filename);
@@ -179,6 +209,10 @@ namespace UPG_SP_2024
             sw.Close();
         }
 
+        /// <summary>
+        /// nastaveni scenare podle cisla
+        /// </summary>
+        /// <param name="scenarioNum">cislo scenare</param>
         public void SetScenario(int scenarioNum)
         {
             string[] files =
@@ -194,7 +228,7 @@ namespace UPG_SP_2024
             LoadScenario(files[scenarioNum]);
         }
 
-        /// <summary>TODO: Custom visualization code comes into this method</summary>
+        /// <summary>Custom visualization code comes into this method</summary>
         /// <remarks>Raises the <see cref="E:System.Windows.Forms.Control.Paint">Paint</see> event.</remarks>
         /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs">PaintEventArgs</see> that contains the event data.</param>
         protected override void OnPaint(PaintEventArgs e)

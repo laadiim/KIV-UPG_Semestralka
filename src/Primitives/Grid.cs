@@ -5,7 +5,9 @@ using UPG_SP_2024.Interfaces;
 namespace UPG_SP_2024.Primitives
 {
 
-    //TODO: doplnit cely Grid
+    /// <summary>
+    /// trida pro mrizku
+    /// </summary>
     public class Grid : IGrid
     {
         readonly float panelWidth;
@@ -23,6 +25,17 @@ namespace UPG_SP_2024.Primitives
         readonly int spacingXpixels;
         readonly int spacingYpixels;
 
+        /// <summary>
+        /// konstruktor
+        /// </summary>
+        /// <param name="corners">rohy vykreslene plochy</param>
+        /// <param name="startTime">zacatek simulace</param>
+        /// <param name="charges">pole naboju</param>
+        /// <param name="scale">skalovani vizualizace</param>
+        /// <param name="spacingXpixels">roztec mrizky v pixelech</param>
+        /// <param name="spacingYpixels">roztec mrizky v pixelech</param>
+        /// <param name="viewportWidth">sirka vyrezu v pixelech</param>
+        /// <param name="viewportHeight">vyska vyrezu v pixelech</param>
         public Grid(float[] corners, int startTime, INaboj[] charges, float scale, int spacingXpixels, int spacingYpixels, float viewportWidth, float viewportHeight)
         {
             this.xMin = corners[2];
@@ -48,11 +61,19 @@ namespace UPG_SP_2024.Primitives
             this.spacingY = panelHeight / countY;
         }
 
+        /// <summary>
+        /// vrati roztec mrizky v pixelech na ose x
+        /// </summary>
+        /// <returns>roztec</returns>
         public int GetSpacingXinPixels()
         {
             return this.spacingXpixels;
         }
 
+        /// <summary>
+        /// vrati roztec mrizky v pixelech na ose y
+        /// </summary>
+        /// <returns></returns>
         public int GetSpacingYinPixels()
         {
             return this.spacingYpixels;
@@ -90,9 +111,6 @@ namespace UPG_SP_2024.Primitives
         /// <param name="penGrid">predane pero pro mrizku</param>
         /// <param name="brush">predany stetec</param>
         /// <param name="brushStr">predany stetec pro string</param>
-        /// <param name="topLeft">horni levy roh</param>
-        /// <param name="bottomRight">dolni pravy roh</param>
-        /// <param name="tipLength">delka sipky</param>
         /// <param name="scale">predany scale</param>
         private void DrawAxes(Graphics g, Pen penAxes, Pen penGrid, Brush brush, Brush brushStr, float scale)
         {
@@ -117,6 +135,12 @@ namespace UPG_SP_2024.Primitives
                 DrawGrid(g, penGrid);
             }
         }
+        
+        /// <summary>
+        /// vykresli mrizku
+        /// </summary>
+        /// <param name="g">graficky kontext</param>
+        /// <param name="pen">pero</param>
         private void DrawGrid(Graphics g, Pen pen)
         {
             float top = this.yMax - SettingsObject.worldCenter.Y;
@@ -171,6 +195,12 @@ namespace UPG_SP_2024.Primitives
 
         }
 
+        /// <summary>
+        /// vykresleni tridy
+        /// </summary>
+        /// <param name="g">graficky kontext</param>
+        /// <param name="tipLength">delka sipky</param>
+        /// <param name="scale">skalovani vizualizace</param>
         public void Draw(Graphics g, float tipLength, float scale)
         {
             Color colorAxes = Color.FromArgb(80, Color.White);
@@ -188,101 +218,3 @@ namespace UPG_SP_2024.Primitives
         }
     }
 }
-
-/*
-   float width_half = this.panelWidth / 2;
-   float height_half = this.panelHeight / 2;
-   int nX, nY, n2x, n2y;
-   
-   nX = (int)(width_half / this.spacingX);
-   nY = (int)(height_half / this.spacingY);
-   
-   n2x = 2 * nX + 1;
-   n2y = 2 * nY + 1;
-   
-   float[] intersectionsX = new float[n2x + 1];
-   float[] intersectionsY = new float[n2y + 1];
-   
-   float x_minus = this.xMin + width_half - this.spacingX;
-   float x_plus = this.xMax - width_half + this.spacingX;
-   float y_minus = this.yMin + height_half - this.spacingY;
-   float y_plus = this.yMax - height_half + this.spacingY;
-   
-   int i = 0;
-   int j = 0;
-   
-   while (x_minus >= this.xMin)
-   {
-       g.DrawLine(pen, x_minus, this.yMin, x_minus, this.yMax);
-       intersectionsX[i] = x_minus;
-   
-       x_minus -= this.spacingX;
-   
-       i++;
-   }
-   
-   intersectionsX[i] = xMin + width_half;
-   
-   while (x_plus <= this.xMax)
-   {
-       g.DrawLine(pen, x_plus, this.yMin, x_plus, this.yMax);
-       intersectionsX[i] = x_plus;
-   
-       x_plus += this.spacingX;
-       i++;
-   }
-   
-   if (intersectionsX.Length == (i + 2))
-   {
-       intersectionsX[i + 1] = x_plus;
-   }
-   
-   while (y_minus >= this.yMin)
-   {
-       g.DrawLine(pen, this.xMin, y_minus, this.xMax, y_minus);
-       intersectionsY[j] = y_minus;
-   
-       y_minus -= this.spacingY;
-       j++;
-   }
-   
-   intersectionsY[j] = yMin + height_half;
-   
-   while (y_plus <= this.yMax)
-   {
-       g.DrawLine(pen, this.xMin, y_plus, this.xMax, y_plus);
-       intersectionsY[j] = y_plus;
-   
-       y_plus += this.spacingY;
-       j++;
-   }
-   
-   if (intersectionsY.Length == (j + 2))
-   {
-       intersectionsY[j + 1] = y_plus;
-   }
-   
-   IProbe[,] probes = new IProbe[intersectionsX.Length, intersectionsY.Length];
-   PointF point = new PointF(0, 0);
-   for (int x = 0; x < intersectionsX.Length; x++)
-   {
-       for (int y = 0; y < intersectionsY.Length; y++)
-       {
-           point.X = intersectionsX[x] - spacingX / 2f;
-           point.Y = intersectionsY[y] - spacingY / 2f;
-   
-           IProbe probe = new Probe(point, 0, 0);
-           probes[x, y] = probe;
-           probe.Calc(this.startTime, this.charges);
-       }
-   }
-   
-   float spacing = Math.Min(spacingX, spacingY);
-   for (int x = 0; x < intersectionsX.Length; x++)
-   {
-       for (int y = 0; y < intersectionsY.Length; y++)
-       {
-           probes[x, y].Draw(g, startTime, charges, scale, spacing, true);
-       }
-   }
-*/
