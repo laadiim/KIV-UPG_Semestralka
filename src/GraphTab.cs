@@ -15,12 +15,19 @@ using UPG_SP_2024.Primitives;
 
 namespace UPG_SP_2024
 {
+    /// <summary>
+    /// trida karty s grafem
+    /// </summary>
     internal class GraphTab : TabPage
     {
         private List<IProbe> probes;
         private List<ISeries> series = new List<ISeries>();
         private CartesianChart chart;
 
+        /// <summary>
+        /// konstruktor
+        /// </summary>
+        /// <param name="probe">instance sondy</param>
         public GraphTab(IProbe probe)
         {
             this.probes = new List<IProbe>();
@@ -29,6 +36,10 @@ namespace UPG_SP_2024
             //UpdateChart();
         }
 
+        /// <summary>
+        /// konstruktor
+        /// </summary>
+        /// <param name="probes">seznam sond</param>
         public GraphTab(List<IProbe> probes)
         {
             this.probes = probes;
@@ -36,6 +47,9 @@ namespace UPG_SP_2024
             //UpdateChart();
         }
 
+        /// <summary>
+        /// nacte data do grafu
+        /// </summary>
         private void GetData()
         {
             for (int j = 0; j < this.probes.Count; j++)
@@ -51,6 +65,10 @@ namespace UPG_SP_2024
             }
             
         }
+        
+        /// <summary>
+        /// inicializace grafu
+        /// </summary>
         private void InitializeChart()
         {
             for (int j = 0; j < this.probes.Count; j++)
@@ -90,6 +108,9 @@ namespace UPG_SP_2024
             Controls.Add(chart);
         }
 
+        /// <summary>
+        /// nacte nova data
+        /// </summary>
         public void UpdateChart()
         {
             GetData();

@@ -108,7 +108,5 @@ namespace UPG_SP_2024
         /// instance okna s tabulkou sond
         /// </summary>
         public static ProbeTable probeForm;
-
-        public static int[] channels;
     }
 }

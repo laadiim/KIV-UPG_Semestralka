@@ -27,7 +27,6 @@ namespace UPG_SP_2024
 			SettingsObject.worldCenter = new PointF(0, 0);
             SettingsObject.tickLen = 30;
             SettingsObject.maxProbes = 7;
-            SettingsObject.channels = new int[] { 0, 1, 2, };
 
             // Configure the form
             this.ClientSize = new Size(800, 600);
@@ -76,10 +75,6 @@ namespace UPG_SP_2024
             // Add controls to the form
             this.Controls.Add(c);
 
-            // Configure the drawing panel and scenario
-            //p.SetScenario(scenario_num);
-            //p.scenario.CreateProbe(new PointF(0, 0), 1, (float)Math.PI / 6);
-
             // Reset probes in GraphPanel
             //g.ResetProbes();
 
@@ -99,6 +94,11 @@ namespace UPG_SP_2024
             p.SetScenario(scenario_num);
         }
 
+        /// <summary>
+        /// obsluha noveho snimku
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimerTick(object sender, EventArgs e)
         {
             ticks++;
