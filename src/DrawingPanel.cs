@@ -184,6 +184,7 @@ namespace UPG_SP_2024
             while (line != null)
             {
                 //write the line to console window
+                line = line.Replace(",", ".");
                 lines.Add(line);
                 //Read the next line
                 line = sr.ReadLine();

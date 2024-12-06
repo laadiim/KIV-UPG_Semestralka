@@ -110,6 +110,7 @@ namespace UPG_SP_2024
         /// <param name="e"></param>
         private void AddProbeButtonClick(object sender, EventArgs e)
         {
+            if (SettingsObject.probes.Count == SettingsObject.maxProbes) return;
             IProbe p = SettingsObject.drawingPanel.scenario.CreateProbe(new PointF(0, 0), 0, 0);
             DataAdd(p.GetID(), p.GetCenter().X, p.GetCenter().Y, p.GetRadius(), p.GetAnglePerSecond());
         }
@@ -197,6 +198,7 @@ namespace UPG_SP_2024
             List<IProbe> probes = SettingsObject.probes;
             foreach (IProbe p in probes)
             {
+                if (p == null) continue;
                 DataAdd(p.GetID(), p.GetCenter().X, p.GetCenter().Y, p.GetRadius(), p.GetAnglePerSecond());
             }
         }

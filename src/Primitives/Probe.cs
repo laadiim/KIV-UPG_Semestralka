@@ -105,7 +105,10 @@ public class Probe : IProbe
     {
         this.center.X += vector.X;
         this.center.Y += vector.Y;
-        SettingsObject.probeForm.Refresh(this.id);
+        if (SettingsObject.probeForm != null)
+        {
+            SettingsObject.probeForm.Refresh(this.id);
+        }
     }
     public string Save()
     {
