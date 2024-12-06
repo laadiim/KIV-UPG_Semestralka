@@ -55,7 +55,7 @@ public class Naboj : INaboj
     /// vrati pozici na ose X
     /// </summary>
     /// <returns></returns>
-    public float GetX()
+    private float GetX()
     {
         return X + SettingsObject.worldCenter.X;
     }

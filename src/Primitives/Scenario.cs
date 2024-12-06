@@ -253,28 +253,6 @@ public class Scenario : IScenario
     }
 
     /// <summary>
-    /// ulozi vsechny krajni pozice na mape
-    /// </summary>
-    /// <returns>dvojice seznamu s pozicemi x a y</returns>
-    private Tuple<float[], float[]> GetPositions()
-    {
-        int j = 0;
-        float[] positionsX = new float[chargesCount * 2];
-        float[] positionsY = new float[chargesCount * 2];
-        for (int i = 0; i < charges.Count;i++)
-        {
-            positionsX[j] = Math.Abs(charges[i].GetPosition().X - charges[i].GetRadius());
-            positionsY[j] = Math.Abs(charges[i].GetPosition().Y - charges[i].GetRadius());
-            j++;
-            positionsX[j] = Math.Abs(charges[i].GetPosition().X + charges[i].GetRadius());
-            positionsY[j] = Math.Abs(charges[i].GetPosition().Y + charges[i].GetRadius());
-            j++;
-        }
-        return Tuple.Create(positionsX, positionsY);
-    }
-
-
-    /// <summary>
     /// vykresli barevnou mapu
     /// </summary>
     /// <param name="g">kontext</param>
@@ -339,7 +317,7 @@ public class Scenario : IScenario
     /// </summary>
     /// <param name="intensity"></param>
     /// <returns></returns>
-    public Color GetColorFromIntensity(double intensity)
+    private Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
         double intst = Math.Pow(Math.Min(10, Math.Max(0, intensity)) / 10f, 0.6);
