@@ -277,8 +277,8 @@ public class Scenario : IScenario
         int heightInSquares = bmp.Height / squareSize;
 
         
-        //Parallel.For(0, heightInSquares, squareY =>
-        for (int squareY = 0; squareY < heightInSquares; squareY++)
+        Parallel.For(0, heightInSquares, squareY =>
+        //for (int squareY = 0; squareY < heightInSquares; squareY++)
             {
                 for (int squareX = 0; squareX < widthInSquares; squareX++)
                 {
@@ -307,7 +307,7 @@ public class Scenario : IScenario
                     }
                 }
             }
-        //);
+        );
         
         /*
         byte[,,] colors = new byte[3,bmp.Stride + squareSize, bmp.Height + squareSize];
