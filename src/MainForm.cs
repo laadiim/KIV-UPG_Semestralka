@@ -27,6 +27,7 @@ namespace UPG_SP_2024
 			SettingsObject.worldCenter = new PointF(0, 0);
             SettingsObject.tickLen = 30;
             SettingsObject.maxProbes = 7;
+            SettingsObject.channels = new int[] { 0, 1, 2, };
 
             // Configure the form
             this.ClientSize = new Size(800, 600);

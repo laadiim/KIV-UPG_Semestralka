@@ -18,6 +18,7 @@ namespace UPG_SP_2024
         private Button openButton;
         private Button saveButton;
         private Button saveAsButton;
+        private Panel legendPanel;
 
         private int legendEntries = 1;
 
@@ -252,13 +253,60 @@ namespace UPG_SP_2024
             this.Controls.Add(probeButton);
             probeButton.Click += ProbeButton_Click;
 
-            // Add colormap legend
-            Panel legendPanel = new Panel
+            NumericUpDown rSpinner = new NumericUpDown
             {
-                Location = new Point(10, 350),
+                Location = new Point(10, 330),
+                Width = 40,
+                Minimum = 0,
+                Maximum = 2,
+                Value = 0
+            }; 
+            rSpinner.ValueChanged += (o, e) =>
+            {
+                SettingsObject.channels[0] = (int)rSpinner.Value;
+                ReloadLegend();
+
+            };
+            this.Controls.Add(rSpinner);
+
+            NumericUpDown gSpinner = new NumericUpDown
+            {
+                Location = new Point(60, 330),
+                Width = 40,
+                Minimum = 0,
+                Maximum = 2,
+                Value = 1
+            };
+            gSpinner.ValueChanged += (o, e) =>
+            {
+                SettingsObject.channels[1] = (int)gSpinner.Value;
+                ReloadLegend();
+
+            };
+            this.Controls.Add(gSpinner);
+
+            NumericUpDown bSpinner = new NumericUpDown
+            {
+                Location = new Point(110, 330),
+                Width = 40,
+                Minimum = 0,
+                Maximum = 2,
+                Value = 2
+            };
+            bSpinner.ValueChanged += (o, e) =>
+            {
+                SettingsObject.channels[2] = (int)bSpinner.Value;
+                ReloadLegend();
+            };
+            this.Controls.Add(bSpinner);
+
+            // Add colormap legend
+            legendPanel = new Panel
+            {
+                Location = new Point(10, 370),
                 Size = new Size(180, 160),
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.White
+                BackColor = Color.White,
             };
 
             Label legendTitle = new Label
@@ -270,11 +318,11 @@ namespace UPG_SP_2024
             legendPanel.Controls.Add(legendTitle);
 
             // Example color entries
-            AddLegendEntry(legendPanel, "0 TN/C", this.GetColorFromIntensity(0));
-            AddLegendEntry(legendPanel, "25E-2 TN/C", this.GetColorFromIntensity(2.5));
-            AddLegendEntry(legendPanel, "50E-2 TN/C", this.GetColorFromIntensity(5));
-            AddLegendEntry(legendPanel, "75E-2 TN/C", this.GetColorFromIntensity(7.5));
-            AddLegendEntry(legendPanel, ">100E-2 TN/C", this.GetColorFromIntensity(10));
+            AddLegendEntry(legendPanel, "0 TN/C", this.GetColor(0));
+            AddLegendEntry(legendPanel, "25E-2 TN/C", this.GetColor(2.5));
+            AddLegendEntry(legendPanel, "50E-2 TN/C", this.GetColor(5));
+            AddLegendEntry(legendPanel, "75E-2 TN/C", this.GetColor(7.5));
+            AddLegendEntry(legendPanel, ">100E-2 TN/C", this.GetColor(10));
 
             this.Controls.Add(legendPanel);
 
@@ -439,7 +487,7 @@ namespace UPG_SP_2024
         /// </summary>
         /// <param name="intensity">intenzita</param>
         /// <returns>barva</returns>
-        public Color GetColorFromIntensity(double intensity)
+        public Color GetColor(double intensity)
         {
             // Cap the intensity value to a maximum of 1.0 for a smoother transition.
             double intst = Math.Pow(Math.Min(10, Math.Max(0, intensity)) / 10f, 0.6);
@@ -469,12 +517,33 @@ namespace UPG_SP_2024
             int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
             int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
 
-            // Clamp RGB values to [0,255]
-            r = Math.Max(0, Math.Min(255, b));
-            g = Math.Max(0, Math.Min(255, g));
-            b = Math.Max(0, Math.Min(255, r));
+            int[] channels = new int[] {b, g, r };
 
-            return Color.FromArgb(r, g, b);
+            // Clamp RGB values to [0,255]
+            r = Math.Max(0, Math.Min(255, r));
+            g = Math.Max(0, Math.Min(255, g));
+            b = Math.Max(0, Math.Min(255, b));
+
+            return Color.FromArgb(channels[SettingsObject.channels[0]], channels[SettingsObject.channels[1]], channels[SettingsObject.channels[2]]);
+        }
+
+        private void ReloadLegend()
+        {
+            legendPanel.Controls.Clear();
+            Label legendTitle = new Label
+            {
+                Text = "Colormap Legend",
+                Location = new Point(10, 5),
+                AutoSize = true
+            };
+            legendPanel.Controls.Add(legendTitle);
+            legendEntries = 1;
+            AddLegendEntry(legendPanel, "0 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(0));
+            AddLegendEntry(legendPanel, "25E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(2.5));
+            AddLegendEntry(legendPanel, "50E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(5));
+            AddLegendEntry(legendPanel, "75E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(7.5));
+            AddLegendEntry(legendPanel, ">100E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(10));
+            legendPanel.Invalidate();
         }
     }
 }

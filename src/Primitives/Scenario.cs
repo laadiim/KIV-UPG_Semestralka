@@ -380,12 +380,14 @@ public class Scenario : IScenario
         int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
         int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
 
+
         // Clamp RGB values to [0,255]
         r = Math.Max(0, Math.Min(255, r));
         g = Math.Max(0, Math.Min(255, g));
         b = Math.Max(0, Math.Min(255, b));
+        int[] channels = new int[] { r, g, b };
 
-        return Color.FromArgb(r, g, b);
+        return Color.FromArgb(channels[SettingsObject.channels[0]], channels[SettingsObject.channels[1]], channels[SettingsObject.channels[2]]);
     }
 
     private double CalcIntensity(PointF point)
