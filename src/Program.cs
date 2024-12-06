@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Windows.Forms;
 using UPG_SP_2024.Primitives;
 
@@ -11,6 +12,9 @@ namespace UPG_SP_2024
         [STAThread]
         static void Main(string[] args)
         {
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+
             int n = 0;
             int gridX = 50; // Default grid X spacing
             int gridY = 50; // Default grid Y spacing
