@@ -23,7 +23,9 @@ namespace UPG_SP_2024
 
 
         private int legendEntries = 0;
-
+        private Button graphButton;
+        private Button chargesButton;
+        private Button probesButton;
         private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
         private readonly int[,] colors = {
@@ -147,6 +149,7 @@ namespace UPG_SP_2024
             scenarioDropdown.SelectedIndexChanged += (o, e) =>
             {
                 SettingsObject.scenario = scenarioDropdown.SelectedIndex;
+                SettingsObject.drawingPanel.SetScenario(scenarioDropdown.SelectedIndex);
             };
             layout.Controls.Add(new Label { Text = "Scenario:", TextAlign = ContentAlignment.MiddleRight }, 0, 3);
             layout.Controls.Add(scenarioDropdown, 1, 3);
@@ -185,7 +188,20 @@ namespace UPG_SP_2024
             layout.SetColumnSpan(gridYSpinner, 2);
 
 
-            // Row 6: Save and Load Buttons
+            // Row 6: Graph, Charge and Probe Buttons
+            graphButton = new Button { Text = "Graphs" };
+            graphButton.Click += GraphButton_Click;
+            layout.Controls.Add(graphButton, 0, 7);
+
+            chargesButton = new Button { Text = "Charges" };
+            chargesButton.Click += ChargeButton_Click;
+            layout.Controls.Add(chargesButton, 1, 7);
+            
+            probesButton = new Button { Text = "Probes" };
+            probesButton.Click += ProbeButton_Click;
+            layout.Controls.Add(probesButton, 2, 7);
+
+            // Row 7: Save and Load Buttons
             openButton = new Button { Text = "Open" };
             openButton.Click += OpenButton_Click;
             layout.Controls.Add(openButton, 0, 6);
@@ -193,12 +209,12 @@ namespace UPG_SP_2024
             saveButton = new Button { Text = "Save" };
             saveButton.Click += SaveButton_Click;
             layout.Controls.Add(saveButton, 1, 6);
-            
+
             saveAsButton = new Button { Text = "Save As" };
             saveAsButton.Click += SaveAsButton_Click;
             layout.Controls.Add(saveAsButton, 2, 6);
 
-            // Row 7: Legend Panel
+            // Row 8: Legend Panel
             legendPanel = new Panel
             {
                 BorderStyle = BorderStyle.FixedSingle,
@@ -211,8 +227,8 @@ namespace UPG_SP_2024
             AddLegendEntry(legendPanel, "50E-2 TN/C", GetColor(5));
             AddLegendEntry(legendPanel, "75E-2 TN/C", GetColor(7.5));
             AddLegendEntry(legendPanel, "> 100E-2 TN/C", GetColor(10));
-            layout.Controls.Add(new Label { Text = "Legend:", TextAlign = ContentAlignment.MiddleRight }, 0, 7);
-            layout.Controls.Add(legendPanel, 1, 7);
+            layout.Controls.Add(new Label { Text = "Legend:", TextAlign = ContentAlignment.MiddleRight }, 0, 8);
+            layout.Controls.Add(legendPanel, 1, 8);
             layout.SetColumnSpan(legendPanel, 2);
 
             this.Controls.Add(layout);
