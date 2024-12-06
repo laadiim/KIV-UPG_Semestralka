@@ -110,6 +110,7 @@ namespace UPG_SP_2024
             SettingsObject.drawingPanel.timeProbeCaught = Environment.TickCount;
             foreach (IProbe probe in SettingsObject.probes)
             {
+                if (probe == null) continue;
                 probe.Tick();
             }
             drawingPanel?.Invalidate(); // Ensure drawingPanel is not null

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using NCalc;
@@ -150,7 +151,7 @@ public class Scenario : IScenario
             else
             {
                 string[] args = arr[1].Split(";");
-                CreateProbe(new PointF(Convert.ToSingle(args[0]), Convert.ToSingle(args[1])), Convert.ToSingle(args[2]), args[3]);
+                CreateProbe(new PointF(Single.Parse(args[0], CultureInfo.InvariantCulture), Single.Parse(args[1], CultureInfo.InvariantCulture)), Single.Parse(args[2], CultureInfo.InvariantCulture), args[3]);
             }
         }
     }
@@ -202,10 +203,11 @@ public class Scenario : IScenario
 
         for (int i = 0; i < probes.Count; i++)
         {
+            if (probes[i] == null) continue;
             if (probes[i].GetID() == id)
             {
                 emptyProbesID.Enqueue(probes[i].GetID());
-                probes[i] = null;
+                probes.RemoveAt(i);
             }
         }
     }
@@ -553,6 +555,7 @@ public class Scenario : IScenario
 
         foreach (IProbe probe in SettingsObject.probes) 
         {
+            if (probe == null) continue;
             probe.Calc(startTime, this.charges.ToArray());
             probe.Draw(g, this.charges.ToArray(), scale, 0, false);
         }

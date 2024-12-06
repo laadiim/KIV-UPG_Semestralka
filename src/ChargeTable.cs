@@ -119,7 +119,7 @@ namespace UPG_SP_2024
             {
                 var row = chargesGridView.Rows[e.RowIndex];
                 int id = Convert.ToInt32(row.Cells["Id"].Value);
-                string charge = Convert.ToString(row.Cells["Charge"].Value);
+                string charge = (Convert.ToString(row.Cells["Charge"].Value)).Replace(",", ".");
                 float x = Convert.ToSingle(row.Cells["X"].Value);
                 float y = Convert.ToSingle(row.Cells["Y"].Value);
                 INaboj c;

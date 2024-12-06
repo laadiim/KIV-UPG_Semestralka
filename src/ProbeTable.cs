@@ -110,6 +110,7 @@ namespace UPG_SP_2024
         /// <param name="e"></param>
         private void AddProbeButtonClick(object sender, EventArgs e)
         {
+            if (SettingsObject.probes.Count == SettingsObject.maxProbes) return;
             IProbe p = SettingsObject.drawingPanel.scenario.CreateProbe(new PointF(0, 0), 0, 0);
             DataAdd(p.GetID(), p.GetCenter().X, p.GetCenter().Y, p.GetRadius(), p.GetAnglePerSecond());
         }
@@ -126,10 +127,10 @@ namespace UPG_SP_2024
             {
                 var row = probesGridView.Rows[e.RowIndex];
                 int id = Convert.ToInt32(row.Cells["Id"].Value);
-                float x = Convert.ToSingle(row.Cells["X"].Value);
-                float y = Convert.ToSingle(row.Cells["Y"].Value);
-                float radius = Convert.ToSingle(row.Cells["Radius"].Value);
-                float angle = Convert.ToSingle(row.Cells["AnglePerSecond"].Value);
+                string x = (Convert.ToString(row.Cells["X"].Value)).Replace(",", ".");
+                string y = (Convert.ToString(row.Cells["Y"].Value)).Replace(",", ".");
+                string radius = (Convert.ToString(row.Cells["Radius"].Value)).Replace(",", ".");
+                string angle = (Convert.ToString(row.Cells["AnglePerSecond"].Value)).Replace(",", ".");
                 IProbe p;
                 // Update data list
                 try
@@ -140,9 +141,9 @@ namespace UPG_SP_2024
                 {
                     return;
                 }
-                p.SetCenter(new PointF(x, y));
-                p.SetRadius(radius);
-                p.SetAnglePerSecond(angle);
+                p.SetCenter(new PointF(Convert.ToSingle(x), Convert.ToSingle(y)));
+                p.SetRadius(Convert.ToSingle(radius));
+                p.SetAnglePerSecond(Convert.ToSingle(angle));
             }
         }
 
@@ -197,6 +198,7 @@ namespace UPG_SP_2024
             List<IProbe> probes = SettingsObject.probes;
             foreach (IProbe p in probes)
             {
+                if (p == null) continue;
                 DataAdd(p.GetID(), p.GetCenter().X, p.GetCenter().Y, p.GetRadius(), p.GetAnglePerSecond());
             }
         }

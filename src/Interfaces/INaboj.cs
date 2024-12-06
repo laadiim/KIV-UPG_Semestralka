@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using UPG_SP_2024.Primitives;
 
@@ -96,6 +97,7 @@ public interface INaboj
     /// <returns></returns>
     public static INaboj Load(string[] args, int id, float startTime)
     {
-        return new Naboj(args[0], Convert.ToSingle(args[1]), Convert.ToSingle(args[2]), id, startTime);
+        return new Naboj(args[0], Single.Parse(args[1], CultureInfo.InvariantCulture),
+            Single.Parse(args[2], CultureInfo.InvariantCulture), id, startTime);
     }
 }
