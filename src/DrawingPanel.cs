@@ -141,7 +141,7 @@ namespace UPG_SP_2024
                         throw new Exception("sondu se nepodarilo ziskat");
                     }
                     
-                    probe.Drag(new PointF((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
+                    probe.Drag(new Vector2((e.X - prevMouse.X) / scale, (e.Y - prevMouse.Y) / scale));
                 }
 
                 if (rightDown)

@@ -62,24 +62,6 @@ namespace UPG_SP_2024.Primitives
         }
 
         /// <summary>
-        /// vrati roztec mrizky v pixelech na ose x
-        /// </summary>
-        /// <returns>roztec</returns>
-        public int GetSpacingXinPixels()
-        {
-            return this.spacingXpixels;
-        }
-
-        /// <summary>
-        /// vrati roztec mrizky v pixelech na ose y
-        /// </summary>
-        /// <returns></returns>
-        public int GetSpacingYinPixels()
-        {
-            return this.spacingYpixels;
-        }
-
-        /// <summary>
         /// vykresli sipky
         /// </summary>
         /// <param name="g">graficky kontext</param>

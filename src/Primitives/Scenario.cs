@@ -16,7 +16,10 @@ public class Scenario : IScenario
 
     private int chargeID = 0;
 
-    /* xMax, yMax, xMin, yMin*/
+    /// <summary>
+    /// xMax, yMax, xMin, yMin
+    /// rohy vyrezu
+    /// </summary>
     public float[] corners = new float[4];
 	private List<IProbe> probes = new List<IProbe>();
 
@@ -189,6 +192,10 @@ public class Scenario : IScenario
         throw new Exception("naboj nebyl nalezen");
     }
 
+    /// <summary>
+    /// odstrani sondu s danym id
+    /// </summary>
+    /// <param name="id"></param>
     public void RemoveProbe(int id)
     {
         probes = SettingsObject.probes;
@@ -203,6 +210,9 @@ public class Scenario : IScenario
         }
     }
 
+    /// <summary>
+    /// vyprazndi seznam sond
+    /// </summary>
     public void EmptyProbes()
     {
         foreach (IProbe probe in SettingsObject.probes)
@@ -261,6 +271,14 @@ public class Scenario : IScenario
         return Tuple.Create(positionsX, positionsY);
     }
 
+
+    /// <summary>
+    /// vykresli barevnou mapu
+    /// </summary>
+    /// <param name="g">kontext</param>
+    /// <param name="width">sirka pixelech</param>
+    /// <param name="height">vyska v pixelech</param>
+    /// <param name="ColorMap">metoda pro vypocet barvy</param>
     private void DrawColorMap(Graphics g, float width, float height, Func<double, Color> ColorMap)
     {
         var img = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
@@ -288,7 +306,7 @@ public class Scenario : IScenario
 
                     // Calculate intensity and map color for the center pixel
                     double intensity =
-                        CalcIntensity(new PointF((centerX - width / 2) / scale, (centerY - height / 2) / scale));
+                        CalcIntensity(new PointF((centerX - width / 2) / scale, -(centerY - height / 2) / scale));
                     Color color = ColorMap(intensity);
                     byte red = color.B;
                     byte green = color.G;
@@ -308,48 +326,17 @@ public class Scenario : IScenario
                 }
             }
         );
-        
-        /*
-        byte[,,] colors = new byte[3,bmp.Stride + squareSize, bmp.Height + squareSize];
-        Parallel.For(0, widthInSquares + 1, i =>
-        //for (int i = 0; i < widthInSquares + 1; i++)
-        {
-            Parallel.For(0, heightInSquares + 1, j =>
-            //for (int j = 0; j < heightInSquares + 1; j++)
-            { 
-                FastMap(squareSize, subdivisions, width, height, colors, i * squareSize, j * squareSize);
-            }
-            );
-
-        }
-        );
-
-
-        for (int j = 0; j < bmp.Height; j++) // Height
-        //Parallel.For(0, bmp.Height + squareSize, j =>
-            {
-                for (int i = 0; i < bmp.Width; i++) // Width
-                //Parallel.For(0, bmp.Width + squareSize, i =>
-                {
-                    // Calculate the index in the pixel array with respect to Stride (padding considered)
-                    int pixelIndex = (j * bmp.Stride) + (i * 3); // 3 for RGB channels (24bpp)
-                    if (pixelIndex + 3 < pixels.Length)
-                    {
-                        // Ensure you are accessing the correct color channels
-                        pixels[pixelIndex] = colors[2, i, j]; // Red
-                        pixels[pixelIndex + 1] = colors[1, i, j]; // Green
-                        pixels[pixelIndex + 2] = colors[0, i, j]; // Blue
-                    }
-                }
-                    //);
-            }
-        //);*/
 
         Marshal.Copy(pixels, 0, bmp.Scan0, pixels.Length);
         img.UnlockBits(bmp);
         g.DrawImage(img, new RectangleF((-width / 2) / scale, (-height / 2) / scale, width / scale, height / scale));
     }
 
+    /// <summary>
+    /// vypocita barvu podle intenzity
+    /// </summary>
+    /// <param name="intensity"></param>
+    /// <returns></returns>
     public Color GetColorFromIntensity(double intensity)
     {
         // Cap the intensity value to a maximum of 1.0 for a smoother transition.
@@ -385,11 +372,15 @@ public class Scenario : IScenario
         r = Math.Max(0, Math.Min(255, r));
         g = Math.Max(0, Math.Min(255, g));
         b = Math.Max(0, Math.Min(255, b));
-        int[] channels = new int[] { r, g, b };
 
-        return Color.FromArgb(channels[SettingsObject.channels[0]], channels[SettingsObject.channels[1]], channels[SettingsObject.channels[2]]);
+        return Color.FromArgb(r, g, b);
     }
 
+    /// <summary>
+    /// spocita intenzitu v danem bode
+    /// </summary>
+    /// <param name="point"></param>
+    /// <returns></returns>
     private double CalcIntensity(PointF point)
     {
         Vector2 start = new Vector2(point.X, point.Y);
@@ -423,92 +414,6 @@ public class Scenario : IScenario
         // Compute final magnitude
         return Math.Sqrt(sum.X * sum.X + sum.Y * sum.Y);
     }
-
-    private void FastMap(int size, int subdivisions, float width, float height, byte[,,] colors, int startX, int startY)
-    {
-        // Base case: when size is 1, fill the pixel with color
-        if (size == 1)
-        {
-            // Convert the (startX, startY) to normalized coordinates
-            Color color =
-                GetColorFromIntensity(CalcIntensity(new PointF((startX - width / 2) / scale, (startY - height / 2) / scale)));
-            colors[0, startX, startY] = color.B;
-            colors[1, startX, startY] = color.G;
-            colors[2, startX, startY] = color.R;
-            return;
-        }
-
-        // Arrays to hold sub-region coordinates
-        int[] xArr = new int[subdivisions];
-        int[] yArr = new int[subdivisions];
-
-        // Divide the region into subdivisions, using the full size of the region
-        for (int i = 0; i < subdivisions; i++)
-        {
-            // Adjust the subdivisions to fit within the current region
-            xArr[i] = startX + (int)((i) * size / subdivisions);
-            yArr[i] = startY + (int)((i) * size / subdivisions);
-        }
-
-        // Variables for calculating intensity for the region
-        double max = 0;
-        double min = Double.PositiveInfinity;
-        double sum = 0;
-
-        // Temporary array to store intensities
-        double[] intst = new double[subdivisions * subdivisions];
-
-        // Loop over the subdivisions to calculate intensity for each region
-        for (int i = 0; i < subdivisions; i++)
-        {
-            for (int j = 0; j < subdivisions; j++)
-            {
-                double intensity =
-                    CalcIntensity(new PointF((xArr[i] - width / 2) / scale, (yArr[j] - height / 2) / scale));
-                max = Math.Max(max, intensity);
-                min = Math.Min(min, intensity);
-                sum += intensity;
-            }
-        }
-
-        // If the difference between max and min intensity is significant, subdivide further
-        if (max - min > 0.15)
-        {
-            for (int i = 0; i < subdivisions; i++)
-            {
-                for (int j = 0; j < subdivisions; j++)
-                {
-                    // Recursive call to further subdivide
-                    FastMap(size / subdivisions, subdivisions, width, height, colors, xArr[i], yArr[j]);
-                }
-            }
-        }
-        else
-        {
-            // If the difference is small, fill the region with the average color
-            Color color = GetColorFromIntensity(sum / (subdivisions * subdivisions));
-
-            // Fill the entire size x size region with the computed color
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    int colorX = startX + i;  // Adjust to current region's coordinates
-                    int colorY = startY + j;  // Adjust to current region's coordinates
-
-                    // Ensure we stay within bounds
-                    if (colorX < colors.GetLength(1) && colorY < colors.GetLength(2))
-                    {
-                        // Assign RGB values to the colors array
-                        colors[0, colorX, colorY] = color.B;
-                        colors[1, colorX, colorY] = color.G;
-                        colors[2, colorX, colorY] = color.R;
-                    }
-                }
-            }
-        }
-    }
-
     public void Move(float x, float y)
     {
         SettingsObject.worldCenter.X += x;
@@ -564,42 +469,6 @@ public class Scenario : IScenario
                 }
             }
         }
-
-
-        // ziskani krajnich pozic naboju
-        /*Tuple<float[], float[]> positions = GetPositions();
-        float xMax = 1, yMax = 1;
-        float xMin = -1, yMin = -1;
-        if (positions.Item1.Length != 0 && positions.Item2.Length != 0)
-        { 
-            xMax = positions.Item1.Max();
-            xMin = -xMax;
-            yMax = positions.Item2.Max();
-            yMin = -yMax;
-        }
-
-        
-        float viewportWidth = xMax - xMin;
-        float viewportHeight = yMax - yMin;
-
-        // v pripade 1 naboje upravime velikost panelu tak, aby nebyl moc velky
-        if (chargesCount == 1)
-        {
-            xMin -= viewportWidth * 1.3f;
-            xMax += viewportWidth * 1.3f;
-            yMin -= viewportHeight * 1.3f;
-            yMax += viewportHeight * 1.3f;
-
-        }
-        
-        else
-        {
-            xMin -= viewportWidth / 9f;
-            xMax += viewportWidth / 9f;
-            yMin -= viewportHeight / 9f;
-            yMax += viewportHeight / 9f;
-        }*/
-
         float xMin = SettingsObject.worldCenter.X - SettingsObject.halfWidth;
         float xMax = SettingsObject.worldCenter.X + SettingsObject.halfWidth;
         float yMin = SettingsObject.worldCenter.Y - SettingsObject.halfHeight;

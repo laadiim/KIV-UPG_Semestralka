@@ -11,28 +11,55 @@ namespace UPG_SP_2024
         [STAThread]
         static void Main(string[] args)
         {
-            int n;
-            int gridX = 50;
-            int gridY = 50;
-            if (args.Length != 1)
+            int n = 0;
+            int gridX = 50; // Default grid X spacing
+            int gridY = 50; // Default grid Y spacing
+
+            if (args.Length > 0)
             {
-                n = 0;
+                foreach (string arg in args)
+                {
+                    // Parse scenario number
+                    if (int.TryParse(arg, out int scenario))
+                    {
+                        n = scenario;
+                        if (n < 0 || n > 6)
+                        {
+                            n = 0; // Default to scenario 0 if out of bounds
+                        }
+                    }
+                    else if (arg.StartsWith("-g"))
+                    {
+                        // Parse grid spacing argument
+                        string[] parts = arg.Substring(2).Split('x');
+                        if (parts.Length == 2 &&
+                            int.TryParse(parts[0], out int x) &&
+                            int.TryParse(parts[1], out int y) &&
+                            x > 0 && y > 0) // Ensure positive values
+                        {
+                            gridX = x;
+                            gridY = y;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid grid parameter. Using default values.");
+                        }
+                    }
+                }
             }
             else
             {
-                n = int.Parse(args[0]);
-                if (n < 0 || n > 6)
-                {
-                    n = 0;
-                }
+                n = 0; // Default to scenario 0 if no arguments provided
             }
+
             int scenario_num = n;
             CreateBaseFiles();
-            Console.WriteLine("Creating scenario #" + scenario_num + "...");
+            Console.WriteLine($"Creating scenario #{scenario_num} with grid spacing {gridX}x{gridY}...");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(scenario_num, gridX, gridY));
         }
+
 
         static void CreateBaseFiles()
         {

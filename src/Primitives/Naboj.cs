@@ -16,6 +16,14 @@ public class Naboj : INaboj
     private int id;
     private float startTime;
 
+    /// <summary>
+    /// kostruktor
+    /// </summary>
+    /// <param name="charge">retezec pro vypocet naboje</param>
+    /// <param name="X">soradnice na ose X</param>
+    /// <param name="Y">souradnice na ose Y</param>
+    /// <param name="id">id</param>
+    /// <param name="startTime">zacatek simulace</param>
     public Naboj(string charge, float X, float Y, int id, float startTime)
     {
         this.charge = new Expression(charge);
@@ -43,11 +51,19 @@ public class Naboj : INaboj
         return $"naboj:{this.chargeStr};{this.X};{this.Y}";
     }
 
+    /// <summary>
+    /// vrati pozici na ose X
+    /// </summary>
+    /// <returns></returns>
     public float GetX()
     {
         return X + SettingsObject.worldCenter.X;
     }
 
+    /// <summary>
+    /// vrati pozici na ose Y
+    /// </summary>
+    /// <returns></returns>
     public float GetY()
     {
         return Y + SettingsObject.worldCenter.Y;

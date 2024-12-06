@@ -67,16 +67,39 @@ public interface IScenario
     /// </summary>
     void EmptyCharges();
 
-		/// <summary>
-		/// vytvori statickou sondu
-		/// </summary>
-		/// <param name="center"> misto sondy
-		/// <param name="radius"/> polomer obehu sondy
-		/// <param name="anglePerSecond"/> uhlova rychlost obehu
-		/// <returns> instance sondy </returns>
-		IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
+	/// <summary>
+	/// vytvori statickou sondu
+	/// </summary>
+	/// <param name="center"> misto sondy
+	/// <param name="radius"/> polomer obehu sondy
+	/// <param name="anglePerSecond"/> uhlova rychlost obehu
+	/// <returns> instance sondy </returns>
+	IProbe CreateProbe(PointF center, float radius, float anglePerSecond);
+    
+    /// <summary>
+    /// posune stred sveta
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    void Move(float x, float y);
 
-        void Move(float x, float y);
+    /// <summary>
+    /// vrati instanci sondy s danym id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public IProbe GetProbe(int id);
 
-        public IProbe GetProbe(int id);
+    /// <summary>
+    /// vrati retezec k ulozeni scenare
+    /// </summary>
+    /// <returns></returns>
+    string Save();
+
+    /// <summary>
+    /// nacte objekty do scenare
+    /// </summary>
+    /// <param name="lines"></param>
+    /// <param name="startTime"></param>
+    public void Load(string[] lines, float startTime);
 }

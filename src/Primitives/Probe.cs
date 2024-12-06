@@ -21,6 +21,13 @@ public class Probe : IProbe
     private float r;
     private float timeHeld = 0;
 
+    /// <summary>
+    /// konstruktor
+    /// </summary>
+    /// <param name="center">stred obehu</param>
+    /// <param name="radius">polomer obehu</param>
+    /// <param name="anglePerSecond">uhlova rychlost</param>
+    /// <param name="id">id</param>
     public Probe(PointF center, float radius, float anglePerSecond, int id)
     {
         this.center = center;
@@ -94,10 +101,10 @@ public class Probe : IProbe
         }
     }
 
-    public void Drag(PointF point)
+    public void Drag(Vector2 vector)
     {
-        this.center.X += point.X;
-        this.center.Y += point.Y;
+        this.center.X += vector.X;
+        this.center.Y += vector.Y;
         SettingsObject.probeForm.Refresh(this.id);
     }
     public string Save()
@@ -250,7 +257,7 @@ public class Probe : IProbe
             if (charges[i] == null) continue;
 
             PointF p = charges[i].GetPosition();
-            Vector2 vect = start - new Vector2(p.X, p.Y);
+            Vector2 vect = start - new Vector2(p.X, -p.Y);
             float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
             sum += charges[i].GetCharge() * vect / l;
         }
@@ -271,7 +278,7 @@ public class Probe : IProbe
             if (charges[i] == null) continue;
 
             PointF p = charges[i].GetPosition();
-            Vector2 vect = start - new Vector2(p.X, p.Y);
+            Vector2 vect = start - new Vector2(p.X, -p.Y);
             float l = vect.Length() > 0 ? (vect.Length() * vect.Length() * vect.Length()) : 0.01f;
             sum += charges[i].GetCharge() * vect / l;
         }

@@ -19,8 +19,10 @@ namespace UPG_SP_2024
         private Button saveButton;
         private Button saveAsButton;
         private Panel legendPanel;
+        private TableLayoutPanel layout;
 
-        private int legendEntries = 1;
+
+        private int legendEntries = 0;
 
         private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
@@ -83,62 +85,60 @@ namespace UPG_SP_2024
         /// </summary>
         private void InitializeControls()
         {
-            Label label = new Label
+            layout = new TableLayoutPanel
+            {
+                ColumnCount = 3,
+                RowCount = 10,
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+            };
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33));
+
+            // Row 0: Title
+            layout.Controls.Add(new Label
             {
                 Text = "Control Panel",
-                Location = new Point(10, 10),
-                AutoSize = true
-            };
-            this.Controls.Add(label);
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill
+            }, 0, 0);
+            layout.SetColumnSpan(layout.Controls[layout.Controls.Count - 1], 3);
 
+            // Row 1: Colormap Checkbox
             colormapCheckBox = new CheckBox
             {
                 Text = "Enable Colormap",
-                Location = new Point(10, 40),
                 AutoSize = true
             };
             colormapCheckBox.CheckedChanged += (o, e) =>
             {
                 SettingsObject.colorMap = colormapCheckBox.Checked;
             };
-            this.Controls.Add(colormapCheckBox);
+            layout.Controls.Add(colormapCheckBox, 1, 1);
+            layout.SetColumnSpan(colormapCheckBox, 2);
 
+
+            // Row 2: Grid Checkbox
             gridCheckBox = new CheckBox
             {
                 Text = "Enable Grid",
-                Location = new Point(10, 70),
-                AutoSize = true
+                AutoSize = true,
             };
             gridCheckBox.CheckedChanged += (o, e) =>
             {
                 SettingsObject.gridShown = gridCheckBox.Checked;
-                Console.WriteLine(SettingsObject.gridShown);
             };
-            this.Controls.Add(gridCheckBox);
+            layout.Controls.Add(gridCheckBox, 1, 2);
+            layout.SetColumnSpan(gridCheckBox, 2);
 
-            Label dropdownLabel = new Label
-            {
-                Text = "Select Scenario:",
-                Location = new Point(10, 100),
-                AutoSize = true
-            };
-            this.Controls.Add(dropdownLabel);
-
+            // Row 3: Scenario Dropdown
             scenarioDropdown = new ComboBox
             {
-                Location = new Point(10, 130),
-                Width = 150,
+                Width = 120,
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
-
-            scenarioDropdown.KeyDown += (sender, e) =>
-            {
-                if (e.KeyCode != Keys.Up && e.KeyCode != Keys.Down && e.KeyCode != Keys.Escape)
-                {
-                    e.SuppressKeyPress = true; 
-                }
-            };
-
             for (int i = 0; i <= 4; i++)
             {
                 scenarioDropdown.Items.Add($"Scenario {i}");
@@ -146,187 +146,76 @@ namespace UPG_SP_2024
             scenarioDropdown.SelectedIndex = SettingsObject.scenario;
             scenarioDropdown.SelectedIndexChanged += (o, e) =>
             {
-                int selectedScenario = scenarioDropdown.SelectedIndex;
-                Console.WriteLine($"Scenario changed to: {selectedScenario}");
-                SettingsObject.scenario = selectedScenario;
-                SettingsObject.drawingPanel.SetScenario(selectedScenario);
+                SettingsObject.scenario = scenarioDropdown.SelectedIndex;
             };
-            this.Controls.Add(scenarioDropdown);
+            layout.Controls.Add(new Label { Text = "Scenario:", TextAlign = ContentAlignment.MiddleRight }, 0, 3);
+            layout.Controls.Add(scenarioDropdown, 1, 3);
+            layout.SetColumnSpan(scenarioDropdown, 2);
 
-            Label gridLabel = new Label
-            {
-                Text = "Grid:",
-                Location = new Point(10, 160),
-                AutoSize = true
-            };
-            this.Controls.Add(gridLabel);
-
-            Label XLabel = new Label
-            {
-                Text = "X:",
-                Location = new Point(10, 192),
-                AutoSize = true
-            };
-            this.Controls.Add(XLabel);
-
+            // Row 4: Grid X Spinner
             gridXSpinner = new NumericUpDown
             {
-                Location = new Point(27, 190),
-                Width = 100,
                 Minimum = 1,
                 Maximum = 100,
-                Value = Math.Max(1, SettingsObject.gridX)
+                Width = 120,
+                Value = SettingsObject.gridX
             };
             gridXSpinner.ValueChanged += (o, e) =>
             {
                 SettingsObject.gridX = (int)gridXSpinner.Value;
             };
-            this.Controls.Add(gridXSpinner);
+            layout.Controls.Add(new Label { Text = "Grid X:", TextAlign = ContentAlignment.MiddleRight }, 0, 4);
+            layout.Controls.Add(gridXSpinner, 1, 4);
+            layout.SetColumnSpan(gridXSpinner, 2);
 
-            Label YLabel = new Label
-            {
-                Text = "Y:",
-                Location = new Point(10, 220),
-                AutoSize = true
-            };
-            this.Controls.Add(YLabel);
-
+            // Row 5: Grid Y Spinner
             gridYSpinner = new NumericUpDown
             {
-                Location = new Point(27, 218),
-                Width = 100,
                 Minimum = 1,
                 Maximum = 100,
-                Value = Math.Max(1, SettingsObject.gridY)
+                Width = 120,
+                Value = SettingsObject.gridY
             };
             gridYSpinner.ValueChanged += (o, e) =>
             {
                 SettingsObject.gridY = (int)gridYSpinner.Value;
             };
-            this.Controls.Add(gridYSpinner);
+            layout.Controls.Add(new Label { Text = "Grid Y:", TextAlign = ContentAlignment.MiddleRight }, 0, 5);
+            layout.Controls.Add(gridYSpinner, 1, 5);
+            layout.SetColumnSpan(gridYSpinner, 2);
 
-            Button graphButton = new Button
-            {
-                Location = new Point(10, 250),
-                Text = "Show graph"
-            };
-            this.Controls.Add(graphButton);
-            graphButton.Click += GraphButton_Click;
 
-            openButton = new Button
-            {
-                Location = new Point(10, 280),
-                Text = "Open"
-            };
-            this.Controls.Add(openButton);
+            // Row 6: Save and Load Buttons
+            openButton = new Button { Text = "Open" };
             openButton.Click += OpenButton_Click;
+            layout.Controls.Add(openButton, 0, 6);
 
-            saveButton = new Button
-            {
-                Location = new Point(60, 280),
-                Text = "Save"
-            };
-            this.Controls.Add(saveButton);
+            saveButton = new Button { Text = "Save" };
             saveButton.Click += SaveButton_Click;
-
-            saveAsButton = new Button
-            {
-                Location = new Point(110, 280),
-                Text = "Save As"
-            };
-            this.Controls.Add(saveAsButton);
+            layout.Controls.Add(saveButton, 1, 6);
+            
+            saveAsButton = new Button { Text = "Save As" };
             saveAsButton.Click += SaveAsButton_Click;
+            layout.Controls.Add(saveAsButton, 2, 6);
 
-            Button chargeButton = new Button
-            {
-                Location = new Point(10, 300),
-                Text = "Show charges"
-            };
-            this.Controls.Add(chargeButton);
-            chargeButton.Click += ChargeButton_Click;
-
-            Button probeButton = new Button
-            {
-                Location = new Point(50, 300),
-                Text = "Show probes"
-            };
-            this.Controls.Add(probeButton);
-            probeButton.Click += ProbeButton_Click;
-
-            NumericUpDown rSpinner = new NumericUpDown
-            {
-                Location = new Point(10, 330),
-                Width = 40,
-                Minimum = 0,
-                Maximum = 2,
-                Value = 0
-            }; 
-            rSpinner.ValueChanged += (o, e) =>
-            {
-                SettingsObject.channels[0] = (int)rSpinner.Value;
-                ReloadLegend();
-
-            };
-            this.Controls.Add(rSpinner);
-
-            NumericUpDown gSpinner = new NumericUpDown
-            {
-                Location = new Point(60, 330),
-                Width = 40,
-                Minimum = 0,
-                Maximum = 2,
-                Value = 1
-            };
-            gSpinner.ValueChanged += (o, e) =>
-            {
-                SettingsObject.channels[1] = (int)gSpinner.Value;
-                ReloadLegend();
-
-            };
-            this.Controls.Add(gSpinner);
-
-            NumericUpDown bSpinner = new NumericUpDown
-            {
-                Location = new Point(110, 330),
-                Width = 40,
-                Minimum = 0,
-                Maximum = 2,
-                Value = 2
-            };
-            bSpinner.ValueChanged += (o, e) =>
-            {
-                SettingsObject.channels[2] = (int)bSpinner.Value;
-                ReloadLegend();
-            };
-            this.Controls.Add(bSpinner);
-
-            // Add colormap legend
+            // Row 7: Legend Panel
             legendPanel = new Panel
             {
-                Location = new Point(10, 370),
-                Size = new Size(180, 160),
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.White,
+                Height = 150,
+                Width = 150
             };
+            AddLegendEntry(legendPanel, "0 TN/C", GetColor(0));
+            AddLegendEntry(legendPanel, "25 E-2TN/C", GetColor(2.5));
+            AddLegendEntry(legendPanel, "50E-2 TN/C", GetColor(5));
+            AddLegendEntry(legendPanel, "75E-2 TN/C", GetColor(7.5));
+            AddLegendEntry(legendPanel, "> 100E-2 TN/C", GetColor(10));
+            layout.Controls.Add(new Label { Text = "Legend:", TextAlign = ContentAlignment.MiddleRight }, 0, 7);
+            layout.Controls.Add(legendPanel, 1, 7);
+            layout.SetColumnSpan(legendPanel, 2);
 
-            Label legendTitle = new Label
-            {
-                Text = "Colormap Legend",
-                Location = new Point(10, 5),
-                AutoSize = true
-            };
-            legendPanel.Controls.Add(legendTitle);
-
-            // Example color entries
-            AddLegendEntry(legendPanel, "0 TN/C", this.GetColor(0));
-            AddLegendEntry(legendPanel, "25E-2 TN/C", this.GetColor(2.5));
-            AddLegendEntry(legendPanel, "50E-2 TN/C", this.GetColor(5));
-            AddLegendEntry(legendPanel, "75E-2 TN/C", this.GetColor(7.5));
-            AddLegendEntry(legendPanel, ">100E-2 TN/C", this.GetColor(10));
-
-            this.Controls.Add(legendPanel);
-
-
+            this.Controls.Add(layout);
         }
 
         /// <summary>
@@ -400,7 +289,7 @@ namespace UPG_SP_2024
         {
             Panel colorBox = new Panel
             {
-                Location = new Point(10, this.legendEntries * 25),
+                Location = new Point(10, this.legendEntries * 25 + 10),
                 Size = new Size(20, 20),
                 BackColor = color
             };
@@ -409,7 +298,7 @@ namespace UPG_SP_2024
             Label legendLabel = new Label
             {
                 Text = text,
-                Location = new Point(40, this.legendEntries * 25 + 2),
+                Location = new Point(40, this.legendEntries * 25 + 12),
                 AutoSize = true
             };
             panel.Controls.Add(legendLabel);
@@ -517,33 +406,12 @@ namespace UPG_SP_2024
             int g = (int)(colors[index, 1] + factor * colorDiffs[index, 1]);
             int b = (int)(colors[index, 2] + factor * colorDiffs[index, 2]);
 
-            int[] channels = new int[] {b, g, r };
-
             // Clamp RGB values to [0,255]
             r = Math.Max(0, Math.Min(255, r));
             g = Math.Max(0, Math.Min(255, g));
             b = Math.Max(0, Math.Min(255, b));
 
-            return Color.FromArgb(channels[SettingsObject.channels[0]], channels[SettingsObject.channels[1]], channels[SettingsObject.channels[2]]);
-        }
-
-        private void ReloadLegend()
-        {
-            legendPanel.Controls.Clear();
-            Label legendTitle = new Label
-            {
-                Text = "Colormap Legend",
-                Location = new Point(10, 5),
-                AutoSize = true
-            };
-            legendPanel.Controls.Add(legendTitle);
-            legendEntries = 1;
-            AddLegendEntry(legendPanel, "0 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(0));
-            AddLegendEntry(legendPanel, "25E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(2.5));
-            AddLegendEntry(legendPanel, "50E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(5));
-            AddLegendEntry(legendPanel, "75E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(7.5));
-            AddLegendEntry(legendPanel, ">100E-2 TN/C", SettingsObject.drawingPanel.scenario.GetColorFromIntensity(10));
-            legendPanel.Invalidate();
+            return Color.FromArgb(b, g, r);
         }
     }
 }
