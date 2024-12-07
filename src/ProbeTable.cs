@@ -126,11 +126,26 @@ namespace UPG_SP_2024
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 var row = probesGridView.Rows[e.RowIndex];
-                int id = Convert.ToInt32(row.Cells["Id"].Value);
-                string x = (Convert.ToString(row.Cells["X"].Value)).Replace(",", ".");
-                string y = (Convert.ToString(row.Cells["Y"].Value)).Replace(",", ".");
-                string radius = (Convert.ToString(row.Cells["Radius"].Value)).Replace(",", ".");
-                string angle = (Convert.ToString(row.Cells["AnglePerSecond"].Value)).Replace(",", ".");
+                int id; 
+                string x = "0";
+                string y = "0";
+                string radius = "0";
+                string angle = "0";
+
+                // TODO podchytit pripady, kdy uzivatel zada "" nebo string
+                try
+                {
+                    id = Convert.ToInt32(row.Cells["Id"].Value);
+                    x = (Convert.ToString(row.Cells["X"].Value)).Replace(",", ".");
+                    y = (Convert.ToString(row.Cells["Y"].Value)).Replace(",", ".");
+                    radius = (Convert.ToString(row.Cells["Radius"].Value)).Replace(",", ".");
+                    angle = (Convert.ToString(row.Cells["AnglePerSecond"].Value)).Replace(",", ".");
+                }
+                catch
+                {
+                    return;
+                }
+               
                 IProbe p;
                 // Update data list
                 try
@@ -141,6 +156,7 @@ namespace UPG_SP_2024
                 {
                     return;
                 }
+
                 p.SetCenter(new PointF(Convert.ToSingle(x), Convert.ToSingle(y)));
                 p.SetRadius(Convert.ToSingle(radius));
                 p.SetAnglePerSecond(Convert.ToSingle(angle));

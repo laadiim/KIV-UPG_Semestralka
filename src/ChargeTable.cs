@@ -118,10 +118,25 @@ namespace UPG_SP_2024
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 var row = chargesGridView.Rows[e.RowIndex];
-                int id = Convert.ToInt32(row.Cells["Id"].Value);
-                string charge = (Convert.ToString(row.Cells["Charge"].Value)).Replace(",", ".");
-                float x = Convert.ToSingle(row.Cells["X"].Value);
-                float y = Convert.ToSingle(row.Cells["Y"].Value);
+                int id;
+                string charge = "0";
+                float x = 0;
+                float y = 0;
+
+                // TODO podchytit pripady, kdy uzivatel zada "" nebo string
+
+                try
+                {
+                    id = Convert.ToInt32(row.Cells["Id"].Value);
+                    charge = (Convert.ToString(row.Cells["Charge"].Value)).Replace(",", ".");
+                    x = Convert.ToSingle(row.Cells["X"].Value);
+                    y = Convert.ToSingle(row.Cells["Y"].Value);
+                }
+                catch
+                {
+                    return;
+                }
+                
                 INaboj c;
                 // Update data list
                 try
