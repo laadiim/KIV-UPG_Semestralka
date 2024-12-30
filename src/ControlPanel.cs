@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace UPG_SP_2024
@@ -26,6 +28,9 @@ namespace UPG_SP_2024
         private Button graphButton;
         private Button chargesButton;
         private Button probesButton;
+        private Button bmpButton;
+        private Button printButton;
+        private Button svgButton;
         private readonly double[] boundaries = { 0.0, 0.25, 0.5, 0.75, 1.0 };
 
         private readonly int[,] colors = {
@@ -214,7 +219,20 @@ namespace UPG_SP_2024
             saveAsButton.Click += SaveAsButton_Click;
             layout.Controls.Add(saveAsButton, 2, 6);
 
-            // Row 8: Legend Panel
+            // Row 8: BMP
+            bmpButton = new Button { Text = "Bitmap" };
+            bmpButton.Click += BmpButton_Click;
+            layout.Controls.Add(bmpButton, 0, 8);
+
+            printButton = new Button { Text = "Print" };
+            printButton.Click += PrintButton_Click;
+            layout.Controls.Add(printButton, 1, 8);
+
+            svgButton = new Button { Text = "SVG" };
+            svgButton.Click += SvgButton_Click;
+            layout.Controls.Add(svgButton, 2, 8);
+
+            // Row 9: Legend Panel
             legendPanel = new Panel
             {
                 BorderStyle = BorderStyle.FixedSingle,
@@ -227,11 +245,53 @@ namespace UPG_SP_2024
             AddLegendEntry(legendPanel, "50E-2 TN/C", GetColor(5));
             AddLegendEntry(legendPanel, "75E-2 TN/C", GetColor(7.5));
             AddLegendEntry(legendPanel, "> 100E-2 TN/C", GetColor(10));
-            layout.Controls.Add(new Label { Text = "Legend:", TextAlign = ContentAlignment.MiddleRight }, 0, 8);
-            layout.Controls.Add(legendPanel, 1, 8);
+            layout.Controls.Add(new Label { Text = "Legend:", TextAlign = ContentAlignment.MiddleRight }, 0, 9);
+            layout.Controls.Add(legendPanel, 1, 9);
             layout.SetColumnSpan(legendPanel, 2);
 
             this.Controls.Add(layout);
+        }
+
+        private void SvgButton_Click(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void PrintButton_Click(object? sender, EventArgs e)
+        {
+            Bitmap bmp = SettingsObject.drawingPanel.scenario.DrawToBitmap(1920, 1080, (int)SettingsObject.startTime, -1);
+            BitmapPrinter printer = new BitmapPrinter(bmp);
+            printer.PrintBitmap();
+        }
+
+        private void BmpButton_Click(object? sender, EventArgs e)
+        {
+            using (ImageSizePopup popup = new ImageSizePopup())
+            {
+                if (popup.ShowDialog() == DialogResult.OK)
+                {
+                    int selectedWidth = popup.ImageWidth;
+                    int selectedHeight = popup.ImageHeight;
+                    string savePath = popup.SavePath;
+
+                    // Update SettingsObject or perform actions with the selected settings
+                    SettingsObject.imageWidth = selectedWidth;
+                    SettingsObject.imageHeight = selectedHeight;
+                    SettingsObject.savePath = savePath;
+
+                    MessageBox.Show($"Image size set to: {selectedWidth} x {selectedHeight}\nSave Path: {savePath}",
+                        "Settings Updated",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+
+            if (SettingsObject.savePath == "" || SettingsObject.savePath == null) return;
+            Bitmap bmp = SettingsObject.drawingPanel.scenario.DrawToBitmap(SettingsObject.imageWidth,
+                SettingsObject.imageHeight, (int)SettingsObject.startTime, -1);
+            bmp.Save(SettingsObject.savePath, ImageFormat.Png);
+            SettingsObject.imageHeight = SettingsObject.imageWidth = 0;
+            SettingsObject.savePath = "";
         }
 
         /// <summary>

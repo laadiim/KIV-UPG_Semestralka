@@ -1,3 +1,5 @@
+using System.Drawing.Drawing2D;
+
 namespace UPG_SP_2024.Interfaces;
 
 /// <summary>
@@ -102,4 +104,6 @@ public interface IScenario
     /// <param name="lines"></param>
     /// <param name="startTime"></param>
     public void Load(string[] lines, float startTime);
+
+    public Bitmap DrawToBitmap(float width, float height, int startTime, int chargeHit);
 }

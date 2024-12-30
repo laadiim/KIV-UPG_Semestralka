@@ -108,5 +108,8 @@ namespace UPG_SP_2024
         /// instance okna s tabulkou sond
         /// </summary>
         public static ProbeTable probeForm;
+        public static int imageWidth;
+        public static int imageHeight;
+        public static string savePath;
     }
 }

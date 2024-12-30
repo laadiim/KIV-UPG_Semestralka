@@ -540,4 +540,32 @@ public class Scenario : IScenario
         
         return scale;
     }
+
+    public Bitmap DrawToBitmap(float width, float height, int startTime, int chargeHit)
+    {
+        // Create a new Bitmap with the specified dimensions
+        if (width * height == 0)
+        {
+            width = height = 1024;
+        }
+        var bitmap = new Bitmap((int)width, (int)height);
+
+        // Create Graphics object from the Bitmap
+        using (Graphics g = Graphics.FromImage(bitmap))
+        {
+            // Set high-quality drawing settings (optional)
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            // Translate origin for consistent drawing (optional, depending on existing setup)
+            g.TranslateTransform(width / 2, height / 2);
+
+            // Call the existing Draw method with the Graphics object
+            this.Draw(g, width, height, startTime, chargeHit);
+        }
+
+        // Return the rendered bitmap
+        return bitmap;
+    }
 }
